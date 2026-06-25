@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "templates": [
+    {
+      "schema_version": 1,
+      "id": "sta-nwu-submax",
+      "name": "NWU sub-max",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "STA",
+      "capacity_tags": ["co2", "mental", "o2_hypoxia"],
+      "goal": "No-warmup sub-max to read sensations.",
+      "set_repeat": 1,
+      "termination": { "type": "fixed_n", "n": 1 },
+      "reps": [
+        {
+          "shape": "simple",
+          "lung_volume": "FL",
+          "prep_breathing": { "duration_s": 300, "pattern": "5:5" },
+          "hold_target": { "unit": "qualitative", "value": "submax" },
+          "recovery": { "type": "qualitative", "value": "full" }
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-co2-increasing",
+      "name": "Short CO2 table, increasing holds",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "STA",
+      "capacity_tags": ["co2"],
+      "goal": "Accumulate CO2 with increasing holds and fixed recovery breaths.",
+      "set_repeat": 1,
+      "termination": { "type": "until_failure" },
+      "generator": { "start_s": 120, "step_s": 25, "until": "failure", "recovery_breaths": 5 },
+      "reps": [
+        { "shape": "simple", "lung_volume": "FL", "hold_target": { "unit": "absolute", "value": 120 }, "recovery": { "type": "absolute", "value": 5, "unit": "breaths" } },
+        { "shape": "simple", "lung_volume": "FL", "hold_target": { "unit": "absolute", "value": 145 }, "recovery": { "type": "absolute", "value": 5, "unit": "breaths" } },
+        { "shape": "simple", "lung_volume": "FL", "hold_target": { "unit": "absolute", "value": 170 }, "recovery": { "type": "absolute", "value": 5, "unit": "breaths" } }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-o2-ladder",
+      "name": "Oxygen table, +1 min each",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "STA",
+      "capacity_tags": ["o2_hypoxia"],
+      "goal": "Hypoxic ladder, 2 minutes recovery between holds.",
+      "set_repeat": 1,
+      "termination": { "type": "until_failure" },
+      "generator": { "start_s": 60, "step_s": 60, "until": "failure" },
+      "reps": [
+        { "shape": "simple", "lung_volume": "FL", "hold_target": { "unit": "absolute", "value": 60 }, "recovery": { "type": "absolute", "value": 120, "unit": "time" } },
+        { "shape": "simple", "lung_volume": "FL", "hold_target": { "unit": "absolute", "value": 120 }, "recovery": { "type": "absolute", "value": 120, "unit": "time" } },
+        { "shape": "simple", "lung_volume": "FL", "hold_target": { "unit": "absolute", "value": 180 }, "recovery": { "type": "absolute", "value": 120, "unit": "time" } }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-el-set",
+      "name": "EL 5x increasing",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "STA",
+      "capacity_tags": ["o2_hypoxia", "mental"],
+      "goal": "Empty-lung holds: efficient hypoxia and nervous-system calm.",
+      "set_repeat": 1,
+      "termination": { "type": "fixed_n", "n": 5 },
+      "reps": [
+        {
+          "shape": "simple",
+          "lung_volume": "RV",
+          "hold_target": { "unit": "qualitative", "value": "submax" },
+          "recovery": { "type": "absolute", "value": 150, "unit": "time" },
+          "note": "Start easy, increase duration progressively across the 5 holds."
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dnf-pyramid",
+      "name": "DNF pyramid drills",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "DNF",
+      "capacity_tags": ["co2", "volume", "technique"],
+      "goal": "Pyramid for 20 minutes at a sweet-spot effort.",
+      "set_repeat": 1,
+      "termination": { "type": "duration_capped", "duration_s": 1200 },
+      "cycle_def": "one full up-and-down pyramid (25-50-75-50-25)",
+      "reps": [
+        { "shape": "simple", "distance_target": { "unit": "absolute", "value": 25 }, "recovery": { "type": "qualitative", "value": "minimal" } },
+        { "shape": "simple", "distance_target": { "unit": "absolute", "value": 50 }, "recovery": { "type": "qualitative", "value": "minimal" } },
+        { "shape": "simple", "distance_target": { "unit": "absolute", "value": 75 }, "recovery": { "type": "qualitative", "value": "minimal" } },
+        { "shape": "simple", "distance_target": { "unit": "absolute", "value": 50 }, "recovery": { "type": "qualitative", "value": "minimal" } },
+        { "shape": "simple", "distance_target": { "unit": "absolute", "value": 25 }, "recovery": { "type": "qualitative", "value": "minimal" } }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dnf-stop-start",
+      "name": "Stop-start: 1:30 STA then DNF",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "DNF",
+      "capacity_tags": ["mental", "co2"],
+      "goal": "Static into a dynamic to explore the transition zone.",
+      "set_repeat": 1,
+      "termination": { "type": "fixed_n", "n": 1 },
+      "reps": [
+        {
+          "shape": "stop-start",
+          "lung_volume": "FL",
+          "hold_target": { "unit": "absolute", "value": 90 },
+          "distance_target": { "unit": "absolute", "value": 50 }
+        }
+      ]
+    }
+  ]
+}

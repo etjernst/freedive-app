@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://freedive.local/schema/freedive.schema.json",
+  "title": "Freedive seed library",
+  "description": "Phase 0a minimal schema. Validates a library of exercise templates (template + rep + typed targets + enums). Sessions, goals, settings, day-level metrics, and the first-contraction store are deferred to Phase 1 and are intentionally NOT defined here yet.",
+  "type": "object",
+  "required": ["schema_version", "templates"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "integer", "minimum": 1 },
+    "templates": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/exerciseTemplate" }
+    }
+  },
+  "$defs": {
+    "discipline": { "enum": ["STA", "DYN", "DYNb", "DNF", "any"] },
+    "lungVolume": { "enum": ["FL", "FRC", "RV"] },
+    "shape": { "enum": ["simple", "stop-start", "start-stop", "stop-in-the-middle", "continuous-protocol"] },
+    "role": { "enum": ["warmup", "main", "cooldown"] },
+    "environment": { "enum": ["pool", "dry", "gym"] },
+    "capacity": { "enum": ["co2", "o2_hypoxia", "mental", "volume", "lung_volume", "fitness_lactic", "technique"] },
+    "pace": { "enum": ["sprint", "max_sprint", "relaxed", "race_pace"] },
+    "techniqueVariant": { "enum": ["legs_only", "arms_only", "normal", "crawl"] },
+
+    "prepBreathing": {
+      "type": "object",
+      "required": ["pattern"],
+      "additionalProperties": false,
+      "properties": {
+        "duration_s": { "type": "number", "minimum": 0 },
+        "pattern": { "type": "string", "description": "e.g. 5:5, 4:6, 2:2, square. Intensity is derived from this via the settings lookup." }
+      }
+    },
+
+    "holdTarget": {
+      "type": "object",
+      "required": ["unit"],
+      "additionalProperties": false,
+      "properties": {
+        "unit": { "enum": ["absolute", "pct_pb", "contraction_relative", "qualitative"] },
+        "value": {
+          "description": "absolute -> seconds; pct_pb -> percent; contraction_relative -> seconds added to 1C (0 = until 1C); qualitative -> one of submax/strong_submax/max/close_to_max",
+          "type": ["number", "string"]
+        }
+      }
+    },
+
+    "distanceTarget": {
+      "type": "object",
+      "required": ["unit"],
+      "additionalProperties": false,
+      "properties": {
+        "unit": { "enum": ["absolute", "pct_pb", "qualitative", "computed"] },
+        "value": {
+          "description": "absolute -> meters; pct_pb -> percent; qualitative -> string; computed -> object describing the rule (e.g. min_of, pct_less_than_previous)",
+          "type": ["number", "string", "object"]
+        }
+      }
+    },
+
+    "recoveryTarget": {
+      "type": "object",
+      "required": ["type"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "enum": ["absolute", "cap", "inequality", "qualitative"] },
+        "value": {
+          "description": "absolute/cap -> number in the given unit; inequality -> string (e.g. '< swim_time'); qualitative -> minimal/adequate/full",
+          "type": ["number", "string"]
+        },
+        "unit": { "enum": ["time", "breaths"] }
+      }
+    },
+
+    "continuousBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "duration_s": { "type": "number", "minimum": 0 },
+        "pattern": { "type": "string", "description": "breathing pattern (e.g. 10s-square) for dry protocols" },
+        "stroke_cadence": { "type": "string", "description": "in-swim cadence (e.g. every 7 strokes) for hypercapnic swims" },
+        "count_label": { "type": "string" }
+      }
+    },
+
+    "repPlanned": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "shape": { "$ref": "#/$defs/shape" },
+        "discipline": { "$ref": "#/$defs/discipline" },
+        "lung_volume": { "$ref": "#/$defs/lungVolume" },
+        "pace": { "$ref": "#/$defs/pace" },
+        "technique_variant": { "$ref": "#/$defs/techniqueVariant" },
+        "prep_breathing": { "$ref": "#/$defs/prepBreathing" },
+        "hold_target": { "$ref": "#/$defs/holdTarget" },
+        "distance_target": { "$ref": "#/$defs/distanceTarget" },
+        "recovery": { "$ref": "#/$defs/recoveryTarget" },
+        "continuous": { "$ref": "#/$defs/continuousBlock" },
+        "note": { "type": "string" }
+      }
+    },
+
+    "termination": {
+      "type": "object",
+      "required": ["type"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "enum": ["fixed_n", "range", "until_1c", "until_utb", "until_failure", "until_quality_drops", "duration_capped"] },
+        "n": { "type": "integer", "minimum": 1 },
+        "n_min": { "type": "integer", "minimum": 1 },
+        "n_max": { "type": "integer", "minimum": 1 },
+        "duration_s": { "type": "number", "minimum": 0 }
+      }
+    },
+
+    "generator": {
+      "type": "object",
+      "description": "Optional rule that expands into the rep block; loose at Phase 0a.",
+      "additionalProperties": true
+    },
+
+    "exerciseTemplate": {
+      "type": "object",
+      "required": ["schema_version", "id", "name", "environment", "role", "discipline", "capacity_tags", "set_repeat", "termination", "reps"],
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": { "type": "integer", "minimum": 1 },
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "environment": { "$ref": "#/$defs/environment" },
+        "role": { "$ref": "#/$defs/role" },
+        "discipline": { "$ref": "#/$defs/discipline" },
+        "capacity_tags": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/capacity" },
+          "minItems": 1
+        },
+        "goal": { "type": "string" },
+        "cues": { "type": "string" },
+        "shape_default": { "$ref": "#/$defs/shape" },
+        "set_repeat": { "type": "integer", "minimum": 1 },
+        "recovery_intra_default": { "$ref": "#/$defs/recoveryTarget" },
+        "recovery_inter": { "$ref": "#/$defs/recoveryTarget" },
+        "termination": { "$ref": "#/$defs/termination" },
+        "reps": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/repPlanned" },
+          "minItems": 1
+        },
+        "generator": { "$ref": "#/$defs/generator" },
+        "references": { "type": "array", "items": { "type": "string" } },
+        "pace_default": { "$ref": "#/$defs/pace" },
+        "equipment": { "type": "array", "items": { "type": "string" } },
+        "cycle_def": { "type": "string" }
+      }
+    }
+  }
+}
