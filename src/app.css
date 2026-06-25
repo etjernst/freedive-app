@@ -178,3 +178,64 @@ main {
   font-weight: 600;
   font-size: 14px;
 }
+
+.card.error {
+  border-color: #7a2b2b;
+  background: #2c1414;
+}
+
+.status {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 16px;
+  margin: 10px 0 0;
+  font-size: 14px;
+}
+
+.status dt {
+  color: var(--muted);
+}
+
+.status dd {
+  margin: 0;
+  text-align: right;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.actions button,
+.file-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 550;
+  cursor: pointer;
+}
+
+.actions button:disabled,
+.file-btn.disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.file-btn input {
+  display: none;
+}
+
+.notice {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: var(--accent-2);
+}

@@ -1,10 +1,48 @@
 <script>
-  import fixtures from '../seed/fixtures.json'
   import { pwa, applyUpdate } from './lib/pwa.svelte.js'
+  import { app, doExport, doRestore } from './lib/store.svelte.js'
 
-  // Phase 1 shell: confirm the seed library loads end to end. The real
-  // capture, calendar, and coaching faces land in later phases.
-  const templates = fixtures.templates ?? fixtures
+  let busy = $state(null)
+  let notice = $state(null)
+
+  async function onExport() {
+    busy = 'export'
+    try {
+      const env = await doExport()
+      notice = `Exported ${env.data.templates.length} templates`
+    } catch (e) {
+      notice = `Export failed: ${e?.message ?? e}`
+    } finally {
+      busy = null
+    }
+  }
+
+  async function onRestoreFile(event) {
+    const file = event.target.files?.[0]
+    event.target.value = '' // allow re-selecting the same file later
+    if (!file) return
+    if (!confirm('Restore replaces all local data with this file. Continue?')) return
+    busy = 'restore'
+    try {
+      const result = await doRestore(file)
+      notice = `Restored ${result.counts.templates ?? 0} templates`
+    } catch (e) {
+      notice = `Restore failed: ${e?.message ?? e}`
+    } finally {
+      busy = null
+    }
+  }
+
+  function fmtBytes(n) {
+    if (n == null) return '—'
+    const mb = n / (1024 * 1024)
+    return mb < 1 ? `${Math.round(n / 1024)} KB` : `${mb.toFixed(1)} MB`
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return 'never'
+    return iso.replace('T', ' ').replace(/:\d\d\.\d+Z$/, '')
+  }
 </script>
 
 <div class="splash" aria-hidden="true">
@@ -27,11 +65,47 @@
 </header>
 
 <main>
+  {#if app.error}
+    <section class="card error">
+      <h2>Storage error</h2>
+      <p>{app.error}</p>
+    </section>
+  {/if}
+
+  <section class="card">
+    <h2>Backup</h2>
+    <dl class="status">
+      <dt>Persistent storage</dt>
+      <dd>{app.persisted ? 'granted' : 'not granted'}</dd>
+      <dt>Storage used</dt>
+      <dd>{fmtBytes(app.usage?.usage)}</dd>
+      <dt>Last export</dt>
+      <dd>{fmtDate(app.lastExport)}</dd>
+      <dt>Not backed up</dt>
+      <dd>{app.pendingBackup} item{app.pendingBackup === 1 ? '' : 's'}</dd>
+    </dl>
+    <div class="actions">
+      <button onclick={onExport} disabled={!app.ready || busy}>
+        {busy === 'export' ? 'Exporting…' : 'Export to file'}
+      </button>
+      <label class="file-btn" class:disabled={!app.ready || busy}>
+        {busy === 'restore' ? 'Restoring…' : 'Restore from file'}
+        <input
+          type="file"
+          accept="application/json,.json"
+          onchange={onRestoreFile}
+          disabled={!app.ready || busy}
+        />
+      </label>
+    </div>
+    {#if notice}<p class="notice">{notice}</p>{/if}
+  </section>
+
   <section class="card">
     <h2>Exercise library</h2>
-    <p class="muted">{templates.length} seed templates loaded</p>
+    <p class="muted">{app.templates.length} templates in your library</p>
     <ul class="library">
-      {#each templates as t}
+      {#each app.templates as t (t.id)}
         <li>
           <span class="name">{t.name ?? t.id}</span>
           {#if t.capacity_tags}
@@ -42,5 +116,5 @@
     </ul>
   </section>
 
-  <p class="phase-note">Phase 1 shell — storage, sync, and capture to come.</p>
+  <p class="phase-note">Phase 1 — storage and backup. Capture and calendar to come.</p>
 </main>
