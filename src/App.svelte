@@ -7,6 +7,13 @@
   const templates = fixtures.templates ?? fixtures
 </script>
 
+<div class="splash" aria-hidden="true">
+  <div class="splash-inner">
+    <div class="wordmark">Winnow</div>
+    <p class="mantra">No quick decisions</p>
+  </div>
+</div>
+
 {#if pwa.needRefresh}
   <div class="banner" role="status">
     <span>A new version is ready.</span>
@@ -15,7 +22,7 @@
 {/if}
 
 <header>
-  <h1>Freedive Log</h1>
+  <h1>Winnow</h1>
   <p class="tagline">Capture, tracking, and coaching</p>
 </header>
 

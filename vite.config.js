@@ -26,8 +26,8 @@ export default defineConfig({
         navigateFallback: base + 'index.html',
       },
       manifest: {
-        name: 'Freedive Log',
-        short_name: 'Freedive',
+        name: 'Winnow',
+        short_name: 'Winnow',
         description: 'Freediving capture, tracking, and coaching log',
         theme_color: '#0e4d6b',
         background_color: '#0b1f2a',

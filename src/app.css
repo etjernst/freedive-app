@@ -107,6 +107,54 @@ main {
   padding: 8px 0 20px;
 }
 
+/* Launch splash: holds briefly, then fades and removes itself. Greets every
+   open with the mantra. visibility:hidden at the end drops pointer events. */
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--bg);
+  display: grid;
+  place-items: center;
+  animation: splash-out 1.8s ease forwards;
+}
+
+.splash-inner {
+  text-align: center;
+}
+
+.wordmark {
+  font-size: 46px;
+  font-weight: 650;
+  letter-spacing: 1px;
+}
+
+.mantra {
+  margin-top: 10px;
+  color: var(--muted);
+  letter-spacing: 3px;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+@keyframes splash-out {
+  0%,
+  55% {
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash {
+    animation-duration: 0.01s;
+  }
+}
+
 .banner {
   position: sticky;
   top: 0;
