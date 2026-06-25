@@ -4,7 +4,8 @@ A freediving capture, tracking, and coaching PWA.
 Client-side only: data lives in the browser (IndexedDB) and round-trips to Dropbox via the API.
 No backend.
 
-Hosted on GitHub Pages: https://etjernst.github.io/freedive-app/
+Hosted on GitHub Pages at the custom domain: https://emiliatjernstrom.com/freedive-app/
+(The `etjernst.github.io/freedive-app/` URL 301-redirects here, so OAuth and deep-links must use the custom domain.)
 
 ## Stack
 
@@ -18,7 +19,7 @@ The app is a single-page client served under the Pages base path.
 These three URL shapes are fixed so OAuth and deep-links resolve on the live origin.
 
 - Base path `/freedive-app/` drives the Vite `base`, the manifest scope, and the service worker `navigateFallback`.
-- OAuth callback returns to `/freedive-app/`; the Dropbox PKCE response is read from the query string on load, then stripped from the URL. App-folder scoped, public client, no secret.
+- OAuth callback returns to `https://emiliatjernstrom.com/freedive-app/`; the Dropbox PKCE response is read from the query string on load, then stripped from the URL. App-folder scoped, public client, no secret.
 - Session deep-link is `/freedive-app/?s=<sessionId>`, a query param rather than a path segment, so GitHub Pages serves `index.html` without per-route 404s. Coaching citations link here.
 
 ## Layout
