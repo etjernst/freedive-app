@@ -1,6 +1,14 @@
 <script>
   import { pwa, applyUpdate } from './lib/pwa.svelte.js'
-  import { app, doExport, doRestore } from './lib/store.svelte.js'
+  import {
+    app,
+    doExport,
+    doRestore,
+    connectDropbox,
+    disconnectDropbox,
+    syncToDropbox,
+    restoreFromDropbox,
+  } from './lib/store.svelte.js'
 
   let busy = $state(null)
   let notice = $state(null)
@@ -42,6 +50,11 @@
   function fmtDate(iso) {
     if (!iso) return 'never'
     return iso.replace('T', ' ').replace(/:\d\d\.\d+Z$/, '')
+  }
+
+  async function onRestoreDropbox() {
+    if (!confirm('Restore replaces all local data with the latest Dropbox backup. Continue?')) return
+    await restoreFromDropbox()
   }
 </script>
 
@@ -99,6 +112,38 @@
       </label>
     </div>
     {#if notice}<p class="notice">{notice}</p>{/if}
+  </section>
+
+  <section class="card">
+    <h2>Cloud backup (Dropbox)</h2>
+    {#if app.dropbox.connected}
+      <dl class="status">
+        <dt>Status</dt>
+        <dd>connected</dd>
+        <dt>Last sync</dt>
+        <dd>{fmtDate(app.dropbox.lastSync)}</dd>
+      </dl>
+      <div class="actions">
+        <button onclick={syncToDropbox} disabled={app.dropbox.busy}>
+          {app.dropbox.busy ? 'Working…' : 'Back up now'}
+        </button>
+        <button onclick={onRestoreDropbox} disabled={app.dropbox.busy}>
+          Restore from Dropbox
+        </button>
+      </div>
+      <div class="actions">
+        <button class="link" onclick={disconnectDropbox} disabled={app.dropbox.busy}>
+          Disconnect
+        </button>
+      </div>
+    {:else}
+      <p class="muted">Auto-back up your log to a private Dropbox app folder.</p>
+      <div class="actions">
+        <button onclick={connectDropbox}>Connect Dropbox</button>
+      </div>
+    {/if}
+    {#if app.dropbox.error}<p class="notice err">{app.dropbox.error}</p>{/if}
+    {#if app.dropbox.justConnected}<p class="notice">Connected to Dropbox</p>{/if}
   </section>
 
   <section class="card">

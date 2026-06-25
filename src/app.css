@@ -239,3 +239,16 @@ main {
   font-size: 13px;
   color: var(--accent-2);
 }
+
+.notice.err {
+  color: #e88;
+}
+
+.actions button.link {
+  flex: 0 0 auto;
+  background: none;
+  border: none;
+  color: var(--muted);
+  text-decoration: underline;
+  padding: 4px 0;
+}
