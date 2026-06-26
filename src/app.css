@@ -275,7 +275,8 @@ main {
   margin-top: 10px;
 }
 
-.field label {
+.field label,
+.field .lbl {
   font-size: 14px;
   color: var(--muted);
   flex: 1;
@@ -334,4 +335,330 @@ main {
   font: inherit;
   font-weight: 600;
   cursor: pointer;
+}
+
+/* --- Sessions, build, and log ------------------------------------------- */
+
+.center {
+  text-align: center;
+}
+
+nav {
+  display: flex;
+  gap: 8px;
+}
+
+.session-row {
+  flex-direction: row !important;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 !important;
+}
+
+.session-open {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: none;
+  border: none;
+  color: var(--text);
+  text-align: left;
+  padding: 10px 12px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.row-del {
+  flex: 0 0 auto;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 8px 12px;
+}
+
+.add-row {
+  gap: 8px;
+}
+
+.add-row select {
+  width: auto;
+  flex: 1;
+}
+
+.add-btn {
+  flex: 0 0 auto;
+  background: var(--accent);
+  color: var(--text);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 550;
+  cursor: pointer;
+}
+
+.add-btn:disabled {
+  opacity: 0.5;
+}
+
+.exercise .ex-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.ex-name {
+  flex: 1;
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font: inherit;
+  font-weight: 550;
+}
+
+.ex-name-static {
+  font-weight: 600;
+}
+
+.ex-move {
+  display: flex;
+  gap: 2px;
+}
+
+.ex-move button {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 4px 6px;
+  font-size: 15px;
+}
+
+.ex-move button:disabled {
+  opacity: 0.3;
+}
+
+.goal {
+  margin: 6px 0 0;
+}
+
+.reps {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rep {
+  background: var(--panel-2);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.rep-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rep-n {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  flex: 0 0 auto;
+}
+
+.rep-top .shape {
+  flex: 1;
+  width: auto;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font: inherit;
+  font-size: 13px;
+}
+
+.rep-top button.link,
+.rep .details-toggle {
+  flex: 0 0 auto;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 4px 6px;
+}
+
+.planned-ctx {
+  flex: 1;
+  color: var(--accent-2);
+  font-size: 12px;
+}
+
+.seg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.seg .lbl {
+  flex: 0 0 70px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.seg input,
+.seg select {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font: inherit;
+  font-size: 13px;
+  width: 90px;
+}
+
+.seg select.unit {
+  width: 86px;
+}
+
+.prep {
+  margin: 8px 0 0;
+  font-size: 12px;
+}
+
+.addrep {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: var(--accent-2);
+  cursor: pointer;
+  padding: 4px 0;
+  font: inherit;
+  font-size: 13px;
+}
+
+.realized {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.rfield {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rfield .lbl {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.rfield input,
+.rfield select {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font: inherit;
+  font-size: 13px;
+  width: 76px;
+}
+
+.rfield .hint {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.details {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rfield.triple {
+  gap: 10px;
+}
+
+.rfield.triple span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rfield.triple input {
+  width: 56px;
+}
+
+.rfield input.wide,
+input.wide {
+  width: 100%;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font: inherit;
+  font-size: 13px;
+}
+
+.ex-actual {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.rpe-inputs {
+  display: flex;
+  gap: 6px;
+}
+
+.rpe-inputs input {
+  width: 64px;
+}
+
+.remarks {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 10px;
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font: inherit;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 48px;
+}
+
+.log-btn {
+  flex: 1;
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.log-btn:disabled {
+  opacity: 0.5;
 }

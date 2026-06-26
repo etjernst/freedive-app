@@ -1,8 +1,9 @@
 import { getDB, setMeta } from './db.js'
 import { seedIfNeeded } from './seed.js'
 import { requestPersistence, storageEstimate } from './persist.js'
-import { exportToFile, restoreFromFile, buildExport, restoreFromEnvelope, parseExport } from './backup.js'
+import { exportToFile, restoreFromFile, buildExport, restoreFromEnvelope, parseExport, localIso } from './backup.js'
 import { mergeSettings } from './settings.js'
+import { newSession, clone } from './session.js'
 import * as dropbox from './dropbox.js'
 
 // Reactive app state for the shell. The UI reads from here; actions below
@@ -13,6 +14,8 @@ export const app = $state({
   error: null,
   view: 'home',
   templates: [],
+  sessions: [],
+  currentSessionId: null,
   settings: mergeSettings(null),
   persisted: false,
   usage: null,
@@ -50,6 +53,12 @@ export async function initApp() {
 export async function refresh() {
   const db = await getDB()
   app.templates = await db.getAll('templates')
+  // Newest training day first; created_at breaks same-day ties.
+  app.sessions = (await db.getAll('sessions')).sort(
+    (a, b) =>
+      (b.date ?? '').localeCompare(a.date ?? '') ||
+      (b.created_at ?? '').localeCompare(a.created_at ?? ''),
+  )
   app.usage = await storageEstimate()
   app.lastExport = (await db.get('meta', 'last_export'))?.value ?? null
   app.pendingBackup = await db.count('outbox')
@@ -60,6 +69,41 @@ export async function refresh() {
 export async function saveSettings(next) {
   const db = await getDB()
   await db.put('settings', { ...next, key: 'profile' })
+  await refresh()
+}
+
+// --- Sessions ---------------------------------------------------------------
+
+export function currentSession() {
+  return app.sessions.find((s) => s.id === app.currentSessionId) ?? null
+}
+
+export async function createSession() {
+  const s = newSession()
+  await (await getDB()).put('sessions', s)
+  app.currentSessionId = s.id
+  await refresh()
+  app.view = 'session-build'
+}
+
+export function openSession(id, view = 'session-build') {
+  app.currentSessionId = id
+  app.view = view
+}
+
+export async function saveSession(session) {
+  // Plain-clone at the persistence boundary: a Svelte $state proxy cannot be
+  // structured-cloned into IndexedDB, and session documents are JSON-shaped, so
+  // this both strips the proxy and guarantees the put is cloneable.
+  const doc = clone(session)
+  doc.updated_at = localIso()
+  await (await getDB()).put('sessions', doc)
+  await refresh()
+}
+
+export async function deleteSession(id) {
+  await (await getDB()).delete('sessions', id)
+  if (app.currentSessionId === id) app.currentSessionId = null
   await refresh()
 }
 

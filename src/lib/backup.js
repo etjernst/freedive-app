@@ -6,7 +6,7 @@ const EXPORT_FORMAT = 'winnow-export'
 // 2026-06-26T10:09:23+10:00. Used instead of Date.toISOString() (which is
 // always UTC) so the timestamp and the filename read in the user's own time
 // zone, while the offset keeps it unambiguous.
-function localIso(d = new Date()) {
+export function localIso(d = new Date()) {
   const pad = (n) => String(n).padStart(2, '0')
   const offMin = -d.getTimezoneOffset() // east of UTC is positive
   const sign = offMin >= 0 ? '+' : '-'

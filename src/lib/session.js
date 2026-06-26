@@ -1,0 +1,263 @@
+import { localIso } from './backup.js'
+import { fmtMMSS } from './settings.js'
+
+// Session model: a session contains exercises, each carrying a frozen `planned`
+// snapshot and, once trained, an `actual` written alongside. The plan is never
+// overwritten when the actual is edited; the gap between them is the signal.
+
+export const SESSION_SCHEMA_VERSION = 1
+
+export const DEVIATION_REASONS = [
+  { value: 'completed', label: 'Completed as planned' },
+  { value: 'ran_out_of_time', label: 'Ran out of time' },
+  { value: 'stopped_early_felt_off', label: 'Stopped early — felt off' },
+  { value: 'equipment', label: 'Equipment' },
+  { value: 'other', label: 'Other' },
+]
+
+export const INCIDENTS = [
+  { value: 'none', label: 'None' },
+  { value: 'samba', label: 'Samba' },
+  { value: 'lmc', label: 'LMC' },
+  { value: 'bo', label: 'Blackout' },
+  { value: 'other', label: 'Other' },
+]
+
+export const FEELS = ['great', 'good', 'okay', 'flat', 'rough']
+
+export const DISCIPLINES = ['STA', 'DYN', 'DYNb', 'DNF']
+
+// Effort shapes. `simple` resolves to hold or distance from the discipline; the
+// rest fix an explicit segment order (see repSegments).
+export const SHAPES = [
+  { value: 'simple', label: 'Simple (hold or distance)' },
+  { value: 'stop-start', label: 'Stop-start (hold then distance)' },
+  { value: 'start-stop', label: 'Start-stop (distance then hold)' },
+  { value: 'stop-in-the-middle', label: 'Stop-in-the-middle (distance, hold, distance)' },
+  { value: 'continuous-protocol', label: 'Continuous protocol' },
+]
+
+const DYNAMIC = new Set(['DYN', 'DYNb', 'DNF'])
+
+export function isDynamic(discipline) {
+  return DYNAMIC.has(discipline)
+}
+
+// Contractions are timed in static but measured by distance in dynamic, so the
+// unit follows the discipline (mirrors the first-contraction baselines).
+export function contractionUnit(discipline) {
+  return isDynamic(discipline) ? 'distance' : 'time'
+}
+
+// Wall turns implied by a distance: lengths minus one (50 m in a 25 m pool is
+// one turn). Display-only, derived from distance and pool length.
+export function turnsFor(distance_m, pool_length_m = 25) {
+  if (!distance_m || !pool_length_m) return null
+  return Math.max(0, Math.round(distance_m / pool_length_m) - 1)
+}
+
+// Ordered segments a rep captures, given its shape and the exercise discipline.
+export function repSegments(shape, discipline) {
+  switch (shape) {
+    case 'stop-start':
+      return ['hold', 'distance']
+    case 'start-stop':
+      return ['distance', 'hold']
+    case 'stop-in-the-middle':
+      return ['distance', 'hold', 'distance2']
+    case 'continuous-protocol':
+      return ['continuous']
+    case 'simple':
+    default:
+      return isDynamic(discipline) ? ['distance'] : ['hold']
+  }
+}
+
+function uid(prefix) {
+  const raw =
+    typeof crypto !== 'undefined' && crypto.randomUUID
+      ? crypto.randomUUID().replace(/-/g, '')
+      : Math.random().toString(36).slice(2)
+  return `${prefix}-${raw.slice(0, 10)}`
+}
+
+export function todayLocalDate(d = new Date()) {
+  const pad = (n) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+}
+
+export function newSession() {
+  const now = localIso()
+  return {
+    id: uid('sess'),
+    schema_version: SESSION_SCHEMA_VERSION,
+    date: todayLocalDate(),
+    created_at: now,
+    updated_at: now,
+    status: 'planned', // -> 'logged' once an actual is saved
+    exercises: [],
+    session_remarks: '',
+    overall_feel: null,
+  }
+}
+
+// Snapshot a library template into a session exercise. The template's rep block
+// becomes the immutable plan; discipline is forced concrete ('any' -> STA, then
+// editable in the build view); actual starts empty.
+export function instantiateExercise(template) {
+  const reps = (template.reps ?? []).map((r) => clone(r))
+  const discipline =
+    template.discipline && template.discipline !== 'any' ? template.discipline : 'STA'
+  return {
+    id: uid('ex'),
+    template_id: template.id ?? null,
+    name: template.name ?? template.id ?? 'Exercise',
+    environment: template.environment ?? 'pool',
+    role: template.role ?? 'main',
+    discipline,
+    capacity_tags: template.capacity_tags ?? [],
+    goal: template.goal ?? '',
+    cues: template.cues ?? '',
+    shape_default: template.shape_default ?? 'simple',
+    set_repeat: template.set_repeat ?? 1,
+    termination: template.termination ?? { type: 'fixed_n', n: 1 },
+    recovery_intra_default: template.recovery_intra_default ?? null,
+    recovery_inter: template.recovery_inter ?? null,
+    planned: { reps: reps.length ? reps : [blankRep('simple')] },
+    actual: null,
+  }
+}
+
+export function blankExercise() {
+  return {
+    id: uid('ex'),
+    template_id: null,
+    name: 'Ad-hoc exercise',
+    environment: 'pool',
+    role: 'main',
+    discipline: 'STA',
+    capacity_tags: [],
+    goal: '',
+    cues: '',
+    shape_default: 'simple',
+    set_repeat: 1,
+    termination: { type: 'fixed_n', n: 1 },
+    recovery_intra_default: null,
+    recovery_inter: null,
+    planned: { reps: [blankRep('simple')] },
+    actual: null,
+  }
+}
+
+export function blankRep(shape = 'simple') {
+  return { shape }
+}
+
+// The plan slots to log against: the rep block repeated set_repeat times. Each
+// slot keeps a plan_index back to its planned rep so the log leaf can show the
+// planned target beside the realized number. Until-failure / progressive sets
+// add or drop rows during logging, so this is a starting scaffold, not a cap.
+export function expandPlannedSlots(exercise) {
+  const reps = exercise.planned?.reps ?? []
+  const k = Math.max(1, exercise.set_repeat ?? 1)
+  const slots = []
+  for (let set = 0; set < k; set++) {
+    reps.forEach((rep, i) => slots.push({ plan_index: i, set, rep }))
+  }
+  return slots
+}
+
+export function blankActualRep(plan_index = null) {
+  return {
+    plan_index,
+    hold_s: null,
+    distance_m: null,
+    distance2_m: null,
+    dive_time_s: null,
+    duration_s: null, // continuous-protocol realized total
+    turns: null,
+    recovery_value: null,
+    recovery_unit: null,
+    contraction_value: null,
+    contraction_unit: null,
+    stroke_count: null,
+    hr_high: null,
+    hr_low: null,
+    spo2_nadir: null,
+    incident: 'none',
+    incident_note: '',
+    prep_pattern: '',
+    prep_duration_s: null,
+    note: '',
+  }
+}
+
+export function seedActual(exercise) {
+  return {
+    physical_rpe: null,
+    mental_rpe: null,
+    deviation_reason: 'completed',
+    remarks: '',
+    reps: expandPlannedSlots(exercise).map((s) => blankActualRep(s.plan_index)),
+  }
+}
+
+// Plain deep clone for JSON-shaped documents; also strips Svelte state proxies.
+export function clone(obj) {
+  return JSON.parse(JSON.stringify(obj))
+}
+
+const QUAL_LABELS = {
+  submax: 'sub-max',
+  strong_submax: 'strong sub-max',
+  max: 'max',
+  close_to_max: 'close to max',
+}
+
+// One-line descriptions of a planned target, for showing the plan beside the
+// realized number in the log leaf.
+export function describeHold(t) {
+  if (!t) return '—'
+  switch (t.unit) {
+    case 'absolute':
+      return fmtMMSS(t.value)
+    case 'pct_pb':
+      return `${t.value}% PB`
+    case 'contraction_relative':
+      return t.value ? `1C +${t.value}s` : 'until 1C'
+    case 'qualitative':
+      return QUAL_LABELS[t.value] ?? String(t.value)
+    default:
+      return String(t.value ?? '—')
+  }
+}
+
+export function describeDistance(t) {
+  if (!t) return '—'
+  switch (t.unit) {
+    case 'absolute':
+      return `${t.value} m`
+    case 'pct_pb':
+      return `${t.value}% PB`
+    case 'qualitative':
+      return String(t.value)
+    case 'computed':
+      return 'computed'
+    default:
+      return String(t.value ?? '—')
+  }
+}
+
+export function describeRecovery(r) {
+  if (!r) return '—'
+  const u = r.unit === 'breaths' ? ' breaths' : 's'
+  switch (r.type) {
+    case 'qualitative':
+    case 'inequality':
+      return String(r.value)
+    case 'cap':
+      return `≤ ${r.value}${u}`
+    default:
+      return r.value != null ? `${r.value}${u}` : '—'
+  }
+}

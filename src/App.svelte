@@ -11,6 +11,18 @@
     setView,
   } from './lib/store.svelte.js'
   import Settings from './Settings.svelte'
+  import Sessions from './Sessions.svelte'
+  import SessionBuild from './SessionBuild.svelte'
+  import SessionLog from './SessionLog.svelte'
+
+  const TITLES = {
+    home: { h1: 'Winnow', tag: 'Capture, tracking, and coaching' },
+    settings: { h1: 'Settings', tag: 'Personal bests, pace, and training baselines' },
+    sessions: { h1: 'Sessions', tag: 'Build, log, and review your training' },
+    'session-build': { h1: 'Build session', tag: 'Assemble the plan from your library' },
+    'session-log': { h1: 'Log session', tag: 'Fill the actuals against your plan' },
+  }
+  const head = $derived(TITLES[app.view] ?? TITLES.home)
 
   let busy = $state(null)
   let notice = $state(null)
@@ -78,24 +90,27 @@
 
 <header>
   <div class="title">
-    <h1>{app.view === 'settings' ? 'Settings' : 'Winnow'}</h1>
-    <p class="tagline">
-      {app.view === 'settings'
-        ? 'Personal bests, pace, and training baselines'
-        : 'Capture, tracking, and coaching'}
-    </p>
+    <h1>{head.h1}</h1>
+    <p class="tagline">{head.tag}</p>
   </div>
   <nav>
-    {#if app.view === 'settings'}
-      <button class="link" onclick={() => setView('home')}>Home</button>
-    {:else}
+    {#if app.view === 'home'}
+      <button class="link" onclick={() => setView('sessions')}>Sessions</button>
       <button class="link" onclick={() => setView('settings')}>Settings</button>
+    {:else}
+      <button class="link" onclick={() => setView('home')}>Home</button>
     {/if}
   </nav>
 </header>
 
 {#if app.view === 'settings'}
   <Settings />
+{:else if app.view === 'sessions'}
+  <Sessions />
+{:else if app.view === 'session-build'}
+  <SessionBuild />
+{:else if app.view === 'session-log'}
+  <SessionLog />
 {:else}
   <main>
     {#if app.error}
@@ -104,6 +119,14 @@
         <p>{app.error}</p>
       </section>
     {/if}
+
+    <section class="card">
+      <h2>Training</h2>
+      <p class="muted">{app.sessions.length} session{app.sessions.length === 1 ? '' : 's'} logged or planned</p>
+      <div class="actions">
+        <button onclick={() => setView('sessions')}>Open sessions</button>
+      </div>
+    </section>
 
     <section class="card">
       <h2>Exercise library</h2>
@@ -181,6 +204,6 @@
       {#if app.dropbox.justConnected}<p class="notice">Connected to Dropbox</p>{/if}
     </section>
 
-    <p class="phase-note">Phase 1 — storage and backup. Capture and calendar to come.</p>
+    <p class="phase-note">Phase 2a — capture. Calendar and capacities to come.</p>
   </main>
 {/if}
