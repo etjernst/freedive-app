@@ -33,7 +33,8 @@ The controlled set, multi-valued per exercise, sourced from each exercise's goal
 Used to resolve `contraction_relative` holds (1C + X) for the time estimate, and tracked as a CO2-tolerance metric.
 
 - Keyed by discipline x lung volume (RV/EL contractions arrive far earlier than full-lung, so buckets are separate).
-- Window: the last N logged first-contraction times in that bucket. Start with N = 5 and a simple mean (no decay); revisit if it lags real change.
+- The unit follows the discipline: seconds for static, meters for dynamic, since contractions are timed in STA but measured by distance in DYN/DNF.
+- Window: the last N logged first-contraction values in that bucket. Start with N = 5 and a simple mean (no decay); revisit if it lags real change.
 - Minimum N before the average is trusted: 3. Below that, fall back in this order: the user's hand-entered baseline for the bucket, then the template nominal.
 - The estimate surfaces which source it used (rolling average / baseline / nominal).
 

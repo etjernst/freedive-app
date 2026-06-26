@@ -28,7 +28,10 @@
       vc: s.spirometer.vital_capacity_l ?? '',
       packed: s.spirometer.packed_l ?? '',
       oneC: Object.fromEntries(
-        ONE_C_BUCKETS.map((b) => [b.key, fmtMMSS(s.one_c_baseline_s[b.key])]),
+        ONE_C_BUCKETS.map((b) => [
+          b.key,
+          b.unit === 'time' ? fmtMMSS(s.one_c_baseline[b.key]) : (s.one_c_baseline[b.key] ?? ''),
+        ]),
       ),
       breathing: Object.entries(s.breathing_intensity).map(([pattern, intensity]) => ({
         pattern,
@@ -49,9 +52,10 @@
 
   function toSettings() {
     const oneC = {}
-    for (const [k, v] of Object.entries(sd.oneC)) {
-      const s = parseMMSS(v)
-      if (s != null) oneC[k] = s
+    for (const b of ONE_C_BUCKETS) {
+      const raw = sd.oneC[b.key]
+      const val = b.unit === 'time' ? parseMMSS(raw) : numOrNull(raw)
+      if (val != null) oneC[b.key] = val
     }
     const breathing = {}
     for (const row of sd.breathing) {
@@ -72,7 +76,7 @@
       },
       pool_length_m: numOrNull(sd.pool) ?? 25,
       spirometer: { vital_capacity_l: numOrNull(sd.vc), packed_l: numOrNull(sd.packed) },
-      one_c_baseline_s: oneC,
+      one_c_baseline: oneC,
       breathing_intensity: breathing,
     }
   }
@@ -110,11 +114,16 @@
 
   <section class="card">
     <h2>First-contraction baseline</h2>
-    <p class="muted">Cold-start values (mm:ss) until logged history takes over.</p>
+    <p class="muted">Cold-start values until logged history takes over. Static in mm:ss, dynamic in meters.</p>
     {#each ONE_C_BUCKETS as b (b.key)}
       <div class="field">
-        <label for={'oc-' + b.key}>{b.label}</label>
-        <input id={'oc-' + b.key} inputmode="numeric" bind:value={sd.oneC[b.key]} placeholder="3:30" />
+        <label for={'oc-' + b.key}>{b.label} {b.unit === 'time' ? '(mm:ss)' : '(m)'}</label>
+        <input
+          id={'oc-' + b.key}
+          inputmode="numeric"
+          bind:value={sd.oneC[b.key]}
+          placeholder={b.unit === 'time' ? '3:30' : '40'}
+        />
       </div>
     {/each}
   </section>

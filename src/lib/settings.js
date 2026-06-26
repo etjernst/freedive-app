@@ -8,28 +8,36 @@ export const DEFAULT_SETTINGS = {
   pace_s_per_25: { DNF: null, DYN: null, DYNb: null },
   pool_length_m: 25,
   spirometer: { vital_capacity_l: null, packed_l: null },
-  // Cold-start first-contraction baseline, seconds, keyed "DISCIPLINE|LUNG"
-  // until enough history exists for the rolling average to take over.
-  one_c_baseline_s: {},
+  // Cold-start first-contraction baseline, keyed "DISCIPLINE|LUNG", until
+  // enough history exists for the rolling average to take over. The value's
+  // unit follows the discipline: seconds for static, meters for dynamic,
+  // because contractions are timed in STA but measured by distance in DYN/DNF.
+  one_c_baseline: {},
   // Breathing pattern -> prep intensity, read by the analysis layer so Emilia
-  // enters only duration + pattern. Seeded from her own decoding.
+  // enters only duration + pattern. Seeded from her own decoding. Distinct
+  // patterns may share an intensity (e.g. square and tidal both read neutral);
+  // the raw pattern is still stored per rep, so nothing is lost.
   breathing_intensity: {
     '2:2': 'very_strong',
+    '3:3': 'very_strong',
     '5:5': 'strong',
     '4:6': 'soft',
     square: 'neutral',
+    tidal: 'neutral',
+    '3 big breaths': 'soft',
   },
 }
 
 // The first-contraction buckets surfaced in the settings form. FRC is omitted
 // as rare; add-as-needed rather than showing every discipline x lung combo.
+// unit drives the input: 'time' (mm:ss, seconds) or 'distance' (meters).
 export const ONE_C_BUCKETS = [
-  { key: 'STA|FL', label: 'STA, full lungs' },
-  { key: 'STA|RV', label: 'STA, residual volume (EL)' },
-  { key: 'DNF|FL', label: 'DNF, full lungs' },
-  { key: 'DNF|RV', label: 'DNF, residual volume (EL)' },
-  { key: 'DYN|FL', label: 'DYN, full lungs' },
-  { key: 'DYNb|FL', label: 'DYNb, full lungs' },
+  { key: 'STA|FL', label: 'STA, full lungs', unit: 'time' },
+  { key: 'STA|RV', label: 'STA, residual volume (EL)', unit: 'time' },
+  { key: 'DNF|FL', label: 'DNF, full lungs', unit: 'distance' },
+  { key: 'DNF|RV', label: 'DNF, residual volume (EL)', unit: 'distance' },
+  { key: 'DYN|FL', label: 'DYN, full lungs', unit: 'distance' },
+  { key: 'DYNb|FL', label: 'DYNb, full lungs', unit: 'distance' },
 ]
 
 export const INTENSITIES = ['very_strong', 'strong', 'soft', 'neutral']
@@ -44,7 +52,7 @@ export function mergeSettings(stored) {
     pace_s_per_25: { ...DEFAULT_SETTINGS.pace_s_per_25, ...(s.pace_s_per_25 ?? {}) },
     pool_length_m: s.pool_length_m ?? DEFAULT_SETTINGS.pool_length_m,
     spirometer: { ...DEFAULT_SETTINGS.spirometer, ...(s.spirometer ?? {}) },
-    one_c_baseline_s: { ...(s.one_c_baseline_s ?? {}) },
+    one_c_baseline: { ...(s.one_c_baseline ?? {}) },
     breathing_intensity: s.breathing_intensity
       ? { ...s.breathing_intensity }
       : { ...DEFAULT_SETTINGS.breathing_intensity },
