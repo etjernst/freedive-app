@@ -641,6 +641,27 @@ nav {
   color: var(--muted);
 }
 
+.pb-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.pb-check input {
+  accent-color: var(--accent);
+  width: 16px;
+  height: 16px;
+}
+
+.pb-check:has(input:checked) {
+  color: var(--accent);
+  font-weight: 600;
+}
+
 .details {
   margin-top: 8px;
   padding-top: 8px;

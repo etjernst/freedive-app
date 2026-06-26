@@ -43,6 +43,15 @@ export function isDynamic(discipline) {
   return DYNAMIC.has(discipline)
 }
 
+// Discipline-aware label for the shape picker. The generic "simple" shape reads
+// as time for static and distance for dynamic, rather than "hold or distance".
+export function shapeLabel(shape, discipline) {
+  if (shape === 'simple') {
+    return isDynamic(discipline) ? 'Simple (distance)' : 'Simple (time)'
+  }
+  return SHAPES.find((s) => s.value === shape)?.label ?? shape
+}
+
 // Contractions are timed in static but measured by distance in dynamic, so the
 // unit follows the discipline (mirrors the first-contraction baselines).
 export function contractionUnit(discipline) {
@@ -185,6 +194,7 @@ export function expandPlannedSlots(exercise) {
 export function blankActualRep(plan_index = null) {
   return {
     plan_index,
+    new_pb: false,
     hold_s: null,
     distance_m: null,
     distance2_m: null,

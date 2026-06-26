@@ -15,6 +15,7 @@
     FEELS,
   } from './lib/session.js'
   import MMSS from './lib/MMSS.svelte'
+  import Help from './lib/Help.svelte'
 
   // Clone the loaded session and seed an empty actual for any exercise not yet
   // logged. The planned snapshot is read-only here; we only ever write actuals.
@@ -109,6 +110,11 @@
               {/if}
             </div>
 
+            <label class="pb-check">
+              <input type="checkbox" bind:checked={ar.new_pb} />
+              New PB
+            </label>
+
             <button class="link details-toggle" onclick={() => toggle(`${ei}-${ri}`)}>
               {open[`${ei}-${ri}`] ? 'Hide details' : 'More'}
             </button>
@@ -116,7 +122,7 @@
             {#if open[`${ei}-${ri}`]}
               <div class="details">
                 <div class="rfield">
-                  <span class="lbl">1C ({cu === 'time' ? 'mm:ss' : 'm'})</span>
+                  <span class="lbl">First contraction ({cu === 'time' ? 'mm:ss' : 'm'})</span>
                   {#if cu === 'time'}
                     <MMSS bind:seconds={ar.contraction_value} />
                   {:else}
@@ -166,7 +172,13 @@
 
       <div class="ex-actual">
         <div class="field rpe-row">
-          <span class="lbl">RPE physical / mental</span>
+          <span class="lbl">
+            RPE physical / mental
+            <Help>
+              <strong>Rate of perceived exertion</strong><br />
+              0–10, higher is harder. 0 is nothing at all, 10 is maximal.
+            </Help>
+          </span>
           <span class="rpe-inputs">
             <input type="number" min="0" max="10" bind:value={ex.actual.physical_rpe} placeholder="phys" />
             <input type="number" min="0" max="10" bind:value={ex.actual.mental_rpe} placeholder="ment" />

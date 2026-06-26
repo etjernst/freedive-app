@@ -6,6 +6,7 @@
     blankRep,
     repSegments,
     shapeHint,
+    shapeLabel,
     clone,
     DISCIPLINES,
     SHAPES,
@@ -156,7 +157,7 @@
             <div class="rep-top">
               <span class="rep-n">#{ri + 1}</span>
               <select class="shape" bind:value={rep.shape} onchange={() => onShape(rep, ex)}>
-                {#each SHAPES as s}<option value={s.value}>{s.label}</option>{/each}
+                {#each SHAPES as s}<option value={s.value}>{shapeLabel(s.value, ex.discipline)}</option>{/each}
               </select>
               <button class="link" onclick={() => removeRep(ex, ri)} aria-label="Remove rep">✕</button>
             </div>
