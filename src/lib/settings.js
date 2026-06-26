@@ -24,7 +24,7 @@ export const DEFAULT_SETTINGS = {
     '4:6': 'soft',
     square: 'neutral',
     tidal: 'neutral',
-    '3 big breaths': 'soft',
+    '3 big breaths': 'neutral',
   },
 }
 
