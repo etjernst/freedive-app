@@ -2,8 +2,8 @@
   /* Quiet light system: warm paper, ink text, a single sage accent (from the
      logo) used only to mark what's selected or primary. No second hue. */
   --bg: #f4f2ea;
-  --panel: #faf9f3;
-  --panel-2: #ffffff;
+  --panel: #f6f2e8;
+  --panel-2: #e9e4d6;
   --accent: #5c6d3c;
   --accent-2: #5c6d3c;
   --on-accent: #f7f6ef;
@@ -157,6 +157,13 @@ main {
 
 .splash-inner {
   text-align: center;
+}
+
+.splash-logo {
+  display: block;
+  height: 220px;
+  width: auto;
+  margin: 0 auto 22px;
 }
 
 .wordmark {
@@ -400,6 +407,34 @@ nav {
   color: var(--muted);
   cursor: pointer;
   padding: 8px 12px;
+}
+
+.row-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Status badge: logged reads solid (done), planned reads as a ghost outline,
+   echoing the ghost-outlined planned days on the calendar to come. */
+.badge {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  padding: 1px 8px;
+  border-radius: 20px;
+}
+
+.badge.logged {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.badge.planned {
+  background: transparent;
+  color: var(--muted);
+  border: 1px dashed var(--muted);
 }
 
 .add-row {

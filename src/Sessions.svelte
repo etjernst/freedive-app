@@ -33,8 +33,11 @@
         {#each app.sessions as s, i (s.id)}
           <li class="session-row" class:is-current={i === 0}>
             <button class="session-open" onclick={() => openSession(s.id, s.status === 'logged' ? 'session-log' : 'session-build')}>
-              <span class="name">{fmtDate(s.date)}</span>
-              <span class="tags">{summary(s)} · {s.status}</span>
+              <span class="row-head">
+                <span class="name">{fmtDate(s.date)}</span>
+                <span class="badge {s.status}">{s.status}</span>
+              </span>
+              <span class="tags">{summary(s)}</span>
             </button>
             <button class="row-del link" onclick={(e) => onDelete(e, s.id)} aria-label="Delete session">✕</button>
           </li>

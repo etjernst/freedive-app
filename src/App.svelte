@@ -10,6 +10,7 @@
     restoreFromDropbox,
     setView,
   } from './lib/store.svelte.js'
+  import logoUrl from './assets/winnow_logo.svg'
   import Settings from './Settings.svelte'
   import Sessions from './Sessions.svelte'
   import SessionBuild from './SessionBuild.svelte'
@@ -76,6 +77,7 @@
 
 <div class="splash" aria-hidden="true">
   <div class="splash-inner">
+    <img class="splash-logo" src={logoUrl} alt="" />
     <div class="wordmark">Winnow</div>
     <p class="mantra">No quick decisions</p>
   </div>
