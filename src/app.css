@@ -31,6 +31,20 @@ body {
 
 header {
   padding: 24px 4px 8px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+header nav button.link {
+  background: none;
+  border: none;
+  color: var(--accent-2);
+  font: inherit;
+  font-size: 14px;
+  padding: 6px 4px;
+  cursor: pointer;
 }
 
 h1 {
@@ -251,4 +265,73 @@ main {
   color: var(--muted);
   text-decoration: underline;
   padding: 4px 0;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.field label {
+  font-size: 14px;
+  color: var(--muted);
+  flex: 1;
+}
+
+.field input,
+.field select {
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font: inherit;
+  font-size: 14px;
+  width: 110px;
+  box-sizing: border-box;
+}
+
+.breathing-row {
+  gap: 8px;
+}
+
+.breathing-row input.pattern {
+  width: auto;
+  flex: 1;
+}
+
+.breathing-row select {
+  width: 130px;
+}
+
+.breathing-row button.link {
+  flex: 0 0 auto;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+
+.sticky-save {
+  position: sticky;
+  bottom: 0;
+  background: var(--bg);
+  padding: 12px 0 20px;
+  margin-top: 4px;
+}
+
+.sticky-save button:first-child {
+  flex: 1;
+  background: var(--accent);
+  color: var(--text);
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
 }

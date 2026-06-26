@@ -2,6 +2,7 @@ import { getDB, setMeta } from './db.js'
 import { seedIfNeeded } from './seed.js'
 import { requestPersistence, storageEstimate } from './persist.js'
 import { exportToFile, restoreFromFile, buildExport, restoreFromEnvelope, parseExport } from './backup.js'
+import { mergeSettings } from './settings.js'
 import * as dropbox from './dropbox.js'
 
 // Reactive app state for the shell. The UI reads from here; actions below
@@ -10,13 +11,19 @@ import * as dropbox from './dropbox.js'
 export const app = $state({
   ready: false,
   error: null,
+  view: 'home',
   templates: [],
+  settings: mergeSettings(null),
   persisted: false,
   usage: null,
   lastExport: null,
   pendingBackup: 0,
   dropbox: { connected: false, busy: false, lastSync: null, error: null, justConnected: false },
 })
+
+export function setView(v) {
+  app.view = v
+}
 
 export async function initApp() {
   try {
@@ -47,6 +54,13 @@ export async function refresh() {
   app.lastExport = (await db.get('meta', 'last_export'))?.value ?? null
   app.pendingBackup = await db.count('outbox')
   app.dropbox.lastSync = (await db.get('meta', 'last_dropbox_sync'))?.value ?? null
+  app.settings = mergeSettings(await db.get('settings', 'profile'))
+}
+
+export async function saveSettings(next) {
+  const db = await getDB()
+  await db.put('settings', { ...next, key: 'profile' })
+  await refresh()
 }
 
 export async function doExport() {

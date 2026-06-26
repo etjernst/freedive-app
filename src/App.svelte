@@ -8,7 +8,9 @@
     disconnectDropbox,
     syncToDropbox,
     restoreFromDropbox,
+    setView,
   } from './lib/store.svelte.js'
+  import Settings from './Settings.svelte'
 
   let busy = $state(null)
   let notice = $state(null)
@@ -75,93 +77,110 @@
 {/if}
 
 <header>
-  <h1>Winnow</h1>
-  <p class="tagline">Capture, tracking, and coaching</p>
+  <div class="title">
+    <h1>{app.view === 'settings' ? 'Settings' : 'Winnow'}</h1>
+    <p class="tagline">
+      {app.view === 'settings'
+        ? 'Personal bests, pace, and training baselines'
+        : 'Capture, tracking, and coaching'}
+    </p>
+  </div>
+  <nav>
+    {#if app.view === 'settings'}
+      <button class="link" onclick={() => setView('home')}>Home</button>
+    {:else}
+      <button class="link" onclick={() => setView('settings')}>Settings</button>
+    {/if}
+  </nav>
 </header>
 
-<main>
-  {#if app.error}
-    <section class="card error">
-      <h2>Storage error</h2>
-      <p>{app.error}</p>
+{#if app.view === 'settings'}
+  <Settings />
+{:else}
+  <main>
+    {#if app.error}
+      <section class="card error">
+        <h2>Storage error</h2>
+        <p>{app.error}</p>
+      </section>
+    {/if}
+
+    <section class="card">
+      <h2>Exercise library</h2>
+      <p class="muted">{app.templates.length} templates in your library</p>
+      <ul class="library">
+        {#each app.templates as t (t.id)}
+          <li>
+            <span class="name">{t.name ?? t.id}</span>
+            {#if t.capacity_tags}
+              <span class="tags">{t.capacity_tags.join(' · ')}</span>
+            {/if}
+          </li>
+        {/each}
+      </ul>
     </section>
-  {/if}
 
-  <section class="card">
-    <h2>Backup</h2>
-    <dl class="status">
-      <dt>Persistent storage</dt>
-      <dd>{app.persisted ? 'granted' : 'not granted'}</dd>
-      <dt>Storage used</dt>
-      <dd>{fmtBytes(app.usage?.usage)}</dd>
-      <dt>Last export</dt>
-      <dd>{fmtDate(app.lastExport)}</dd>
-      <dt>Not backed up</dt>
-      <dd>{app.pendingBackup} item{app.pendingBackup === 1 ? '' : 's'}</dd>
-    </dl>
-    <div class="actions">
-      <button onclick={onExport} disabled={!app.ready || busy}>
-        {busy === 'export' ? 'Exporting…' : 'Export to file'}
-      </button>
-      <label class="file-btn" class:disabled={!app.ready || busy}>
-        {busy === 'restore' ? 'Restoring…' : 'Restore from file'}
-        <input
-          type="file"
-          accept="application/json,.json"
-          onchange={onRestoreFile}
-          disabled={!app.ready || busy}
-        />
-      </label>
-    </div>
-    {#if notice}<p class="notice">{notice}</p>{/if}
-  </section>
-
-  <section class="card">
-    <h2>Cloud backup (Dropbox)</h2>
-    {#if app.dropbox.connected}
+    <section class="card">
+      <h2>Backup</h2>
       <dl class="status">
-        <dt>Status</dt>
-        <dd>connected</dd>
-        <dt>Last sync</dt>
-        <dd>{fmtDate(app.dropbox.lastSync)}</dd>
+        <dt>Persistent storage</dt>
+        <dd>{app.persisted ? 'granted' : 'not granted'}</dd>
+        <dt>Storage used</dt>
+        <dd>{fmtBytes(app.usage?.usage)}</dd>
+        <dt>Last export</dt>
+        <dd>{fmtDate(app.lastExport)}</dd>
+        <dt>Not backed up</dt>
+        <dd>{app.pendingBackup} item{app.pendingBackup === 1 ? '' : 's'}</dd>
       </dl>
       <div class="actions">
-        <button onclick={syncToDropbox} disabled={app.dropbox.busy}>
-          {app.dropbox.busy ? 'Working…' : 'Back up now'}
+        <button onclick={onExport} disabled={!app.ready || busy}>
+          {busy === 'export' ? 'Exporting…' : 'Export to file'}
         </button>
-        <button onclick={onRestoreDropbox} disabled={app.dropbox.busy}>
-          Restore from Dropbox
-        </button>
+        <label class="file-btn" class:disabled={!app.ready || busy}>
+          {busy === 'restore' ? 'Restoring…' : 'Restore from file'}
+          <input
+            type="file"
+            accept="application/json,.json"
+            onchange={onRestoreFile}
+            disabled={!app.ready || busy}
+          />
+        </label>
       </div>
-      <div class="actions">
-        <button class="link" onclick={disconnectDropbox} disabled={app.dropbox.busy}>
-          Disconnect
-        </button>
-      </div>
-    {:else}
-      <p class="muted">Auto-back up your log to a private Dropbox app folder.</p>
-      <div class="actions">
-        <button onclick={connectDropbox}>Connect Dropbox</button>
-      </div>
-    {/if}
-    {#if app.dropbox.error}<p class="notice err">{app.dropbox.error}</p>{/if}
-    {#if app.dropbox.justConnected}<p class="notice">Connected to Dropbox</p>{/if}
-  </section>
+      {#if notice}<p class="notice">{notice}</p>{/if}
+    </section>
 
-  <section class="card">
-    <h2>Exercise library</h2>
-    <p class="muted">{app.templates.length} templates in your library</p>
-    <ul class="library">
-      {#each app.templates as t (t.id)}
-        <li>
-          <span class="name">{t.name ?? t.id}</span>
-          {#if t.capacity_tags}
-            <span class="tags">{t.capacity_tags.join(' · ')}</span>
-          {/if}
-        </li>
-      {/each}
-    </ul>
-  </section>
+    <section class="card">
+      <h2>Cloud backup (Dropbox)</h2>
+      {#if app.dropbox.connected}
+        <dl class="status">
+          <dt>Status</dt>
+          <dd>connected</dd>
+          <dt>Last sync</dt>
+          <dd>{fmtDate(app.dropbox.lastSync)}</dd>
+        </dl>
+        <div class="actions">
+          <button onclick={syncToDropbox} disabled={app.dropbox.busy}>
+            {app.dropbox.busy ? 'Working…' : 'Back up now'}
+          </button>
+          <button onclick={onRestoreDropbox} disabled={app.dropbox.busy}>
+            Restore from Dropbox
+          </button>
+        </div>
+        <div class="actions">
+          <button class="link" onclick={disconnectDropbox} disabled={app.dropbox.busy}>
+            Disconnect
+          </button>
+        </div>
+      {:else}
+        <p class="muted">Auto-back up your log to a private Dropbox app folder.</p>
+        <div class="actions">
+          <button onclick={connectDropbox}>Connect Dropbox</button>
+        </div>
+      {/if}
+      {#if app.dropbox.error}<p class="notice err">{app.dropbox.error}</p>{/if}
+      {#if app.dropbox.justConnected}<p class="notice">Connected to Dropbox</p>{/if}
+    </section>
 
-  <p class="phase-note">Phase 1 — storage and backup. Capture and calendar to come.</p>
-</main>
+    <p class="phase-note">Phase 1 — storage and backup. Capture and calendar to come.</p>
+  </main>
+{/if}
