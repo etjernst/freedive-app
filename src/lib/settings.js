@@ -3,8 +3,19 @@
 // is seconds per 25 m (STA has no pace). null means "not set yet".
 export const DEFAULT_SETTINGS = {
   key: 'profile',
-  // Personal bests. STA is a hold time (seconds); the rest are distances (m).
-  pbs: { STA: null, DNF: null, DYN: null, DYNb: null },
+  // Personal bests, keyed by PB_FIELDS below. Times in seconds, distances in
+  // meters; the unit per key lives in PB_FIELDS so the form parses each right.
+  pbs: {
+    STA: null,
+    STA_EL: null,
+    DNF: null,
+    DYN: null,
+    DYNb: null,
+    tortuga: null,
+    sweet16_DNF: null,
+    sweet16_DYNb: null,
+    sweet16_DYN: null,
+  },
   pace_s_per_25: { DNF: null, DYN: null, DYNb: null },
   pool_length_m: 25,
   spirometer: { vital_capacity_l: null, packed_l: null },
@@ -27,6 +38,22 @@ export const DEFAULT_SETTINGS = {
     '3 big breaths': 'neutral',
   },
 }
+
+// Personal-best fields surfaced in the settings form, in display order. `unit`
+// drives the input: 'time' (mm:ss, seconds) or 'distance' (meters). STA bests
+// and the named tests (tortuga, the sweet-16 sprint) are times; the bare
+// discipline maxes are distances.
+export const PB_FIELDS = [
+  { key: 'STA', label: 'STA full lung', unit: 'time' },
+  { key: 'STA_EL', label: 'STA empty lung (EL)', unit: 'time' },
+  { key: 'DNF', label: 'DNF max', unit: 'distance' },
+  { key: 'DYN', label: 'DYN monofin max', unit: 'distance' },
+  { key: 'DYNb', label: 'DYNb bifins max', unit: 'distance' },
+  { key: 'tortuga', label: 'Tortuga', unit: 'time' },
+  { key: 'sweet16_DNF', label: 'Sweet 16 DNF (16×25)', unit: 'time' },
+  { key: 'sweet16_DYNb', label: 'Sweet 16 DYNb (16×25)', unit: 'time' },
+  { key: 'sweet16_DYN', label: 'Sweet 16 DYN (16×25)', unit: 'time' },
+]
 
 // The first-contraction buckets surfaced in the settings form. FRC is omitted
 // as rare; add-as-needed rather than showing every discipline x lung combo.

@@ -1,6 +1,7 @@
 <script>
   import { app, saveSettings, setView } from './lib/store.svelte.js'
   import {
+    PB_FIELDS,
     ONE_C_BUCKETS,
     INTENSITIES,
     parseMMSS,
@@ -13,12 +14,12 @@
   // after the app has loaded, so app.settings is current here).
   function buildDraft(s) {
     return {
-      pbs: {
-        STA: fmtMMSS(s.pbs.STA),
-        DNF: s.pbs.DNF ?? '',
-        DYN: s.pbs.DYN ?? '',
-        DYNb: s.pbs.DYNb ?? '',
-      },
+      pbs: Object.fromEntries(
+        PB_FIELDS.map((f) => [
+          f.key,
+          f.unit === 'time' ? fmtMMSS(s.pbs[f.key]) : (s.pbs[f.key] ?? ''),
+        ]),
+      ),
       pace: {
         DNF: s.pace_s_per_25.DNF ?? '',
         DYN: s.pace_s_per_25.DYN ?? '',
@@ -63,12 +64,12 @@
       if (p) breathing[p] = row.intensity
     }
     return {
-      pbs: {
-        STA: parseMMSS(sd.pbs.STA),
-        DNF: numOrNull(sd.pbs.DNF),
-        DYN: numOrNull(sd.pbs.DYN),
-        DYNb: numOrNull(sd.pbs.DYNb),
-      },
+      pbs: Object.fromEntries(
+        PB_FIELDS.map((f) => [
+          f.key,
+          f.unit === 'time' ? parseMMSS(sd.pbs[f.key]) : numOrNull(sd.pbs[f.key]),
+        ]),
+      ),
       pace_s_per_25: {
         DNF: numOrNull(sd.pace.DNF),
         DYN: numOrNull(sd.pace.DYN),
@@ -91,10 +92,17 @@
 <main>
   <section class="card">
     <h2>Personal bests</h2>
-    <div class="field"><label for="pb-sta">STA (mm:ss)</label><input id="pb-sta" inputmode="numeric" bind:value={sd.pbs.STA} placeholder="6:00" /></div>
-    <div class="field"><label for="pb-dnf">DNF (m)</label><input id="pb-dnf" type="number" bind:value={sd.pbs.DNF} placeholder="150" /></div>
-    <div class="field"><label for="pb-dyn">DYN monofin (m)</label><input id="pb-dyn" type="number" bind:value={sd.pbs.DYN} placeholder="200" /></div>
-    <div class="field"><label for="pb-dynb">DYNb bifins (m)</label><input id="pb-dynb" type="number" bind:value={sd.pbs.DYNb} /></div>
+    {#each PB_FIELDS as f (f.key)}
+      <div class="field">
+        <label for={'pb-' + f.key}>{f.label} {f.unit === 'time' ? '(mm:ss)' : '(m)'}</label>
+        <input
+          id={'pb-' + f.key}
+          inputmode="numeric"
+          bind:value={sd.pbs[f.key]}
+          placeholder={f.unit === 'time' ? '6:00' : '150'}
+        />
+      </div>
+    {/each}
   </section>
 
   <section class="card">
