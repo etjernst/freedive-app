@@ -92,11 +92,11 @@
       "termination": { "type": "duration_capped", "duration_s": 1200 },
       "cycle_def": "one full up-and-down pyramid (25-50-75-50-25)",
       "reps": [
-        { "shape": "simple", "distance_target": { "unit": "absolute", "value": 25 }, "recovery": { "type": "qualitative", "value": "minimal" } },
-        { "shape": "simple", "distance_target": { "unit": "absolute", "value": 50 }, "recovery": { "type": "qualitative", "value": "minimal" } },
-        { "shape": "simple", "distance_target": { "unit": "absolute", "value": 75 }, "recovery": { "type": "qualitative", "value": "minimal" } },
-        { "shape": "simple", "distance_target": { "unit": "absolute", "value": 50 }, "recovery": { "type": "qualitative", "value": "minimal" } },
-        { "shape": "simple", "distance_target": { "unit": "absolute", "value": 25 }, "recovery": { "type": "qualitative", "value": "minimal" } }
+        { "shape": "simple", "distance_target": { "unit": "absolute", "value": 25 }, "recovery": { "type": "inequality", "value": "≤ swim time" } },
+        { "shape": "simple", "distance_target": { "unit": "absolute", "value": 50 }, "recovery": { "type": "inequality", "value": "≤ swim time" } },
+        { "shape": "simple", "distance_target": { "unit": "absolute", "value": 75 }, "recovery": { "type": "inequality", "value": "≤ swim time" } },
+        { "shape": "simple", "distance_target": { "unit": "absolute", "value": 50 }, "recovery": { "type": "inequality", "value": "≤ swim time" } },
+        { "shape": "simple", "distance_target": { "unit": "absolute", "value": 25 }, "recovery": { "type": "inequality", "value": "≤ swim time" } }
       ]
     },
     {
