@@ -2,6 +2,23 @@ import { getDB, getMeta, STORES, DATA_SCHEMA_VERSION } from './db.js'
 
 const EXPORT_FORMAT = 'winnow-export'
 
+// Local-time ISO 8601 with the machine's UTC offset, e.g.
+// 2026-06-26T10:09:23+10:00. Used instead of Date.toISOString() (which is
+// always UTC) so the timestamp and the filename read in the user's own time
+// zone, while the offset keeps it unambiguous.
+function localIso(d = new Date()) {
+  const pad = (n) => String(n).padStart(2, '0')
+  const offMin = -d.getTimezoneOffset() // east of UTC is positive
+  const sign = offMin >= 0 ? '+' : '-'
+  const oh = pad(Math.floor(Math.abs(offMin) / 60))
+  const om = pad(Math.abs(offMin) % 60)
+  return (
+    `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}` +
+    `T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}` +
+    `${sign}${oh}:${om}`
+  )
+}
+
 // Gather every store into one versioned envelope. `schema_version` lets a
 // future import run migrate-on-read; `exported_at` is provenance and names
 // the file. The Dropbox adapter will reuse this same envelope, so export and
@@ -13,7 +30,7 @@ export async function buildExport() {
   return {
     format: EXPORT_FORMAT,
     schema_version: (await getMeta('schema_version')) ?? DATA_SCHEMA_VERSION,
-    exported_at: new Date().toISOString(),
+    exported_at: localIso(),
     data,
   }
 }

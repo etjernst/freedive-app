@@ -49,7 +49,9 @@
 
   function fmtDate(iso) {
     if (!iso) return 'never'
-    return iso.replace('T', ' ').replace(/:\d\d\.\d+Z$/, '')
+    // 2026-06-26T10:09:23+10:00 (or an older ...Z) -> 2026-06-26 10:09
+    const m = iso.match(/^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/)
+    return m ? `${m[1]} ${m[2]}` : iso
   }
 
   async function onRestoreDropbox() {
