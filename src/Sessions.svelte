@@ -30,8 +30,8 @@
       <p class="muted">No sessions yet. Build one from your library.</p>
     {:else}
       <ul class="library">
-        {#each app.sessions as s (s.id)}
-          <li class="session-row">
+        {#each app.sessions as s, i (s.id)}
+          <li class="session-row" class:is-current={i === 0}>
             <button class="session-open" onclick={() => openSession(s.id, s.status === 'logged' ? 'session-log' : 'session-build')}>
               <span class="name">{fmtDate(s.date)}</span>
               <span class="tags">{summary(s)} · {s.status}</span>

@@ -1,17 +1,20 @@
 :root {
-  --bg: #0b1f2a;
-  --panel: #0e2c3a;
-  --panel-2: #103444;
-  --accent: #0e4d6b;
-  --accent-2: #2a9fd6;
-  --text: #e6eef2;
-  --muted: #8aa3b0;
-  --border: #1b3d4d;
+  /* Quiet light system: warm paper, ink text, a single sage accent (from the
+     logo) used only to mark what's selected or primary. No second hue. */
+  --bg: #f4f2ea;
+  --panel: #faf9f3;
+  --panel-2: #ffffff;
+  --accent: #5c6d3c;
+  --accent-2: #5c6d3c;
+  --on-accent: #f7f6ef;
+  --text: #21261f;
+  --muted: #86877a;
+  --border: #e1ddce;
 
-  font: 16px/1.45 system-ui, 'Segoe UI', Roboto, sans-serif;
+  font: 16px/1.5 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
   color: var(--text);
   background: var(--bg);
-  color-scheme: dark;
+  color-scheme: light;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -68,17 +71,26 @@ main {
   padding-top: 12px;
 }
 
+/* Flat sections divided by hairlines rather than nested filled cards. */
 .card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 16px;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  padding: 22px 2px;
+}
+
+.card:first-of-type {
+  border-top: 0;
+  padding-top: 8px;
 }
 
 .card h2 {
   margin: 0 0 4px;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--muted);
 }
 
 .muted {
@@ -88,20 +100,30 @@ main {
 
 .library {
   list-style: none;
-  margin: 12px 0 0;
+  margin: 10px 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0;
 }
 
 .library li {
-  background: var(--panel-2);
-  border-radius: 10px;
-  padding: 10px 12px;
+  background: transparent;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  padding: 12px 2px;
   display: flex;
   flex-direction: column;
   gap: 2px;
+}
+
+.library li:last-child {
+  border-bottom: 0;
+}
+
+/* Sage tick marking the selected / most-recent item (the only accent use). */
+.is-current {
+  box-shadow: inset 2px 0 0 var(--accent);
 }
 
 .library .name {
@@ -184,8 +206,8 @@ main {
 }
 
 .banner button {
-  background: var(--accent-2);
-  color: #04222e;
+  background: var(--accent);
+  color: var(--on-accent);
   border: none;
   border-radius: 8px;
   padding: 6px 14px;
@@ -194,8 +216,10 @@ main {
 }
 
 .card.error {
-  border-color: #7a2b2b;
-  background: #2c1414;
+  background: #f7e8e3;
+  border: 1px solid #e0b9ad;
+  border-radius: 10px;
+  padding: 14px;
 }
 
 .status {
@@ -255,7 +279,7 @@ main {
 }
 
 .notice.err {
-  color: #e88;
+  color: #a8432e;
 }
 
 .actions button.link {
@@ -328,7 +352,7 @@ main {
 .sticky-save button:first-child {
   flex: 1;
   background: var(--accent);
-  color: var(--text);
+  color: var(--on-accent);
   border: none;
   border-radius: 10px;
   padding: 12px;
@@ -390,7 +414,7 @@ nav {
 .add-btn {
   flex: 0 0 auto;
   background: var(--accent);
-  color: var(--text);
+  color: var(--on-accent);
   border: none;
   border-radius: 8px;
   padding: 8px 14px;
