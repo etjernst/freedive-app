@@ -23,7 +23,7 @@ export const INCIDENTS = [
   { value: 'other', label: 'Other' },
 ]
 
-export const FEELS = ['great', 'good', 'okay', 'flat', 'rough']
+export const FEELS = ['great', 'good', 'meh', 'bad', 'terrible']
 
 export const DISCIPLINES = ['STA', 'DYN', 'DYNb', 'DNF']
 
@@ -71,6 +71,21 @@ export function repSegments(shape, discipline) {
     default:
       return isDynamic(discipline) ? ['distance'] : ['hold']
   }
+}
+
+// Plain-language description of what a shape captures, given the discipline.
+// Lets "simple" read as "hold time" for static and "distance" for dynamic
+// rather than leaving the user to infer it.
+export function shapeHint(shape, discipline) {
+  const names = {
+    hold: 'hold time',
+    distance: 'distance',
+    distance2: 'second distance',
+    continuous: 'one continuous block',
+  }
+  return repSegments(shape, discipline)
+    .map((s) => names[s])
+    .join(', then ')
 }
 
 function uid(prefix) {

@@ -5,11 +5,13 @@
     blankExercise,
     blankRep,
     repSegments,
+    shapeHint,
     clone,
     DISCIPLINES,
     SHAPES,
   } from './lib/session.js'
   import MMSS from './lib/MMSS.svelte'
+  import Help from './lib/Help.svelte'
 
   const HOLD_QUAL = [
     { value: 'submax', label: 'sub-max' },
@@ -77,6 +79,16 @@
   }
   function onShape(rep, ex) {
     ensure(rep, ex.discipline)
+  }
+  // A feel word (minimal/adequate/full) only makes sense for the qualitative
+  // type; fixed and cap need a number, the rule needs a condition. Reset the
+  // value when switching across those families so a stale word never lands in
+  // a numeric field.
+  function onRecType(rep) {
+    const t = rep.recovery.type
+    if (t === 'qualitative') rep.recovery.value = 'adequate'
+    else if (t === 'inequality') rep.recovery.value = ''
+    else if (typeof rep.recovery.value !== 'number') rep.recovery.value = null
   }
 
   async function save(then) {
@@ -148,6 +160,7 @@
               </select>
               <button class="link" onclick={() => removeRep(ex, ri)} aria-label="Remove rep">✕</button>
             </div>
+            <p class="shape-hint">captures {shapeHint(rep.shape ?? 'simple', ex.discipline)}</p>
 
             {#if segs.includes('hold') && rep.hold_target}
               <div class="seg">
@@ -206,10 +219,19 @@
 
             {#if rep.recovery}
               <div class="seg">
-                <span class="lbl">Recovery</span>
-                <select class="unit" bind:value={rep.recovery.type}>
+                <span class="lbl recovery-lbl">
+                  Recovery
+                  <Help>
+                    <strong>Recovery type</strong><br />
+                    <em>fixed</em> — a set time or number of breaths<br />
+                    <em>cap</em> — recover up to a numeric maximum (≤)<br />
+                    <em>≤ rule</em> — bounded by a condition, e.g. &lt; swim time<br />
+                    <em>qualitative</em> — a feel word (minimal / adequate / full) when you aren't counting
+                  </Help>
+                </span>
+                <select class="unit" bind:value={rep.recovery.type} onchange={() => onRecType(rep)}>
                   <option value="absolute">fixed</option>
-                  <option value="cap">cap</option>
+                  <option value="cap">cap (≤)</option>
                   <option value="inequality">≤ rule</option>
                   <option value="qualitative">qualitative</option>
                 </select>
