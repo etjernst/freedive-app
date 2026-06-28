@@ -29,8 +29,8 @@ export default defineConfig({
         name: 'Winnow',
         short_name: 'Winnow',
         description: 'Freediving capture, tracking, and coaching log',
-        theme_color: '#0e4d6b',
-        background_color: '#0b1f2a',
+        theme_color: '#f4f2ea',
+        background_color: '#f4f2ea',
         display: 'standalone',
         orientation: 'portrait',
         icons: [
