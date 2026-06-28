@@ -434,15 +434,37 @@ REPS = {
     # DYN 2 / DYN 18 Ex1: 2x {50m FRC, 4 breaths, 6x25m sprints, 15s recovery}.
     "dyn-frc-sprint": [
         {"shape": "simple", "distance_target": {"unit": "absolute", "value": 50},
-         "recovery": _BREATHS(4), "note": "FRC"},
+         "recovery": _BREATHS(4), "lung_volume": "FRC", "note": "FRC"},
         *[{"shape": "simple", "distance_target": {"unit": "absolute", "value": 25},
-           "recovery": _SECS(15), "note": "sprint"} for _ in range(6)],
+           "recovery": _SECS(15), "pace": "sprint", "note": "sprint"} for _ in range(6)],
     ],
+}
+
+# Uniform lung volume / speed for exercises whose whole structure is one volume
+# or one speed (applied to every rep). Multi-volume exercises (EL/FL switch) keep
+# the default and are set per-rep in the app; REPS-defined exercises above carry
+# their own. lung_volume uses the schema codes FL/FRC/RV (RV is empty lung / EL).
+LUNG = {
+    "sta-el": "RV",
+    "sta-frc-awareness": "FRC",
+    "sta-wu-frc-progression": "FRC",
+}
+SPEED = {
+    "dyn-sprints": "sprint",
 }
 
 templates = []
 for (cid, name, discipline, allowed_roles, capacity, structure, options) in catalog:
     caps = [c.strip() for c in capacity.split(",")]
+    reps = REPS.get(cid, [{"shape": SHAPE.get(cid, "simple")}])
+    # REPS-defined exercises carry their own per-rep lung/speed; for the rest,
+    # stamp a uniform lung volume / speed onto the placeholder rep when known.
+    if cid not in REPS:
+        for r in reps:
+            if cid in LUNG:
+                r["lung_volume"] = LUNG[cid]
+            if cid in SPEED:
+                r["pace"] = SPEED[cid]
     templates.append({
         "schema_version": 1,
         "id": cid,
@@ -455,7 +477,7 @@ for (cid, name, discipline, allowed_roles, capacity, structure, options) in cata
         "cues": options,
         "set_repeat": SET_REPEAT.get(cid, 1),
         "termination": TERMINATION.get(cid, {"type": "fixed_n", "n": 1}),
-        "reps": REPS.get(cid, [{"shape": SHAPE.get(cid, "simple")}]),
+        "reps": reps,
     })
 
 affinity_records = [

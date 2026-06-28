@@ -229,7 +229,8 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "lung_volume": "RV"
         }
       ]
     },
@@ -299,7 +300,8 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "lung_volume": "FRC"
         }
       ]
     },
@@ -441,7 +443,8 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "lung_volume": "FRC"
         }
       ]
     },
@@ -828,7 +831,8 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "pace": "sprint"
         }
       ]
     },
@@ -861,6 +865,7 @@
             "value": 4,
             "unit": "breaths"
           },
+          "lung_volume": "FRC",
           "note": "FRC"
         },
         {
@@ -874,6 +879,7 @@
             "value": 15,
             "unit": "time"
           },
+          "pace": "sprint",
           "note": "sprint"
         },
         {
@@ -887,6 +893,7 @@
             "value": 15,
             "unit": "time"
           },
+          "pace": "sprint",
           "note": "sprint"
         },
         {
@@ -900,6 +907,7 @@
             "value": 15,
             "unit": "time"
           },
+          "pace": "sprint",
           "note": "sprint"
         },
         {
@@ -913,6 +921,7 @@
             "value": 15,
             "unit": "time"
           },
+          "pace": "sprint",
           "note": "sprint"
         },
         {
@@ -926,6 +935,7 @@
             "value": 15,
             "unit": "time"
           },
+          "pace": "sprint",
           "note": "sprint"
         },
         {
@@ -939,6 +949,7 @@
             "value": 15,
             "unit": "time"
           },
+          "pace": "sprint",
           "note": "sprint"
         }
       ]
