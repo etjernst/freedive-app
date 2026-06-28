@@ -19,16 +19,19 @@ const OPEN_TERMS = new Set(['until_failure', 'until_quality_drops', 'until_1c', 
 const SPRINT_TEMPLATES = new Set(['dyn-sprints'])
 const SURFACE_TEMPLATES = new Set(['dyn-hypercapnic'])
 
-function paceFor(ex, settings) {
+function paceFor(rep, ex, settings) {
   if (SURFACE_TEMPLATES.has(ex.template_id)) return settings.swim_pace_s_per_25 ?? null
-  if (SPRINT_TEMPLATES.has(ex.template_id)) return settings.sprint_pace_s_per_25?.[ex.discipline] ?? null
+  // Per-rep speed wins; the sprint-template list is a fallback for legacy data.
+  const sprint =
+    rep?.pace === 'sprint' || rep?.pace === 'max_sprint' || SPRINT_TEMPLATES.has(ex.template_id)
+  if (sprint) return settings.sprint_pace_s_per_25?.[ex.discipline] ?? null
   return settings.pace_s_per_25?.[ex.discipline] ?? null
 }
 
 // Pace is seconds per 25 m by definition, so swim time is distance/25 * pace
 // regardless of pool length.
-function distanceSeconds(distance_m, ex, settings) {
-  const pace = paceFor(ex, settings)
+function distanceSeconds(distance_m, rep, ex, settings) {
+  const pace = paceFor(rep, ex, settings)
   if (distance_m == null || pace == null) return null
   return (distance_m / 25) * pace
 }
@@ -37,7 +40,8 @@ function holdSeconds(rep, settings) {
   const t = rep.hold_target
   if (!t) return null
   const lung = rep.lung_volume || 'FL'
-  const pb = lung === 'RV' ? settings.pbs?.STA_EL : settings.pbs?.STA
+  const pb =
+    lung === 'RV' ? settings.pbs?.STA_EL : lung === 'FRC' ? settings.pbs?.STA_FRC : settings.pbs?.STA
   switch (t.unit) {
     case 'absolute':
       return t.value ?? null
@@ -76,7 +80,7 @@ function effortSeconds(rep, ex, settings) {
       total += h
     } else if (seg === 'distance' || seg === 'distance2') {
       const key = seg === 'distance2' ? 'distance2_target' : 'distance_target'
-      const ds = distanceSeconds(distanceMeters(rep, ex, settings, key), ex, settings)
+      const ds = distanceSeconds(distanceMeters(rep, ex, settings, key), rep, ex, settings)
       if (ds == null) return null
       total += ds
     } else if (seg === 'continuous') {

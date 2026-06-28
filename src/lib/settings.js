@@ -7,6 +7,7 @@ export const DEFAULT_SETTINGS = {
   // meters; the unit per key lives in PB_FIELDS so the form parses each right.
   pbs: {
     STA: null,
+    STA_FRC: null,
     STA_EL: null,
     DNF: null,
     DYN: null,
@@ -51,6 +52,7 @@ export const DEFAULT_SETTINGS = {
 // discipline maxes are distances.
 export const PB_FIELDS = [
   { key: 'STA', label: 'STA full lung', unit: 'time' },
+  { key: 'STA_FRC', label: 'STA FRC', unit: 'time' },
   { key: 'STA_EL', label: 'STA empty lung (EL)', unit: 'time' },
   { key: 'DNF', label: 'DNF max', unit: 'distance' },
   { key: 'DYN', label: 'DYN monofin max', unit: 'distance' },
@@ -61,11 +63,12 @@ export const PB_FIELDS = [
   { key: 'sweet16_DYN', label: 'Sweet 16 DYN (16×25)', unit: 'time' },
 ]
 
-// The first-contraction buckets surfaced in the settings form. FRC is omitted
-// as rare; add-as-needed rather than showing every discipline x lung combo.
-// unit drives the input: 'time' (mm:ss, seconds) or 'distance' (meters).
+// The first-contraction buckets surfaced in the settings form. Dynamic FRC/EL
+// combos are omitted as rare; add-as-needed rather than showing every
+// discipline x lung combo. unit drives the input: 'time' or 'distance'.
 export const ONE_C_BUCKETS = [
   { key: 'STA|FL', label: 'STA, full lungs', unit: 'time' },
+  { key: 'STA|FRC', label: 'STA, functional residual (FRC)', unit: 'time' },
   { key: 'STA|RV', label: 'STA, residual volume (EL)', unit: 'time' },
   { key: 'DNF|FL', label: 'DNF, full lungs', unit: 'distance' },
   { key: 'DNF|RV', label: 'DNF, residual volume (EL)', unit: 'distance' },

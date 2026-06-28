@@ -12,6 +12,7 @@
     describeHold,
     describeDistance,
     clone,
+    isDynamic,
     DISCIPLINES,
     SHAPES,
   } from './lib/session.js'
@@ -27,6 +28,17 @@
   import { openInObsidian } from './lib/obsidian.js'
   import MMSS from './lib/MMSS.svelte'
   import Help from './lib/Help.svelte'
+
+  const LUNG_OPTS = [
+    { value: 'FL', label: 'full lung' },
+    { value: 'FRC', label: 'FRC' },
+    { value: 'RV', label: 'empty (EL)' },
+  ]
+  const SPEED_OPTS = [
+    { value: '', label: 'normal' },
+    { value: 'sprint', label: 'sprint' },
+    { value: 'max_sprint', label: 'max sprint' },
+  ]
 
   const HOLD_QUAL = [
     { value: 'submax', label: 'sub-max' },
@@ -56,6 +68,7 @@
     if (segs.includes('distance2') && !rep.distance2_target) rep.distance2_target = { unit: 'absolute', value: null }
     if (segs.includes('continuous') && !rep.continuous) rep.continuous = { duration_s: null, pattern: '' }
     if (!rep.recovery) rep.recovery = { type: 'absolute', value: null, unit: 'time' }
+    if (rep.lung_volume == null) rep.lung_volume = 'FL'
     return rep
   }
   function ensureExercise(ex) {
@@ -138,8 +151,36 @@
   function onDiscipline(ex) {
     ensureExercise(ex)
   }
+  // Exercise-level lung volume / speed: a convenience that reads the first rep
+  // and writes all reps, with per-rep overrides available under "More options".
+  function exLung(ex) {
+    return ex.planned.reps[0]?.lung_volume ?? 'FL'
+  }
+  function setExLung(ex, v) {
+    ex.planned.reps = ex.planned.reps.map((r) => ({ ...r, lung_volume: v }))
+  }
+  function exSpeed(ex) {
+    return ex.planned.reps[0]?.pace ?? ''
+  }
+  function setExSpeed(ex, v) {
+    ex.planned.reps = ex.planned.reps.map((r) => {
+      const n = { ...r }
+      if (v) n.pace = v
+      else delete n.pace
+      return n
+    })
+  }
+  function setRepPace(rep, v) {
+    if (v) rep.pace = v
+    else delete rep.pace
+  }
+  let repMore = $state({})
+
   function addRep(ex) {
     const rep = ensure(blankRep(ex.shape_default ?? 'simple'), ex.discipline)
+    rep.lung_volume = exLung(ex)
+    const sp = exSpeed(ex)
+    if (sp) rep.pace = sp
     ex.planned.reps = [...ex.planned.reps, rep]
   }
   function removeRep(ex, i) {
@@ -301,6 +342,20 @@
         <span class="lbl">Sets (repeat)</span>
         <input type="number" min="1" bind:value={ex.set_repeat} />
       </div>
+      <div class="field">
+        <span class="lbl">Lung volume</span>
+        <select value={exLung(ex)} onchange={(e) => setExLung(ex, e.currentTarget.value)}>
+          {#each LUNG_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
+        </select>
+      </div>
+      {#if isDynamic(ex.discipline)}
+        <div class="field">
+          <span class="lbl">Speed</span>
+          <select value={exSpeed(ex)} onchange={(e) => setExSpeed(ex, e.currentTarget.value)}>
+            {#each SPEED_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
+          </select>
+        </div>
+      {/if}
       {#if needsPlanningReps(ex)}
         <div class="field">
           <span class="lbl">Expected reps <span class="muted">(time est.)</span></span>
@@ -418,6 +473,26 @@
                   </select>
                 {/if}
               </div>
+            {/if}
+
+            <button class="link rep-more" onclick={() => (repMore[`${ei}-${ri}`] = !repMore[`${ei}-${ri}`])}>
+              {repMore[`${ei}-${ri}`] ? 'Less' : 'More options'}
+            </button>
+            {#if repMore[`${ei}-${ri}`]}
+              <div class="seg">
+                <span class="lbl">Lung volume</span>
+                <select bind:value={rep.lung_volume}>
+                  {#each LUNG_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
+                </select>
+              </div>
+              {#if isDynamic(ex.discipline)}
+                <div class="seg">
+                  <span class="lbl">Speed</span>
+                  <select value={rep.pace ?? ''} onchange={(e) => setRepPace(rep, e.currentTarget.value)}>
+                    {#each SPEED_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
+                  </select>
+                </div>
+              {/if}
             {/if}
 
             {#if rep.prep_breathing}

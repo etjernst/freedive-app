@@ -853,6 +853,18 @@ nav {
   font-size: 13px;
 }
 
+.rep-more {
+  display: inline-block;
+  margin-top: 8px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 2px 0;
+  font: inherit;
+  font-size: 12px;
+}
+
 .realized {
   display: flex;
   flex-wrap: wrap;

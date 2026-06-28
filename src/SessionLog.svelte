@@ -145,6 +145,8 @@
                 {#if p}
                   {#if segs.includes('hold')}plan {describeHold(p.hold_target)}{/if}
                   {#if segs.includes('distance')} {describeDistance(p.distance_target)}{/if}
+                  {#if p.lung_volume && p.lung_volume !== 'FL'} · {p.lung_volume === 'RV' ? 'EL' : p.lung_volume}{/if}
+                  {#if p.pace} · {p.pace.replace('_', ' ')}{/if}
                   {#if p.recovery} · rec {describeRecovery(p.recovery)}{/if}
                 {:else}extra rep{/if}
               </span>
