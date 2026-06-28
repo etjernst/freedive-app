@@ -379,6 +379,34 @@ main {
   color: var(--text);
 }
 
+.cmp {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cmp-col {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+}
+
+.cmp-head {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+}
+
+.cmp-best {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 4px 0;
+}
+
 .field {
   display: flex;
   align-items: center;
