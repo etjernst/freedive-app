@@ -597,7 +597,7 @@
       "capacity_tags": [
         "o2_hypoxia"
       ],
-      "goal": "80% PB, short dive, then a max push, with breaths between. Active safety.",
+      "goal": "80% PB, short dive, then a max push, with breaths between.",
       "cues": "% PB (def 80); short leg (def min{60m,30% PB}); RB (def 2 then 3).",
       "set_repeat": 1,
       "termination": {
@@ -606,7 +606,38 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "distance_target": {
+            "unit": "pct_pb",
+            "value": 80
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 2,
+            "unit": "breaths"
+          },
+          "note": "80% PB dive"
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 60
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 3,
+            "unit": "breaths"
+          },
+          "note": "short leg (min{60m, 30% PB})"
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "qualitative",
+            "value": "max"
+          },
+          "note": "max push"
         }
       ]
     },
@@ -813,14 +844,102 @@
       ],
       "goal": "FRC dive (longest possible) then a max-sprint ladder.",
       "cues": "FRC distance (def 50-100m); sprint ladder (def 3x25m, growing recovery); sets (def 3).",
-      "set_repeat": 1,
+      "set_repeat": 2,
       "termination": {
         "type": "fixed_n",
         "n": 1
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 4,
+            "unit": "breaths"
+          },
+          "note": "FRC"
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 15,
+            "unit": "time"
+          },
+          "note": "sprint"
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 15,
+            "unit": "time"
+          },
+          "note": "sprint"
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 15,
+            "unit": "time"
+          },
+          "note": "sprint"
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 15,
+            "unit": "time"
+          },
+          "note": "sprint"
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 15,
+            "unit": "time"
+          },
+          "note": "sprint"
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 15,
+            "unit": "time"
+          },
+          "note": "sprint"
         }
       ]
     },
@@ -1010,7 +1129,55 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 75
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "minimal"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "minimal"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "minimal"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "minimal"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          }
         }
       ]
     },

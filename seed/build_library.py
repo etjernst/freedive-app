@@ -6,6 +6,10 @@ and the session->canonical mapping, then emits:
   - seed/fixtures.json                     (the app's seed library, schema-validated)
 
 Run: python seed/build_library.py
+
+Nested sets (DYN 2/17/18): heterogeneous repeated blocks are flattened into
+explicit rep rows, with set_repeat for the outer repeat---no recursive group
+node. E.g. "2x {50m FRC, 6x25m sprints}" is seven rep rows with set_repeat=2.
 """
 import itertools
 import json
@@ -126,7 +130,7 @@ catalog = [
      "discipline (def any; DNF shorter)."),
     ("dyn-max-simulator", "Max dive simulator", "any", "main",
      "o2_hypoxia",
-     "80% PB, short dive, then a max push, with breaths between. Active safety.",
+     "80% PB, short dive, then a max push, with breaths between.",
      "% PB (def 80); short leg (def min{60m,30% PB}); RB (def 2 then 3)."),
     ("dyn-volume-fixed", "Volume: fixed reps", "any", "main",
      "volume, co2",
@@ -398,6 +402,44 @@ TERMINATION = {
     "dyn-inverse-pyramid": {"type": "fixed_n", "n": 1},
 }
 
+# Outer-repeat count for flattened nested-set exercises (default 1 elsewhere).
+SET_REPEAT = {
+    "dyn-frc-sprint": 2,
+}
+
+# Pre-built rep rows for the compound / nested-set exercises, so a fresh install
+# (or a device after "Refresh library") gets the real structure instead of one
+# placeholder rep. Everything else defaults to a single editable rep below.
+_BREATHS = lambda n: {"type": "absolute", "value": n, "unit": "breaths"}
+_SECS = lambda n: {"type": "absolute", "value": n, "unit": "time"}
+_MINIMAL = {"type": "qualitative", "value": "minimal"}
+REPS = {
+    # DYN 1: 80% PB, short leg (min{60m,30% PB}), then a max push.
+    "dyn-max-simulator": [
+        {"shape": "simple", "distance_target": {"unit": "pct_pb", "value": 80},
+         "recovery": _BREATHS(2), "note": "80% PB dive"},
+        {"shape": "simple", "distance_target": {"unit": "absolute", "value": 60},
+         "recovery": _BREATHS(3), "note": "short leg (min{60m, 30% PB})"},
+        {"shape": "simple", "distance_target": {"unit": "qualitative", "value": "max"},
+         "note": "max push"},
+    ],
+    # DYN 17 Ex1: broken 200m, 75/50/3x25, minimum recovery, consistent pace.
+    "dyn-broken-200": [
+        {"shape": "simple", "distance_target": {"unit": "absolute", "value": 75}, "recovery": _MINIMAL},
+        {"shape": "simple", "distance_target": {"unit": "absolute", "value": 50}, "recovery": _MINIMAL},
+        {"shape": "simple", "distance_target": {"unit": "absolute", "value": 25}, "recovery": _MINIMAL},
+        {"shape": "simple", "distance_target": {"unit": "absolute", "value": 25}, "recovery": _MINIMAL},
+        {"shape": "simple", "distance_target": {"unit": "absolute", "value": 25}},
+    ],
+    # DYN 2 / DYN 18 Ex1: 2x {50m FRC, 4 breaths, 6x25m sprints, 15s recovery}.
+    "dyn-frc-sprint": [
+        {"shape": "simple", "distance_target": {"unit": "absolute", "value": 50},
+         "recovery": _BREATHS(4), "note": "FRC"},
+        *[{"shape": "simple", "distance_target": {"unit": "absolute", "value": 25},
+           "recovery": _SECS(15), "note": "sprint"} for _ in range(6)],
+    ],
+}
+
 templates = []
 for (cid, name, discipline, allowed_roles, capacity, structure, options) in catalog:
     caps = [c.strip() for c in capacity.split(",")]
@@ -411,9 +453,9 @@ for (cid, name, discipline, allowed_roles, capacity, structure, options) in cata
         "capacity_tags": caps,
         "goal": structure,
         "cues": options,
-        "set_repeat": 1,
+        "set_repeat": SET_REPEAT.get(cid, 1),
         "termination": TERMINATION.get(cid, {"type": "fixed_n", "n": 1}),
-        "reps": [{"shape": SHAPE.get(cid, "simple")}],
+        "reps": REPS.get(cid, [{"shape": SHAPE.get(cid, "simple")}]),
     })
 
 affinity_records = [
