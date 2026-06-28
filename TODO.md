@@ -12,6 +12,12 @@ Mapping from the rep to the PB key:
 
 Only raise the PB (never lower it from a non-PB rep), and confirm before overwriting so a mistaken check does not clobber a real best.
 
+## Log lung volumes (vital capacity, with and without packing) as measurements
+
+Vital capacity lives in Settings as a single spirometer value, but Emilia wants to log it the way she logs exercises: a dated reading she can repeat and trend over time.
+Each entry should carry the date, vital capacity in liters, an optional packed vital capacity in liters (after glossopharyngeal insufflation), and optional notes.
+Store these as a time series rather than overwriting one setting, surface entry in the capture flow (a dedicated quick-log alongside exercises is fine), and feed the series into the Phase 3 lung-volume trend.
+
 ## Smaller deferred items
 
 - The qualitative ratios in `estimate.js` (submax 75 percent, recovery multipliers, and so on) are hardcoded constants; surface them in Settings if they ever need tuning in-app.
