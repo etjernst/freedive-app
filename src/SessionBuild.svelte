@@ -4,9 +4,12 @@
     instantiateExercise,
     blankExercise,
     blankRep,
+    reuseExercise,
     repSegments,
     shapeHint,
     shapeLabel,
+    describeHold,
+    describeDistance,
     clone,
     DISCIPLINES,
     SHAPES,
@@ -28,6 +31,7 @@
   let draft = $state(clone(currentSession()))
   let chosen = $state('')
   let saved = $state(false)
+  let showHistory = $state(false)
 
   // Give every shown segment a target object to bind to, so the editor never
   // binds through undefined. Idempotent: only fills what is missing.
@@ -63,6 +67,41 @@
     const ex = blankExercise()
     ensureExercise(ex)
     draft.exercises = [...draft.exercises, ex]
+  }
+
+  // Re-usable exercises pulled from past sessions: the most recent filled-in
+  // version of each distinct exercise (keyed by template, else name+discipline),
+  // newest first, so a previously-entered rep block can be added in one click.
+  const historyItems = $derived.by(() => {
+    const seen = new Set()
+    const out = []
+    for (const s of app.sessions) {
+      if (s.id === draft.id) continue
+      for (const ex of s.exercises ?? []) {
+        const key = ex.template_id || `${ex.name}|${ex.discipline}`
+        if (seen.has(key)) continue
+        seen.add(key)
+        out.push({ key, ex, date: s.date })
+      }
+    }
+    return out.slice(0, 30)
+  })
+
+  function historySummary(ex) {
+    const reps = ex.planned?.reps ?? []
+    const n = reps.length * (ex.set_repeat ?? 1)
+    const first = reps[0]
+    let target = ''
+    if (first?.hold_target?.value != null) target = `hold ${describeHold(first.hold_target)}`
+    else if (first?.distance_target?.value != null) target = describeDistance(first.distance_target)
+    return `${n} rep${n === 1 ? '' : 's'}${target ? ` · ${target}` : ''}`
+  }
+
+  function reuseFromHistory(srcEx) {
+    const copy = reuseExercise(srcEx)
+    ensureExercise(copy)
+    draft.exercises = [...draft.exercises, copy]
+    showHistory = false
   }
   function removeExercise(i) {
     draft.exercises = draft.exercises.filter((_, j) => j !== i)
@@ -121,11 +160,27 @@
           <option value={t.id}>{t.name} ({t.discipline})</option>
         {/each}
       </select>
-      <button class="add-btn" onclick={addTemplate} disabled={!chosen}>Add</button>
+      <button class="add-btn" onclick={() => addTemplate()} disabled={!chosen}>Add</button>
     </div>
     <div class="actions">
       <button class="link" onclick={addAdhoc}>+ Ad-hoc exercise</button>
+      <button class="link" onclick={() => (showHistory = !showHistory)} disabled={historyItems.length === 0}>
+        {showHistory ? 'Hide history' : '+ From history'}
+      </button>
     </div>
+    {#if showHistory}
+      <div class="history-list">
+        {#if historyItems.length === 0}
+          <p class="muted">No past exercises to reuse yet.</p>
+        {/if}
+        {#each historyItems as h (h.key)}
+          <button class="hist-row" onclick={() => reuseFromHistory(h.ex)}>
+            <span class="hist-name">{h.ex.name}</span>
+            <span class="muted">{h.ex.discipline} · {h.date} · {historySummary(h.ex)}</span>
+          </button>
+        {/each}
+      </div>
+    {/if}
     {#if suggestions.length}
       <div class="suggest">
         <span class="muted">Goes well with</span>

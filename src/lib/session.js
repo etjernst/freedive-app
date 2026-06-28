@@ -155,6 +155,17 @@ export function instantiateExercise(template) {
   }
 }
 
+// Re-use an exercise from a past session: deep-copy its plan into a fresh
+// exercise (new id, actual cleared), so a previously filled-in rep block can be
+// dropped into a new session without re-entering it. The source exercise is
+// left untouched.
+export function reuseExercise(ex) {
+  const copy = clone(ex)
+  copy.id = uid('ex')
+  copy.actual = null
+  return copy
+}
+
 export function blankExercise() {
   return {
     id: uid('ex'),

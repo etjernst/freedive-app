@@ -325,6 +325,41 @@ main {
   background: var(--panel-2);
 }
 
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.hist-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 12px;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.hist-row:hover {
+  border-color: var(--accent);
+}
+
+.hist-name {
+  font-size: 14px;
+  font-weight: 550;
+  color: var(--text);
+}
+
+.hist-row .muted {
+  font-size: 12px;
+}
+
 .field {
   display: flex;
   align-items: center;
