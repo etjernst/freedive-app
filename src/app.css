@@ -136,6 +136,98 @@ main {
   letter-spacing: 0.2px;
 }
 
+/* Home exercise library: discipline filter chips plus tappable cards. */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 4px;
+}
+
+.filters .chip.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.lib-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.lib-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  width: 100%;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lib-card:hover {
+  border-color: var(--accent);
+}
+
+.lib-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.lib-card .name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.badges {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.badges .disc,
+.badges .role {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  padding: 1px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.badges .disc {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.badges .role {
+  background: transparent;
+  color: var(--muted);
+  border: 1px dashed var(--muted);
+}
+
+.lib-card .tags {
+  color: var(--accent-2);
+  font-size: 12px;
+  letter-spacing: 0.2px;
+}
+
+.lib-goal {
+  font-size: 12.5px;
+}
+
 .phase-note {
   color: var(--muted);
   font-size: 13px;

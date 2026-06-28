@@ -9,6 +9,8 @@
     syncToDropbox,
     restoreFromDropbox,
     setView,
+    createSession,
+    startSessionWith,
   } from './lib/store.svelte.js'
   import logoUrl from './assets/winnow_logo.svg'
   import Settings from './Settings.svelte'
@@ -26,6 +28,38 @@
     stats: { h1: 'Insights', tag: 'What your logged training shows' },
   }
   const head = $derived(TITLES[app.view] ?? TITLES.home)
+
+  // Home library filter. The 18 'any' templates are the dynamic exercises
+  // (usable across DYN/DYNb/DNF), so they group under one "Dynamic" chip.
+  const DYNAMIC_DISC = new Set(['any', 'DYN', 'DYNb', 'DNF'])
+  const LIB_FILTERS = [
+    { key: 'all', label: 'All' },
+    { key: 'STA', label: 'STA' },
+    { key: 'dynamic', label: 'Dynamic' },
+    { key: 'tortuga', label: 'Tortuga' },
+  ]
+  const ROLE_ORDER = { warmup: 0, main: 1, cooldown: 2 }
+  let libFilter = $state('all')
+
+  function matchesFilter(t) {
+    if (libFilter === 'all') return true
+    if (libFilter === 'dynamic') return DYNAMIC_DISC.has(t.discipline)
+    return t.discipline === libFilter
+  }
+  // Filtered, then ordered warm-up -> main -> cool-down, then by name, so a
+  // filtered list reads top-to-bottom the way a session is assembled.
+  const libTemplates = $derived(
+    app.templates
+      .filter(matchesFilter)
+      .slice()
+      .sort(
+        (a, b) =>
+          (ROLE_ORDER[a.role] ?? 1) - (ROLE_ORDER[b.role] ?? 1) ||
+          (a.name ?? '').localeCompare(b.name ?? ''),
+      ),
+  )
+  const discLabel = (d) => (d === 'any' ? 'dynamic' : d)
+  const roleLabel = (r) => (r === 'warmup' ? 'warm-up' : r === 'cooldown' ? 'cool-down' : null)
 
   let busy = $state(null)
   let notice = $state(null)
@@ -130,6 +164,7 @@
       <h2>Training</h2>
       <p class="muted">{app.sessions.length} session{app.sessions.length === 1 ? '' : 's'} logged or planned</p>
       <div class="actions">
+        <button onclick={() => createSession()}>New session</button>
         <button onclick={() => setView('sessions')}>Open sessions</button>
         <button class="link" onclick={() => setView('stats')}>Insights</button>
       </div>
@@ -137,17 +172,34 @@
 
     <section class="card">
       <h2>Exercise library</h2>
-      <p class="muted">{app.templates.length} templates in your library</p>
-      <ul class="library">
-        {#each app.templates as t (t.id)}
-          <li>
-            <span class="name">{t.name ?? t.id}</span>
-            {#if t.capacity_tags}
+      <p class="muted">{app.templates.length} templates · tap one to start a session</p>
+      <div class="filters">
+        {#each LIB_FILTERS as f (f.key)}
+          <button class="chip" class:active={libFilter === f.key} onclick={() => (libFilter = f.key)}>
+            {f.label}
+          </button>
+        {/each}
+      </div>
+      <div class="lib-list">
+        {#each libTemplates as t (t.id)}
+          <button class="lib-card" onclick={() => startSessionWith(t.id)}>
+            <span class="lib-top">
+              <span class="name">{t.name ?? t.id}</span>
+              <span class="badges">
+                <span class="disc">{discLabel(t.discipline)}</span>
+                {#if roleLabel(t.role)}<span class="role">{roleLabel(t.role)}</span>{/if}
+              </span>
+            </span>
+            {#if t.capacity_tags?.length}
               <span class="tags">{t.capacity_tags.join(' · ')}</span>
             {/if}
-          </li>
+            {#if t.goal}<span class="lib-goal muted">{t.goal}</span>{/if}
+          </button>
         {/each}
-      </ul>
+        {#if libTemplates.length === 0}
+          <p class="muted">No exercises match this filter.</p>
+        {/if}
+      </div>
     </section>
 
     <section class="card">

@@ -3,7 +3,7 @@ import { seedIfNeeded } from './seed.js'
 import { requestPersistence, storageEstimate } from './persist.js'
 import { exportToFile, restoreFromFile, buildExport, restoreFromEnvelope, parseExport, localIso } from './backup.js'
 import { mergeSettings } from './settings.js'
-import { newSession, clone } from './session.js'
+import { newSession, instantiateExercise, clone } from './session.js'
 import * as dropbox from './dropbox.js'
 
 // Reactive app state for the shell. The UI reads from here; actions below
@@ -84,6 +84,21 @@ export async function createSession(view = 'session-build') {
   app.currentSessionId = s.id
   await refresh()
   app.view = view
+}
+
+// Start a fresh planned session seeded with one library exercise, then jump to
+// the builder. Mirrors createSession() but pre-adds the chosen template so a
+// tap on a Home library card lands in a buildable session.
+export async function startSessionWith(templateId) {
+  const s = newSession()
+  const t = app.templates.find((x) => x.id === templateId)
+  // instantiateExercise reads from the $state-proxied template, so clone the
+  // assembled session to strip proxies before IndexedDB structured-clones it.
+  if (t) s.exercises = [instantiateExercise(t)]
+  await (await getDB()).put('sessions', clone(s))
+  app.currentSessionId = s.id
+  await refresh()
+  app.view = 'session-build'
 }
 
 export function openSession(id, view = 'session-build') {
