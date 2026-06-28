@@ -407,6 +407,37 @@ main {
   margin: 4px 0;
 }
 
+.rank {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+.rank li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.rank li:last-child {
+  border-bottom: none;
+}
+
+.rank-name {
+  font-size: 14px;
+  color: var(--text);
+}
+
+.rank-val {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+}
+
 .field {
   display: flex;
   align-items: center;

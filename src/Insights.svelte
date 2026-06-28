@@ -1,6 +1,6 @@
 <script>
   import { app, setView } from './lib/store.svelte.js'
-  import { collectStaHolds, summarize } from './lib/insights.js'
+  import { collectStaHolds, summarize, maxByWarmup } from './lib/insights.js'
   import { fmtMMSS } from './lib/settings.js'
 
   const all = $derived(collectStaHolds(app.sessions))
@@ -9,7 +9,8 @@
     { label: 'Max attempts', wet: summarize(max.wet), dry: summarize(max.dry) },
     { label: 'All static holds', wet: summarize(all.wet), dry: summarize(all.dry) },
   ])
-  const hasData = $derived(rows.some((r) => r.wet.n || r.dry.n))
+  const warmupRows = $derived(maxByWarmup(app.sessions, { discipline: 'STA' }))
+  const hasData = $derived(rows.some((r) => r.wet.n || r.dry.n) || warmupRows.length > 0)
 
   const dash = (s) => fmtMMSS(s) || '—'
 </script>
@@ -49,6 +50,21 @@
         {/if}
       </section>
     {/each}
+
+    {#if warmupRows.length}
+      <section class="card">
+        <h2>Static max by warm-up</h2>
+        <p class="muted">Best max-attempt hold, grouped by the warm-up that preceded it.</p>
+        <ul class="rank">
+          {#each warmupRows as r (r.name)}
+            <li>
+              <span class="rank-name">{r.name}</span>
+              <span class="rank-val">{dash(r.best)} <span class="muted">· avg {dash(r.avg)} · n {r.n}</span></span>
+            </li>
+          {/each}
+        </ul>
+      </section>
+    {/if}
   {/if}
 
   <div class="actions">
