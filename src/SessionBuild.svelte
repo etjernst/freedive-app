@@ -15,6 +15,13 @@
     SHAPES,
   } from './lib/session.js'
   import { suggestionsFor } from './lib/affinities.js'
+  import {
+    estimateExercise,
+    estimateSession,
+    fmtDuration,
+    needsPlanningReps,
+    needsPlanningDistance,
+  } from './lib/estimate.js'
   import MMSS from './lib/MMSS.svelte'
   import Help from './lib/Help.svelte'
 
@@ -48,7 +55,14 @@
     for (const rep of ex.planned.reps) ensure(rep, ex.discipline)
   }
   // Seed-time pass so reloaded sessions render without a flash of empty binds.
-  for (const ex of draft.exercises) ensureExercise(ex)
+  // Also backfill fields added after a session was first saved.
+  for (const ex of draft.exercises) {
+    ex.medium ??= 'wet'
+    ex.plan_estimate ??= { reps: null, distance_m: null }
+    ensureExercise(ex)
+  }
+
+  const sessionEstimate = $derived(estimateSession(draft, app.settings))
 
   function addTemplate(id = chosen) {
     const t = app.templates.find((x) => x.id === id)
@@ -196,6 +210,7 @@
   {/if}
 
   {#each draft.exercises as ex, ei (ex.id)}
+    {@const est = estimateExercise(ex, app.settings)}
     <section class="card exercise">
       <div class="ex-head">
         <input class="ex-name" bind:value={ex.name} />
@@ -207,6 +222,9 @@
       </div>
 
       {#if ex.goal}<p class="muted goal">{ex.goal}</p>{/if}
+      <p class="est" class:est-unknown={est.seconds == null}>
+        {est.seconds != null ? `Est. ${fmtDuration(est.seconds)}` : `Est. — ${est.reason}`}
+      </p>
 
       <div class="field">
         <span class="lbl">Discipline</span>
@@ -214,10 +232,31 @@
           {#each DISCIPLINES as d}<option value={d}>{d}</option>{/each}
         </select>
       </div>
+      {#if ex.discipline === 'STA'}
+        <div class="field">
+          <span class="lbl">Medium</span>
+          <select bind:value={ex.medium}>
+            <option value="wet">wet</option>
+            <option value="dry">dry</option>
+          </select>
+        </div>
+      {/if}
       <div class="field">
         <span class="lbl">Sets (repeat)</span>
         <input type="number" min="1" bind:value={ex.set_repeat} />
       </div>
+      {#if needsPlanningReps(ex)}
+        <div class="field">
+          <span class="lbl">Expected reps <span class="muted">(time est.)</span></span>
+          <input type="number" min="1" bind:value={ex.plan_estimate.reps} placeholder="e.g. 8" />
+        </div>
+      {/if}
+      {#if needsPlanningDistance(ex)}
+        <div class="field">
+          <span class="lbl">Expected distance (m) <span class="muted">(time est.)</span></span>
+          <input type="number" min="1" bind:value={ex.plan_estimate.distance_m} placeholder="e.g. 75" />
+        </div>
+      {/if}
 
       <div class="reps">
         {#each ex.planned.reps as rep, ri (ri)}
@@ -334,6 +373,12 @@
       </div>
     </section>
   {/each}
+
+  {#if draft.exercises.length > 0}
+    <p class="session-est">
+      Estimated session: <strong>{fmtDuration(sessionEstimate.seconds) ?? '—'}</strong>{sessionEstimate.uncertain ? ' + unestimated exercises' : ''}
+    </p>
+  {/if}
 
   <div class="actions sticky-save">
     <button onclick={() => save('plan')}>{saved ? 'Saved ✓' : 'Save plan'}</button>

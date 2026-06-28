@@ -25,6 +25,13 @@
         DYN: s.pace_s_per_25.DYN ?? '',
         DYNb: s.pace_s_per_25.DYNb ?? '',
       },
+      sprintPace: {
+        DNF: s.sprint_pace_s_per_25.DNF ?? '',
+        DYN: s.sprint_pace_s_per_25.DYN ?? '',
+        DYNb: s.sprint_pace_s_per_25.DYNb ?? '',
+      },
+      swimPace: s.swim_pace_s_per_25 ?? '',
+      recBreath: s.recovery_breath_s ?? '',
       pool: s.pool_length_m ?? '',
       vc: s.spirometer.vital_capacity_l ?? '',
       packed: s.spirometer.packed_l ?? '',
@@ -75,6 +82,13 @@
         DYN: numOrNull(sd.pace.DYN),
         DYNb: numOrNull(sd.pace.DYNb),
       },
+      sprint_pace_s_per_25: {
+        DNF: numOrNull(sd.sprintPace.DNF),
+        DYN: numOrNull(sd.sprintPace.DYN),
+        DYNb: numOrNull(sd.sprintPace.DYNb),
+      },
+      swim_pace_s_per_25: numOrNull(sd.swimPace),
+      recovery_breath_s: numOrNull(sd.recBreath) ?? 10,
       pool_length_m: numOrNull(sd.pool) ?? 25,
       spirometer: { vital_capacity_l: numOrNull(sd.vc), packed_l: numOrNull(sd.packed) },
       one_c_baseline: oneC,
@@ -108,9 +122,19 @@
   <section class="card">
     <h2>Pace (seconds per 25 m)</h2>
     <p class="muted">Drives session-time estimates. STA has no pace.</p>
-    <div class="field"><label for="pace-dnf">DNF</label><input id="pace-dnf" type="number" bind:value={sd.pace.DNF} /></div>
-    <div class="field"><label for="pace-dyn">DYN</label><input id="pace-dyn" type="number" bind:value={sd.pace.DYN} /></div>
-    <div class="field"><label for="pace-dynb">DYNb</label><input id="pace-dynb" type="number" bind:value={sd.pace.DYNb} /></div>
+    <div class="field"><label for="pace-dnf">DNF cruise</label><input id="pace-dnf" type="number" bind:value={sd.pace.DNF} /></div>
+    <div class="field"><label for="pace-dyn">DYN cruise</label><input id="pace-dyn" type="number" bind:value={sd.pace.DYN} /></div>
+    <div class="field"><label for="pace-dynb">DYNb cruise</label><input id="pace-dynb" type="number" bind:value={sd.pace.DYNb} /></div>
+    <div class="field"><label for="spr-dnf">DNF sprint</label><input id="spr-dnf" type="number" bind:value={sd.sprintPace.DNF} /></div>
+    <div class="field"><label for="spr-dyn">DYN sprint</label><input id="spr-dyn" type="number" bind:value={sd.sprintPace.DYN} /></div>
+    <div class="field"><label for="spr-dynb">DYNb sprint</label><input id="spr-dynb" type="number" bind:value={sd.sprintPace.DYNb} /></div>
+    <div class="field"><label for="swim">Surface swim (hypercapnic)</label><input id="swim" type="number" bind:value={sd.swimPace} /></div>
+  </section>
+
+  <section class="card">
+    <h2>Recovery</h2>
+    <p class="muted">Seconds one recovery breath takes, for breath-counted recoveries.</p>
+    <div class="field"><label for="recb">Seconds per breath</label><input id="recb" type="number" bind:value={sd.recBreath} placeholder="10" /></div>
   </section>
 
   <section class="card">

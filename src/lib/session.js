@@ -150,6 +150,10 @@ export function instantiateExercise(template) {
     termination: template.termination ?? { type: 'fixed_n', n: 1 },
     recovery_intra_default: template.recovery_intra_default ?? null,
     recovery_inter: template.recovery_inter ?? null,
+    // wet vs dry, only meaningful for STA; seeded from the template environment.
+    medium: template.environment === 'dry' ? 'dry' : 'wet',
+    // Planning hint used only for the time estimate of open-ended/qualitative sets.
+    plan_estimate: { reps: null, distance_m: null },
     planned: { reps: reps.length ? reps : [blankRep('simple')] },
     actual: null,
   }
@@ -182,6 +186,8 @@ export function blankExercise() {
     termination: { type: 'fixed_n', n: 1 },
     recovery_intra_default: null,
     recovery_inter: null,
+    medium: 'wet',
+    plan_estimate: { reps: null, distance_m: null },
     planned: { reps: [blankRep('simple')] },
     actual: null,
   }
