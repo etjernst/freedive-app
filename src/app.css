@@ -298,6 +298,33 @@ main {
   padding: 4px 0;
 }
 
+.suggest {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.suggest .muted {
+  font-size: 12.5px;
+}
+
+.chip {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--accent-2);
+  padding: 4px 10px;
+  font: inherit;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+.chip:hover {
+  background: var(--panel-2);
+}
+
 .field {
   display: flex;
   align-items: center;

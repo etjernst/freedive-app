@@ -1,20 +1,29 @@
 import fixtures from '../../seed/fixtures.json'
 import { getDB, getMeta, setMeta, DATA_SCHEMA_VERSION } from './db.js'
 
-// Load the shipped exercise library into IndexedDB once, on first run. The
-// `seeded` meta flag guards re-import: once the user edits a template or adds
-// their own, a later app load must not overwrite their library with the
-// fixtures again. Returns whether a seed actually happened.
+// Merge the shipped exercise library into IndexedDB on every load, additively:
+// any shipped template whose id is not already stored gets added, so exercises
+// we add to fixtures.json later show up automatically on the next app start.
+// Existing templates are never overwritten, so a template the user has edited
+// (or one we've since changed) is left exactly as it is. Updating already-seeded
+// templates in place is intentionally NOT done here; that needs per-template
+// "user edited?" tracking and is a separate change. Returns what happened.
 export async function seedIfNeeded() {
-  if (await getMeta('seeded')) return { seeded: false }
-
   const templates = fixtures.templates ?? []
   const db = await getDB()
-  const tx = db.transaction('templates', 'readwrite')
-  for (const t of templates) tx.store.put(t)
-  await tx.done
+  const existing = new Set(await db.getAllKeys('templates'))
+  const toAdd = templates.filter((t) => !existing.has(t.id))
 
-  await setMeta('seeded', true)
-  await setMeta('schema_version', DATA_SCHEMA_VERSION)
-  return { seeded: true, count: templates.length }
+  if (toAdd.length) {
+    const tx = db.transaction('templates', 'readwrite')
+    for (const t of toAdd) tx.store.put(t)
+    await tx.done
+  }
+
+  const firstRun = !(await getMeta('seeded'))
+  if (firstRun) {
+    await setMeta('seeded', true)
+    await setMeta('schema_version', DATA_SCHEMA_VERSION)
+  }
+  return { seeded: firstRun, added: toAdd.length }
 }

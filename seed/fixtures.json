@@ -8,115 +8,1343 @@
       "environment": "pool",
       "role": "main",
       "discipline": "STA",
-      "capacity_tags": ["co2", "mental", "o2_hypoxia"],
-      "goal": "No-warmup sub-max to read sensations.",
+      "capacity_tags": [
+        "mental",
+        "co2",
+        "o2_hypoxia"
+      ],
+      "goal": "No warmup; one sub-max hold to read sensations.",
+      "cues": "HV prep (def 5 min 5:5); movement: still|moving (def still); recovery (def full).",
       "set_repeat": 1,
-      "termination": { "type": "fixed_n", "n": 1 },
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
       "reps": [
         {
-          "shape": "simple",
-          "lung_volume": "FL",
-          "prep_breathing": { "duration_s": 300, "pattern": "5:5" },
-          "hold_target": { "unit": "qualitative", "value": "submax" },
-          "recovery": { "type": "qualitative", "value": "full" }
+          "shape": "simple"
         }
       ]
     },
     {
       "schema_version": 1,
       "id": "sta-co2-increasing",
-      "name": "Short CO2 table, increasing holds",
+      "name": "CO2 table, increasing holds",
       "environment": "pool",
       "role": "main",
       "discipline": "STA",
-      "capacity_tags": ["co2"],
-      "goal": "Accumulate CO2 with increasing holds and fixed recovery breaths.",
+      "capacity_tags": [
+        "co2"
+      ],
+      "goal": "Fixed recovery breaths; holds increase from a start, until failure.",
+      "cues": "recovery breaths (def 5); start (def 2:00); step (def +20-30s); termination (def until failure).",
       "set_repeat": 1,
-      "termination": { "type": "until_failure" },
-      "generator": { "start_s": 120, "step_s": 25, "until": "failure", "recovery_breaths": 5 },
-      "reps": [
-        { "shape": "simple", "lung_volume": "FL", "hold_target": { "unit": "absolute", "value": 120 }, "recovery": { "type": "absolute", "value": 5, "unit": "breaths" } },
-        { "shape": "simple", "lung_volume": "FL", "hold_target": { "unit": "absolute", "value": 145 }, "recovery": { "type": "absolute", "value": 5, "unit": "breaths" } },
-        { "shape": "simple", "lung_volume": "FL", "hold_target": { "unit": "absolute", "value": 170 }, "recovery": { "type": "absolute", "value": 5, "unit": "breaths" } }
-      ]
-    },
-    {
-      "schema_version": 1,
-      "id": "sta-o2-ladder",
-      "name": "Oxygen table, +1 min each",
-      "environment": "pool",
-      "role": "main",
-      "discipline": "STA",
-      "capacity_tags": ["o2_hypoxia"],
-      "goal": "Hypoxic ladder, 2 minutes recovery between holds.",
-      "set_repeat": 1,
-      "termination": { "type": "until_failure" },
-      "generator": { "start_s": 60, "step_s": 60, "until": "failure" },
-      "reps": [
-        { "shape": "simple", "lung_volume": "FL", "hold_target": { "unit": "absolute", "value": 60 }, "recovery": { "type": "absolute", "value": 120, "unit": "time" } },
-        { "shape": "simple", "lung_volume": "FL", "hold_target": { "unit": "absolute", "value": 120 }, "recovery": { "type": "absolute", "value": 120, "unit": "time" } },
-        { "shape": "simple", "lung_volume": "FL", "hold_target": { "unit": "absolute", "value": 180 }, "recovery": { "type": "absolute", "value": 120, "unit": "time" } }
-      ]
-    },
-    {
-      "schema_version": 1,
-      "id": "sta-el-set",
-      "name": "EL 5x increasing",
-      "environment": "pool",
-      "role": "main",
-      "discipline": "STA",
-      "capacity_tags": ["o2_hypoxia", "mental"],
-      "goal": "Empty-lung holds: efficient hypoxia and nervous-system calm.",
-      "set_repeat": 1,
-      "termination": { "type": "fixed_n", "n": 5 },
+      "termination": {
+        "type": "until_failure"
+      },
       "reps": [
         {
-          "shape": "simple",
-          "lung_volume": "RV",
-          "hold_target": { "unit": "qualitative", "value": "submax" },
-          "recovery": { "type": "absolute", "value": 150, "unit": "time" },
-          "note": "Start easy, increase duration progressively across the 5 holds."
+          "shape": "simple"
         }
       ]
     },
     {
       "schema_version": 1,
-      "id": "dnf-pyramid",
-      "name": "DNF pyramid drills",
+      "id": "sta-co2-vshape",
+      "name": "CO2 table, V-shaped",
       "environment": "pool",
       "role": "main",
-      "discipline": "DNF",
-      "capacity_tags": ["co2", "volume", "technique"],
-      "goal": "Pyramid for 20 minutes at a sweet-spot effort.",
+      "discipline": "STA",
+      "capacity_tags": [
+        "co2"
+      ],
+      "goal": "Holds descend toward ~1 min then ascend; maximize total time under discomfort.",
+      "cues": "recovery breaths (def 2); start (def ~50% PB); HV prep (def 4:6 soft).",
       "set_repeat": 1,
-      "termination": { "type": "duration_capped", "duration_s": 1200 },
-      "cycle_def": "one full up-and-down pyramid (25-50-75-50-25)",
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
       "reps": [
-        { "shape": "simple", "distance_target": { "unit": "absolute", "value": 25 }, "recovery": { "type": "inequality", "value": "≤ swim time" } },
-        { "shape": "simple", "distance_target": { "unit": "absolute", "value": 50 }, "recovery": { "type": "inequality", "value": "≤ swim time" } },
-        { "shape": "simple", "distance_target": { "unit": "absolute", "value": 75 }, "recovery": { "type": "inequality", "value": "≤ swim time" } },
-        { "shape": "simple", "distance_target": { "unit": "absolute", "value": 50 }, "recovery": { "type": "inequality", "value": "≤ swim time" } },
-        { "shape": "simple", "distance_target": { "unit": "absolute", "value": 25 }, "recovery": { "type": "inequality", "value": "≤ swim time" } }
+        {
+          "shape": "simple"
+        }
       ]
     },
     {
       "schema_version": 1,
-      "id": "dnf-stop-start",
-      "name": "Stop-start: 1:30 STA then DNF",
+      "id": "sta-co2-1breath",
+      "name": "1-breath CO2 ladder",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "STA",
+      "capacity_tags": [
+        "co2"
+      ],
+      "goal": "1-breath recovery; short repeated holds until quality drops.",
+      "cues": "ladder mode: absolute|1C+X (def 1C+X); step (def +10s); termination (def quality-drop).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "until_quality_drops"
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-co2-short-intense",
+      "name": "Short & intense CO2",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "STA",
+      "capacity_tags": [
+        "co2"
+      ],
+      "goal": "5-6 FL holds at a sustainable duration, 2-breath recovery only.",
+      "cues": "n holds (def 6); hold (def sustainable, e.g. 2:30); recovery (def 2 breaths).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 6
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-co2-decreasing-rec",
+      "name": "Medium & moderate CO2",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "STA",
+      "capacity_tags": [
+        "co2",
+        "mental"
+      ],
+      "goal": "Fixed hold; recovery shrinks each rep.",
+      "cues": "hold (def sized to contraction duration); recovery start (def 60s); step (def -10s).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 7
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-co2-square",
+      "name": "Soft & medium CO2 (square breathing)",
+      "environment": "dry",
+      "role": "main",
+      "discipline": "STA",
+      "capacity_tags": [
+        "mental",
+        "co2"
+      ],
+      "goal": "Square breathing held for a long duration.",
+      "cues": "box length (def 10s); duration (def 30 min).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "duration_capped",
+        "duration_s": 1800
+      },
+      "reps": [
+        {
+          "shape": "continuous-protocol"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-co2-second-hold",
+      "name": "CO2, challenging second hold",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "STA",
+      "capacity_tags": [
+        "co2"
+      ],
+      "goal": "Sub-max, a few recovery breaths, then a max-effort second hold as the target.",
+      "cues": "first hold (def ~70% PB); recovery breaths (def 3); prep (def 5 min 5:5).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-get-high",
+      "name": "Get high (oxygen table)",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "STA",
+      "capacity_tags": [
+        "o2_hypoxia"
+      ],
+      "goal": "Strong HV prep before each; add 1 min per hold until it gets hard, then add 30s only.",
+      "cues": "HV pattern (def 2:2 strong); start hold (def 1 min); step (def +1 min, then +30s once hard).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "until_failure"
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-el",
+      "name": "Empty-lung set",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "STA",
+      "capacity_tags": [
+        "o2_hypoxia",
+        "mental"
+      ],
+      "goal": "RV/EL holds, increasing duration.",
+      "cues": "n (def 5); style: relaxed-belly|pull-and-release (def relaxed-belly); recovery (def 2-3 min).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 5
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-el-fl-switch",
+      "name": "EL/FL switch",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "STA",
+      "capacity_tags": [
+        "o2_hypoxia",
+        "mental"
+      ],
+      "goal": "Alternating EL and FL holds, both increasing.",
+      "cues": "EL step (def +20s); FL step (def +20-30s); recovery (def 2 min 4:6 HV); as-warmup: stay below PB margins.",
+      "set_repeat": 1,
+      "termination": {
+        "type": "until_failure"
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-1c-plus",
+      "name": "First-contraction-plus ladder",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "STA",
+      "capacity_tags": [
+        "co2",
+        "mental"
+      ],
+      "goal": "Increasing breathing prep; hold target = 1C + Xs across reps.",
+      "cues": "prep ramp (def 2->4 min); 1C+X schedule (def +0/20/40/60/80s); recovery mode (def increasing prep|fixed 2 min).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 5
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-frc-awareness",
+      "name": "FRC CO2 awareness",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "STA",
+      "capacity_tags": [
+        "co2"
+      ],
+      "goal": "FL then exhale to FRC then a short hold; short recovery only.",
+      "cues": "hold steps (def 15/30/45s); recovery (def 1 min).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-high-volume",
+      "name": "High-volume holds",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "STA",
+      "capacity_tags": [
+        "volume",
+        "co2",
+        "o2_hypoxia"
+      ],
+      "goal": "Repeat a % of PB many times.",
+      "cues": "% PB (def 70); n reps (def 3-10); rest (def long/unlimited); reduce-prep-each-rep (def off).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-progressive-fl",
+      "name": "Progressive FL to max",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "STA",
+      "capacity_tags": [
+        "co2",
+        "mental"
+      ],
+      "goal": "Comfortable -> strong sub-max -> max(-ish) FL for the day.",
+      "cues": "prep (def 5 min); sequence (def 3 holds).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 3
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-max",
+      "name": "STA max attempt",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "STA",
+      "capacity_tags": [
+        "performance"
+      ],
+      "goal": "Single maximal breath-hold. The performance test warm-ups are compared against.",
+      "cues": "HV prep (def 5 min 5:5); lung (def FL).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-cooldown-easy",
+      "name": "Easy cool-down STA",
+      "environment": "pool",
+      "role": "cooldown",
+      "discipline": "STA",
+      "capacity_tags": [
+        "mental"
+      ],
+      "goal": "Light, relaxed sub-max hold to finish on something easy.",
+      "cues": "hold (def light submax); recovery (def full).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-wu-fl-progression",
+      "name": "WU: FL progression",
+      "environment": "pool",
+      "role": "warmup",
+      "discipline": "STA",
+      "capacity_tags": [
+        "co2",
+        "mental"
+      ],
+      "goal": "1C+20 / 1C+40 / 1C+60 FL holds.",
+      "cues": "steps (def 1C+20/40/60); recovery (def 3 min).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-wu-frc-progression",
+      "name": "WU: FRC progression",
+      "environment": "pool",
+      "role": "warmup",
+      "discipline": "STA",
+      "capacity_tags": [
+        "co2"
+      ],
+      "goal": "FRC holds through the first hard contractions (not to hypoxia).",
+      "cues": "n (def 3); recovery (def 3-4 min).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-wu-contraction-delay",
+      "name": "WU: contraction delay",
+      "environment": "pool",
+      "role": "warmup",
+      "discipline": "STA",
+      "capacity_tags": [
+        "co2",
+        "mental"
+      ],
+      "goal": "Repeat holds until 1C arrives at the right time, then go for max.",
+      "cues": "trigger (def 1C timing feels right).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-wu-rv-fl",
+      "name": "WU: RV progression + 1 FL",
+      "environment": "pool",
+      "role": "warmup",
+      "discipline": "STA",
+      "capacity_tags": [
+        "o2_hypoxia",
+        "co2"
+      ],
+      "goal": "3 RV holds (easy/moderate/hard) + 1 FL.",
+      "cues": "FL target (def ~1.5 min under PB).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-wu-nwu-hard-start",
+      "name": "WU: NWU hard start",
+      "environment": "pool",
+      "role": "warmup",
+      "discipline": "STA",
+      "capacity_tags": [
+        "co2",
+        "o2_hypoxia"
+      ],
+      "goal": "One hard FL near PB-1min, recover, then max.",
+      "cues": "hard hold (def PB-1 min); recovery (def 5 min + strong HV).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-wu-3rv-3fl",
+      "name": "WU: 3xRV + 3xFL",
+      "environment": "pool",
+      "role": "warmup",
+      "discipline": "STA",
+      "capacity_tags": [
+        "o2_hypoxia"
+      ],
+      "goal": "3 EL holds then 3 FL holds.",
+      "cues": "RV recovery (def 3 min); FL recovery (def 5 min).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-nwu-submax",
+      "name": "NWU sub-max (dynamic)",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "any",
+      "capacity_tags": [
+        "mental",
+        "o2_hypoxia"
+      ],
+      "goal": "~70-80% feel, explore sensations, no fixed distance.",
+      "cues": "% feel (def 70-80); variant: plain|to-1C+contractions (def plain); discipline (def any; DNF shorter).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-max",
+      "name": "Dynamic max attempt",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "any",
+      "capacity_tags": [
+        "performance"
+      ],
+      "goal": "Single maximal distance attempt. The performance test warm-ups are compared against.",
+      "cues": "discipline (def any; DNF shorter).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-max-simulator",
+      "name": "Max dive simulator",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "any",
+      "capacity_tags": [
+        "o2_hypoxia"
+      ],
+      "goal": "80% PB, short dive, then a max push, with breaths between. Active safety.",
+      "cues": "% PB (def 80); short leg (def min{60m,30% PB}); RB (def 2 then 3).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-volume-fixed",
+      "name": "Volume: fixed reps",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "any",
+      "capacity_tags": [
+        "volume",
+        "co2"
+      ],
+      "goal": "N x a fixed distance with a set recovery (NOT goal-maximize).",
+      "cues": "n reps; distance (def 50/75m; shorter for DNF); recovery; pacing (def even).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-volume-maximize",
+      "name": "Volume: maximize total distance",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "any",
+      "capacity_tags": [
+        "volume",
+        "o2_hypoxia"
+      ],
+      "goal": "N dives where the goal is maximizing total distance; distance not fixed.",
+      "cues": "n dives; recovery (often shrinks across session).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-volume-technique",
+      "name": "Volume: technique drill",
       "environment": "pool",
       "role": "main",
       "discipline": "DNF",
-      "capacity_tags": ["mental", "co2"],
-      "goal": "Static into a dynamic to explore the transition zone.",
+      "capacity_tags": [
+        "technique",
+        "co2"
+      ],
+      "goal": "Sets alternating legs-only and normal (or arms-only), minimal recovery.",
+      "cues": "n sets (def 8-10); block (def 50m legs-only + 50m normal); recovery (def minimal).",
       "set_repeat": 1,
-      "termination": { "type": "fixed_n", "n": 1 },
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
       "reps": [
         {
-          "shape": "stop-start",
-          "lung_volume": "FL",
-          "hold_target": { "unit": "absolute", "value": 90 },
-          "distance_target": { "unit": "absolute", "value": 50 }
+          "shape": "simple"
         }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-pyramid",
+      "name": "Pyramid drills",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "any",
+      "capacity_tags": [
+        "co2",
+        "volume"
+      ],
+      "goal": "25-50-75-50-25; minimal-but-confident recovery; full recovery between sets.",
+      "cues": "ladder (def 25-50-75-50-25); recovery (def minimal/confident); n pyramids (user adds as many as wanted); distances shorter for DNF.",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-inverse-pyramid",
+      "name": "Inverse pyramid",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "any",
+      "capacity_tags": [
+        "co2",
+        "volume"
+      ],
+      "goal": "75-50-25-50-75; minimal-but-confident recovery.",
+      "cues": "ladder (def 75-50-25-50-75); recovery (def < swim time, cap 90s); sets (def 2).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-descending",
+      "name": "Descending distance",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "any",
+      "capacity_tags": [
+        "co2"
+      ],
+      "goal": "Long doable distance, then ~20% less, then ~20% less again.",
+      "cues": "start (def long doable); step (def -20%); n (def 3); recovery (def minimal).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 3
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-sweet16",
+      "name": "Sweet 16",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "any",
+      "capacity_tags": [
+        "co2",
+        "technique"
+      ],
+      "goal": "16 x 25m as quickly as possible.",
+      "cues": "reps (def 16); distance (def 25m); recovery (def 0-30s).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 16
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-sprints",
+      "name": "Sprint set",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "any",
+      "capacity_tags": [
+        "fitness_lactic",
+        "technique"
+      ],
+      "goal": "Max sprints with short recovery.",
+      "cues": "distance (def 25/50m); n; recovery (short).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-frc-sprint",
+      "name": "FRC dive + sprints",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "any",
+      "capacity_tags": [
+        "fitness_lactic"
+      ],
+      "goal": "FRC dive (longest possible) then a max-sprint ladder.",
+      "cues": "FRC distance (def 50-100m); sprint ladder (def 3x25m, growing recovery); sets (def 3).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-elastic-sprint-max",
+      "name": "Elastic sprints into max",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "any",
+      "capacity_tags": [
+        "fitness_lactic"
+      ],
+      "goal": "Elastic-band max sprints then straight into a max dive.",
+      "cues": "sprints (def 4 x 15s, 15s rest); sets (def 2).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-stop-start",
+      "name": "Stop-start (STA then swim)",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "any",
+      "capacity_tags": [
+        "mental",
+        "co2"
+      ],
+      "goal": "A STA hold, then straight into a dynamic swim.",
+      "cues": "STA duration (def 1:30); then distance/sub-max.",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "stop-start"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-start-stop",
+      "name": "Start-stop (swim then STA)",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "any",
+      "capacity_tags": [
+        "mental",
+        "co2"
+      ],
+      "goal": "A dynamic swim, then straight into a STA hold. (Not in the library; added.)",
+      "cues": "distance; then STA duration.",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "start-stop"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-stop-dyn",
+      "name": "Stop in the middle (dive-STA-dive)",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "any",
+      "capacity_tags": [
+        "mental",
+        "co2"
+      ],
+      "goal": "A dynamic, then a STA hold, then another dynamic. (Not in the library; added.)",
+      "cues": "leg-1 distance; STA duration; leg-2 distance.",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "stop-in-the-middle"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-transition-ladder",
+      "name": "STA-to-dynamic transition ladder",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "any",
+      "capacity_tags": [
+        "mental",
+        "co2"
+      ],
+      "goal": "2-3x STA to 1C/UTB then a dynamic, swimming further each dive.",
+      "cues": "mode: FL|crawl|FRC; n per mode (def 2-3).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "range",
+        "n_min": 2,
+        "n_max": 3
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-technique",
+      "name": "Technique drills",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "DNF",
+      "capacity_tags": [
+        "technique"
+      ],
+      "goal": "Arms-only / legs-only / normal, counting strokes to reduce them.",
+      "cues": "blocks (def 4x each); count (strokes).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-tortuga",
+      "name": "Tortuga (slow crawl)",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "tortuga",
+      "capacity_tags": [
+        "mental",
+        "co2"
+      ],
+      "goal": "Its own discipline. Cover a short distance in the longest possible time; max time, distance irrelevant.",
+      "cues": "distance cap (def 50m).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-broken-200",
+      "name": "Broken 200m",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "any",
+      "capacity_tags": [
+        "co2"
+      ],
+      "goal": "75m, 50m, 3x25m with minimum recovery; consistent pace.",
+      "cues": "structure (def 75/50/3x25); recovery (def minimum, caps 60s/30s/few breaths).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "dyn-hypercapnic",
+      "name": "Hypercapnic cool-down",
+      "environment": "pool",
+      "role": "cooldown",
+      "discipline": "any",
+      "capacity_tags": [
+        "co2",
+        "volume"
+      ],
+      "goal": "Continuous swim, breathing every several strokes, no stopping.",
+      "cues": "distance (def 300-500m); breathe every (def 7+ strokes).",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n",
+        "n": 1
+      },
+      "reps": [
+        {
+          "shape": "continuous-protocol"
+        }
+      ]
+    }
+  ],
+  "affinities": [
+    {
+      "exercises": [
+        "dyn-nwu-submax",
+        "dyn-volume-fixed"
+      ],
+      "weight": 3,
+      "sessions": [
+        "DYN 9",
+        "DYN 12",
+        "DYN 16"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-sprints",
+        "dyn-volume-fixed"
+      ],
+      "weight": 3,
+      "sessions": [
+        "DYN 9",
+        "DYN 12",
+        "DYN 14"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-stop-start",
+        "dyn-volume-fixed"
+      ],
+      "weight": 3,
+      "sessions": [
+        "DYN 11",
+        "DYN 14",
+        "DYN 16"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-nwu-submax",
+        "dyn-sprints"
+      ],
+      "weight": 2,
+      "sessions": [
+        "DYN 9",
+        "DYN 12"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-broken-200",
+        "dyn-sprints"
+      ],
+      "weight": 1,
+      "sessions": [
+        "DYN 17"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-descending",
+        "dyn-sweet16"
+      ],
+      "weight": 1,
+      "sessions": [
+        "DYN 6"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-frc-sprint",
+        "dyn-volume-fixed"
+      ],
+      "weight": 1,
+      "sessions": [
+        "DYN 18"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-hypercapnic",
+        "dyn-sprints"
+      ],
+      "weight": 1,
+      "sessions": [
+        "DYN 14"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-hypercapnic",
+        "dyn-stop-start"
+      ],
+      "weight": 1,
+      "sessions": [
+        "DYN 14"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-hypercapnic",
+        "dyn-volume-fixed"
+      ],
+      "weight": 1,
+      "sessions": [
+        "DYN 14"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-inverse-pyramid",
+        "dyn-nwu-submax"
+      ],
+      "weight": 1,
+      "sessions": [
+        "DYN 13"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-inverse-pyramid",
+        "dyn-sprints"
+      ],
+      "weight": 1,
+      "sessions": [
+        "DYN 10"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-inverse-pyramid",
+        "dyn-tortuga"
+      ],
+      "weight": 1,
+      "sessions": [
+        "DYN 10"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-nwu-submax",
+        "dyn-stop-start"
+      ],
+      "weight": 1,
+      "sessions": [
+        "DYN 16"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-nwu-submax",
+        "dyn-sweet16"
+      ],
+      "weight": 1,
+      "sessions": [
+        "DYN 15"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-nwu-submax",
+        "dyn-technique"
+      ],
+      "weight": 1,
+      "sessions": [
+        "DYN 9"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-sprints",
+        "dyn-stop-start"
+      ],
+      "weight": 1,
+      "sessions": [
+        "DYN 14"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-sprints",
+        "dyn-technique"
+      ],
+      "weight": 1,
+      "sessions": [
+        "DYN 9"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-sprints",
+        "dyn-tortuga"
+      ],
+      "weight": 1,
+      "sessions": [
+        "DYN 10"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-stop-start",
+        "dyn-volume-maximize"
+      ],
+      "weight": 1,
+      "sessions": [
+        "DYN 8"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-technique",
+        "dyn-volume-fixed"
+      ],
+      "weight": 1,
+      "sessions": [
+        "DYN 9"
+      ]
+    },
+    {
+      "exercises": [
+        "dyn-volume-maximize",
+        "dyn-volume-technique"
+      ],
+      "weight": 1,
+      "sessions": [
+        "DYN 5"
+      ]
+    },
+    {
+      "exercises": [
+        "sta-co2-decreasing-rec",
+        "sta-wu-frc-progression"
+      ],
+      "weight": 1,
+      "sessions": [
+        "STA 16"
+      ]
+    },
+    {
+      "exercises": [
+        "sta-co2-increasing",
+        "sta-nwu-submax"
+      ],
+      "weight": 1,
+      "sessions": [
+        "STA 1"
+      ]
+    },
+    {
+      "exercises": [
+        "sta-co2-short-intense",
+        "sta-wu-frc-progression"
+      ],
+      "weight": 1,
+      "sessions": [
+        "STA 15"
+      ]
+    },
+    {
+      "exercises": [
+        "sta-co2-vshape",
+        "sta-nwu-submax"
+      ],
+      "weight": 1,
+      "sessions": [
+        "STA 2"
+      ]
+    },
+    {
+      "exercises": [
+        "sta-el",
+        "sta-progressive-fl"
+      ],
+      "weight": 1,
+      "sessions": [
+        "STA 11"
+      ]
+    },
+    {
+      "exercises": [
+        "sta-high-volume",
+        "sta-wu-frc-progression"
+      ],
+      "weight": 1,
+      "sessions": [
+        "STA 8"
+      ]
+    },
+    {
+      "exercises": [
+        "sta-high-volume",
+        "sta-wu-rv-fl"
+      ],
+      "weight": 1,
+      "sessions": [
+        "STA 10"
+      ]
+    },
+    {
+      "exercises": [
+        "sta-progressive-fl",
+        "sta-wu-frc-progression"
+      ],
+      "weight": 1,
+      "sessions": [
+        "STA 20"
       ]
     }
   ]

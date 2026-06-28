@@ -11,6 +11,7 @@
     DISCIPLINES,
     SHAPES,
   } from './lib/session.js'
+  import { suggestionsFor } from './lib/affinities.js'
   import MMSS from './lib/MMSS.svelte'
   import Help from './lib/Help.svelte'
 
@@ -45,14 +46,19 @@
   // Seed-time pass so reloaded sessions render without a flash of empty binds.
   for (const ex of draft.exercises) ensureExercise(ex)
 
-  function addTemplate() {
-    const t = app.templates.find((x) => x.id === chosen)
+  function addTemplate(id = chosen) {
+    const t = app.templates.find((x) => x.id === id)
     if (!t) return
     const ex = instantiateExercise(t)
     ensureExercise(ex)
     draft.exercises = [...draft.exercises, ex]
     chosen = ''
   }
+
+  // "Goes well with" suggestions: exercises that co-occurred in the source
+  // library with the ones already in the draft, ranked by co-occurrence weight.
+  const addedIds = $derived(draft.exercises.map((e) => e.template_id).filter(Boolean))
+  const suggestions = $derived(suggestionsFor(addedIds, app.templates))
   function addAdhoc() {
     const ex = blankExercise()
     ensureExercise(ex)
@@ -120,6 +126,14 @@
     <div class="actions">
       <button class="link" onclick={addAdhoc}>+ Ad-hoc exercise</button>
     </div>
+    {#if suggestions.length}
+      <div class="suggest">
+        <span class="muted">Goes well with</span>
+        {#each suggestions as s (s.id)}
+          <button class="chip" onclick={() => addTemplate(s.id)}>+ {s.name}</button>
+        {/each}
+      </div>
+    {/if}
   </section>
 
   {#if draft.exercises.length === 0}

@@ -25,7 +25,7 @@ export const INCIDENTS = [
 
 export const FEELS = ['great', 'good', 'meh', 'bad', 'terrible']
 
-export const DISCIPLINES = ['STA', 'DYN', 'DYNb', 'DNF']
+export const DISCIPLINES = ['STA', 'DYN', 'DYNb', 'DNF', 'tortuga']
 
 // Effort shapes. `simple` resolves to hold or distance from the discipline; the
 // rest fix an explicit segment order (see repSegments).
@@ -130,8 +130,11 @@ export function newSession() {
 // editable in the build view); actual starts empty.
 export function instantiateExercise(template) {
   const reps = (template.reps ?? []).map((r) => clone(r))
+  // 'any' is a template-only placeholder; every 'any' exercise in the library is
+  // a dynamic one (the static exercises all carry a concrete STA), so resolve it
+  // to a dynamic default the user can change, not STA.
   const discipline =
-    template.discipline && template.discipline !== 'any' ? template.discipline : 'STA'
+    template.discipline && template.discipline !== 'any' ? template.discipline : 'DNF'
   return {
     id: uid('ex'),
     template_id: template.id ?? null,

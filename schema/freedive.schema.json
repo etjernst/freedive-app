@@ -11,15 +11,44 @@
     "templates": {
       "type": "array",
       "items": { "$ref": "#/$defs/exerciseTemplate" }
+    },
+    "affinities": {
+      "type": "array",
+      "description": "Pairs of exercises that co-occurred in the same source session. Drives 'goes well with' suggestions in the build UI.",
+      "items": { "$ref": "#/$defs/affinity" }
     }
   },
   "$defs": {
-    "discipline": { "enum": ["STA", "DYN", "DYNb", "DNF", "any"] },
+    "affinity": {
+      "type": "object",
+      "required": ["exercises", "weight"],
+      "additionalProperties": false,
+      "properties": {
+        "exercises": {
+          "type": "array",
+          "description": "The two template ids that co-occurred, sorted.",
+          "items": { "type": "string" },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "weight": {
+          "type": "integer",
+          "description": "How many source sessions the pair appeared in together.",
+          "minimum": 1
+        },
+        "sessions": {
+          "type": "array",
+          "description": "The source-session labels where the pair co-occurred.",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "discipline": { "enum": ["STA", "DYN", "DYNb", "DNF", "tortuga", "any"] },
     "lungVolume": { "enum": ["FL", "FRC", "RV"] },
     "shape": { "enum": ["simple", "stop-start", "start-stop", "stop-in-the-middle", "continuous-protocol"] },
     "role": { "enum": ["warmup", "main", "cooldown"] },
     "environment": { "enum": ["pool", "dry", "gym"] },
-    "capacity": { "enum": ["co2", "o2_hypoxia", "mental", "volume", "lung_volume", "fitness_lactic", "technique"] },
+    "capacity": { "enum": ["co2", "o2_hypoxia", "mental", "volume", "lung_volume", "fitness_lactic", "technique", "performance"] },
     "pace": { "enum": ["sprint", "max_sprint", "relaxed", "race_pace"] },
     "techniqueVariant": { "enum": ["legs_only", "arms_only", "normal", "crawl"] },
 
