@@ -12,6 +12,7 @@
     createSession,
     startSessionWith,
   } from './lib/store.svelte.js'
+  import { LIB_FILTERS, filterLibrary, discLabel, roleLabel } from './lib/library.js'
   import logoUrl from './assets/winnow_logo.svg'
   import Settings from './Settings.svelte'
   import Sessions from './Sessions.svelte'
@@ -29,37 +30,8 @@
   }
   const head = $derived(TITLES[app.view] ?? TITLES.home)
 
-  // Home library filter. The 18 'any' templates are the dynamic exercises
-  // (usable across DYN/DYNb/DNF), so they group under one "Dynamic" chip.
-  const DYNAMIC_DISC = new Set(['any', 'DYN', 'DYNb', 'DNF'])
-  const LIB_FILTERS = [
-    { key: 'all', label: 'All' },
-    { key: 'STA', label: 'STA' },
-    { key: 'dynamic', label: 'Dynamic' },
-    { key: 'tortuga', label: 'Tortuga' },
-  ]
-  const ROLE_ORDER = { warmup: 0, main: 1, cooldown: 2 }
   let libFilter = $state('all')
-
-  function matchesFilter(t) {
-    if (libFilter === 'all') return true
-    if (libFilter === 'dynamic') return DYNAMIC_DISC.has(t.discipline)
-    return t.discipline === libFilter
-  }
-  // Filtered, then ordered warm-up -> main -> cool-down, then by name, so a
-  // filtered list reads top-to-bottom the way a session is assembled.
-  const libTemplates = $derived(
-    app.templates
-      .filter(matchesFilter)
-      .slice()
-      .sort(
-        (a, b) =>
-          (ROLE_ORDER[a.role] ?? 1) - (ROLE_ORDER[b.role] ?? 1) ||
-          (a.name ?? '').localeCompare(b.name ?? ''),
-      ),
-  )
-  const discLabel = (d) => (d === 'any' ? 'dynamic' : d)
-  const roleLabel = (r) => (r === 'warmup' ? 'warm-up' : r === 'cooldown' ? 'cool-down' : null)
+  const libTemplates = $derived(filterLibrary(app.templates, libFilter))
 
   let busy = $state(null)
   let notice = $state(null)

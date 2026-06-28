@@ -739,6 +739,21 @@ nav {
   margin: 6px 0 0;
 }
 
+.plan-note {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 8px 0 0;
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font: inherit;
+  font-size: 13px;
+  resize: vertical;
+  min-height: 38px;
+}
+
 .reps {
   margin-top: 10px;
   display: flex;

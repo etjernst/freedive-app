@@ -131,6 +131,7 @@
           </select>
         </div>
       {/if}
+      {#if ex.plan_note}<p class="muted goal">{ex.plan_note}</p>{/if}
 
       <div class="reps">
         {#each ex.actual.reps as ar, ri (ri)}

@@ -110,22 +110,26 @@ function recoverySeconds(rep, settings, effortSec) {
   }
 }
 
-// One pass through the entered reps: prep + effort + recovery for each.
+// One pass through the entered reps: prep + effort + recovery for each. Also
+// reports the final rep's recovery (lastRec) so a single-set exercise can drop
+// the recovery that follows its last effort, which leads nowhere.
 function blockSeconds(ex, settings) {
   const reps = ex.planned?.reps ?? []
   let sum = 0
   let known = true
-  for (const rep of reps) {
+  let lastRec = 0
+  reps.forEach((rep, i) => {
     const prep = rep.prep_breathing?.duration_s ?? 0
     const eff = effortSeconds(rep, ex, settings)
     const rec = recoverySeconds(rep, settings, eff)
     if (eff == null || rec == null) {
       known = false
-      continue
+      return
     }
     sum += prep + eff + rec
-  }
-  return { sec: sum, known, perRep: reps.length ? sum / reps.length : 0 }
+    if (i === reps.length - 1) lastRec = rec
+  })
+  return { sec: sum, known, perRep: reps.length ? sum / reps.length : 0, lastRec }
 }
 
 // Estimate one exercise. Returns { seconds, uncertain, reason }.
@@ -157,7 +161,10 @@ export function estimateExercise(ex, settings) {
     return { seconds: blk.perRep * Math.round((lo + hi) / 2) * sets, uncertain: false }
   }
 
-  return { seconds: blk.sec * sets, uncertain: false }
+  // A single-set exercise has no effort after its last rep, so the recovery that
+  // would follow it is not real time; drop it.
+  const trailing = sets === 1 ? blk.lastRec : 0
+  return { seconds: blk.sec * sets - trailing, uncertain: false }
 }
 
 export function estimateSession(session, settings) {

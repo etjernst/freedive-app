@@ -145,6 +145,8 @@ export function instantiateExercise(template) {
     capacity_tags: template.capacity_tags ?? [],
     goal: template.goal ?? '',
     cues: template.cues ?? '',
+    // Free-text instructions the user writes for themselves on this exercise.
+    plan_note: template.plan_note ?? '',
     shape_default: template.shape_default ?? 'simple',
     set_repeat: template.set_repeat ?? 1,
     termination: template.termination ?? { type: 'fixed_n', n: 1 },
@@ -181,6 +183,7 @@ export function blankExercise() {
     capacity_tags: [],
     goal: '',
     cues: '',
+    plan_note: '',
     shape_default: 'simple',
     set_repeat: 1,
     termination: { type: 'fixed_n', n: 1 },
@@ -195,6 +198,30 @@ export function blankExercise() {
 
 export function blankRep(shape = 'simple') {
   return { shape }
+}
+
+export function newTemplateId() {
+  return uid('tmpl')
+}
+
+// Build a reusable library template from a session exercise: keep its plan and
+// metadata, drop the per-instance actual, ids, and day-specific note. The field
+// set mirrors the seeded templates so it validates against the same schema.
+export function exerciseToTemplate(ex, name) {
+  return {
+    schema_version: 1,
+    id: newTemplateId(),
+    name: name || ex.name || 'New exercise',
+    environment: ex.environment ?? 'pool',
+    role: ex.role ?? 'main',
+    discipline: ex.discipline ?? 'STA',
+    capacity_tags: clone(ex.capacity_tags ?? []),
+    goal: ex.goal ?? '',
+    cues: ex.cues ?? '',
+    set_repeat: ex.set_repeat ?? 1,
+    termination: clone(ex.termination ?? { type: 'fixed_n', n: 1 }),
+    reps: clone(ex.planned?.reps ?? [{ shape: 'simple' }]),
+  }
 }
 
 // The plan slots to log against: the rep block repeated set_repeat times. Each

@@ -1,5 +1,5 @@
 <script>
-  import { app, saveSettings, setView } from './lib/store.svelte.js'
+  import { app, saveSettings, setView, refreshLibrary } from './lib/store.svelte.js'
   import {
     PB_FIELDS,
     ONE_C_BUCKETS,
@@ -101,6 +101,14 @@
     saved = true
     setTimeout(() => (saved = false), 2000)
   }
+
+  let libNotice = $state(null)
+  async function onRefreshLibrary() {
+    if (!confirm('Refresh updates the built-in exercises to the latest version. Your own saved exercises are not touched. Continue?')) return
+    const n = await refreshLibrary()
+    libNotice = `Library refreshed (${n} exercises)`
+    setTimeout(() => (libNotice = null), 2500)
+  }
 </script>
 
 <main>
@@ -175,6 +183,15 @@
     <div class="actions">
       <button class="link" onclick={addBreathing}>+ Add pattern</button>
     </div>
+  </section>
+
+  <section class="card">
+    <h2>Exercise library</h2>
+    <p class="muted">Update the built-in exercises to the latest version. Your own saved exercises are left untouched.</p>
+    <div class="actions">
+      <button onclick={onRefreshLibrary}>Refresh library from latest</button>
+    </div>
+    {#if libNotice}<p class="notice">{libNotice}</p>{/if}
   </section>
 
   <div class="actions sticky-save">

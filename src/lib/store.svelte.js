@@ -1,4 +1,5 @@
 import { getDB, setMeta } from './db.js'
+import fixtures from '../../seed/fixtures.json'
 import { seedIfNeeded } from './seed.js'
 import { requestPersistence, storageEstimate } from './persist.js'
 import { exportToFile, restoreFromFile, buildExport, restoreFromEnvelope, parseExport, localIso } from './backup.js'
@@ -66,6 +67,19 @@ export async function refresh() {
   app.settings = mergeSettings(await db.get('settings', 'profile'))
 }
 
+// Overwrite the shipped canon templates with the latest fixtures (by id), so
+// edits we make to the library reach an already-seeded device. Templates whose
+// id is NOT in fixtures (the user's own saved/ad-hoc ones) are left untouched.
+export async function refreshLibrary() {
+  const db = await getDB()
+  const shipped = fixtures.templates ?? []
+  const tx = db.transaction('templates', 'readwrite')
+  for (const t of shipped) tx.store.put(t)
+  await tx.done
+  await refresh()
+  return shipped.length
+}
+
 export async function saveSettings(next) {
   const db = await getDB()
   await db.put('settings', { ...next, key: 'profile' })
@@ -113,6 +127,13 @@ export async function saveSession(session) {
   const doc = clone(session)
   doc.updated_at = localIso()
   await (await getDB()).put('sessions', doc)
+  await refresh()
+}
+
+// Save a user-authored template to the library (a fresh id, never overwriting).
+// Clone at the boundary to strip $state proxies, as saveSession does.
+export async function saveTemplate(template) {
+  await (await getDB()).put('templates', clone(template))
   await refresh()
 }
 

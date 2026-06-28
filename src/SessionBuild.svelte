@@ -1,10 +1,11 @@
 <script>
-  import { app, currentSession, saveSession, setView } from './lib/store.svelte.js'
+  import { app, currentSession, saveSession, saveTemplate, setView } from './lib/store.svelte.js'
   import {
     instantiateExercise,
     blankExercise,
     blankRep,
     reuseExercise,
+    exerciseToTemplate,
     repSegments,
     shapeHint,
     shapeLabel,
@@ -15,6 +16,7 @@
     SHAPES,
   } from './lib/session.js'
   import { suggestionsFor } from './lib/affinities.js'
+  import { LIB_FILTERS, filterLibrary, discLabel, roleLabel } from './lib/library.js'
   import {
     estimateExercise,
     estimateSession,
@@ -22,6 +24,7 @@
     needsPlanningReps,
     needsPlanningDistance,
   } from './lib/estimate.js'
+  import { openInObsidian } from './lib/obsidian.js'
   import MMSS from './lib/MMSS.svelte'
   import Help from './lib/Help.svelte'
 
@@ -36,9 +39,13 @@
   // Working copy: clone the loaded session, edit freely, persist on save. The
   // plan we assemble here is what gets snapshotted; logging never touches it.
   let draft = $state(clone(currentSession()))
-  let chosen = $state('')
   let saved = $state(false)
   let showHistory = $state(false)
+  // Library picker mirrors Home's filter + cards. Open by default on an empty
+  // session so adding the first exercise is one tap, not a hunt through a select.
+  let showLibrary = $state(clone(currentSession())?.exercises?.length === 0)
+  let libFilter = $state('all')
+  const libTemplates = $derived(filterLibrary(app.templates, libFilter))
 
   // Give every shown segment a target object to bind to, so the editor never
   // binds through undefined. Idempotent: only fills what is missing.
@@ -59,18 +66,19 @@
   for (const ex of draft.exercises) {
     ex.medium ??= 'wet'
     ex.plan_estimate ??= { reps: null, distance_m: null }
+    ex.plan_note ??= ''
     ensureExercise(ex)
   }
+  draft.session_remarks ??= ''
 
   const sessionEstimate = $derived(estimateSession(draft, app.settings))
 
-  function addTemplate(id = chosen) {
+  function addTemplate(id) {
     const t = app.templates.find((x) => x.id === id)
     if (!t) return
     const ex = instantiateExercise(t)
     ensureExercise(ex)
     draft.exercises = [...draft.exercises, ex]
-    chosen = ''
   }
 
   // "Goes well with" suggestions: exercises that co-occurred in the source
@@ -151,6 +159,22 @@
     else if (typeof rep.recovery.value !== 'number') rep.recovery.value = null
   }
 
+  function toObsidian() {
+    openInObsidian($state.snapshot(draft), app.settings)
+  }
+
+  // Save the (possibly tweaked) exercise to the library as a new template. The
+  // builder is the editor, so this covers both duplicate-and-tweak and promoting
+  // an ad-hoc exercise. Always a new name, never overwrites an existing one.
+  let tmplSaved = $state(null)
+  async function saveAsTemplate(ex) {
+    const name = prompt('Save as a new library exercise.\nName:', ex.name)
+    if (!name || !name.trim()) return
+    await saveTemplate(exerciseToTemplate($state.snapshot(ex), name.trim()))
+    tmplSaved = ex.id
+    setTimeout(() => { if (tmplSaved === ex.id) tmplSaved = null }, 1500)
+  }
+
   async function save(then) {
     await saveSession($state.snapshot(draft))
     if (then === 'log') setView('session-log')
@@ -167,21 +191,47 @@
       <label for="sess-date">Date</label>
       <input id="sess-date" type="date" bind:value={draft.date} />
     </div>
-    <div class="field add-row">
-      <select bind:value={chosen}>
-        <option value="" disabled>Add from library…</option>
-        {#each app.templates as t (t.id)}
-          <option value={t.id}>{t.name} ({t.discipline})</option>
-        {/each}
-      </select>
-      <button class="add-btn" onclick={() => addTemplate()} disabled={!chosen}>Add</button>
-    </div>
+    <textarea
+      class="remarks"
+      rows="2"
+      placeholder="Session notes / plan for the day"
+      bind:value={draft.session_remarks}
+    ></textarea>
     <div class="actions">
+      <button class="link" onclick={() => (showLibrary = !showLibrary)}>
+        {showLibrary ? 'Hide library' : '+ From library'}
+      </button>
       <button class="link" onclick={addAdhoc}>+ Ad-hoc exercise</button>
       <button class="link" onclick={() => (showHistory = !showHistory)} disabled={historyItems.length === 0}>
         {showHistory ? 'Hide history' : '+ From history'}
       </button>
     </div>
+    {#if showLibrary}
+      <div class="filters">
+        {#each LIB_FILTERS as f (f.key)}
+          <button class="chip" class:active={libFilter === f.key} onclick={() => (libFilter = f.key)}>
+            {f.label}
+          </button>
+        {/each}
+      </div>
+      <div class="lib-list">
+        {#each libTemplates as t (t.id)}
+          <button class="lib-card" onclick={() => addTemplate(t.id)}>
+            <span class="lib-top">
+              <span class="name">{t.name ?? t.id}</span>
+              <span class="badges">
+                <span class="disc">{discLabel(t.discipline)}</span>
+                {#if roleLabel(t.role)}<span class="role">{roleLabel(t.role)}</span>{/if}
+              </span>
+            </span>
+            {#if t.capacity_tags?.length}
+              <span class="tags">{t.capacity_tags.join(' · ')}</span>
+            {/if}
+            {#if t.goal}<span class="lib-goal muted">{t.goal}</span>{/if}
+          </button>
+        {/each}
+      </div>
+    {/if}
     {#if showHistory}
       <div class="history-list">
         {#if historyItems.length === 0}
@@ -222,6 +272,12 @@
       </div>
 
       {#if ex.goal}<p class="muted goal">{ex.goal}</p>{/if}
+      <textarea
+        class="plan-note"
+        rows="2"
+        placeholder="Notes / instructions to yourself"
+        bind:value={ex.plan_note}
+      ></textarea>
       <p class="est" class:est-unknown={est.seconds == null}>
         {est.seconds != null ? `Est. ${fmtDuration(est.seconds)}` : `Est. — ${est.reason}`}
       </p>
@@ -326,7 +382,7 @@
               </div>
             {/if}
 
-            {#if rep.recovery}
+            {#if rep.recovery && !((ex.set_repeat ?? 1) <= 1 && ri === ex.planned.reps.length - 1)}
               <div class="seg">
                 <span class="lbl recovery-lbl">
                   Recovery
@@ -371,6 +427,11 @@
         {/each}
         <button class="link addrep" onclick={() => addRep(ex)}>+ Add rep</button>
       </div>
+      <div class="actions">
+        <button class="link" onclick={() => saveAsTemplate(ex)}>
+          {tmplSaved === ex.id ? 'Saved to library ✓' : 'Save as template'}
+        </button>
+      </div>
     </section>
   {/each}
 
@@ -385,6 +446,7 @@
     <button class="log-btn" onclick={() => save('log')} disabled={draft.exercises.length === 0}>Log actuals →</button>
   </div>
   <div class="actions">
+    <button class="link" onclick={toObsidian} disabled={draft.exercises.length === 0}>Add to Obsidian</button>
     <button class="link" onclick={() => setView('sessions')}>Back to sessions</button>
   </div>
 </main>
