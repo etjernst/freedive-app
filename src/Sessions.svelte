@@ -20,8 +20,10 @@
 <main>
   <section class="card">
     <div class="actions">
-      <button onclick={createSession}>+ New session</button>
+      <button onclick={() => createSession()}>+ New session</button>
+      <button onclick={() => createSession('session-log')}>Quick log</button>
     </div>
+    <p class="muted center">Quick log skips the plan: enter a past session straight from the actuals.</p>
   </section>
 
   <section class="card">

@@ -78,12 +78,12 @@ export function currentSession() {
   return app.sessions.find((s) => s.id === app.currentSessionId) ?? null
 }
 
-export async function createSession() {
+export async function createSession(view = 'session-build') {
   const s = newSession()
   await (await getDB()).put('sessions', s)
   app.currentSessionId = s.id
   await refresh()
-  app.view = 'session-build'
+  app.view = view
 }
 
 export function openSession(id, view = 'session-build') {

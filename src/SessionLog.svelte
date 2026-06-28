@@ -3,6 +3,8 @@
   import {
     seedActual,
     blankActualRep,
+    instantiateExercise,
+    blankExercise,
     repSegments,
     contractionUnit,
     turnsFor,
@@ -10,6 +12,7 @@
     describeDistance,
     describeRecovery,
     clone,
+    DISCIPLINES,
     DEVIATION_REASONS,
     INCIDENTS,
     FEELS,
@@ -21,10 +24,31 @@
   // logged. The planned snapshot is read-only here; we only ever write actuals.
   let draft = $state(clone(currentSession()))
   for (const ex of draft.exercises) {
+    ex.medium ??= 'wet'
     if (!ex.actual) ex.actual = seedActual(ex)
   }
   let open = $state({}) // rep details toggles, keyed `${ei}-${ri}`
   let saved = $state(false)
+  let chosen = $state('')
+
+  // Add an exercise straight in the log (for quick-logging a past session with
+  // no plan): instantiate it and seed an empty actual to fill in.
+  function addTemplate(id = chosen) {
+    const t = app.templates.find((x) => x.id === id)
+    if (!t) return
+    const ex = instantiateExercise(t)
+    ex.actual = seedActual(ex)
+    draft.exercises = [...draft.exercises, ex]
+    chosen = ''
+  }
+  function addAdhoc() {
+    const ex = blankExercise()
+    ex.actual = seedActual(ex)
+    draft.exercises = [...draft.exercises, ex]
+  }
+  function removeExercise(i) {
+    draft.exercises = draft.exercises.filter((_, j) => j !== i)
+  }
 
   const breathingPatterns = Object.keys(app.settings.breathing_intensity ?? {})
   const pool = app.settings.pool_length_m ?? 25
@@ -62,15 +86,51 @@
 
 <main>
   <section class="card">
-    <p class="muted">{draft.date} · logging actuals against your plan</p>
+    <div class="field">
+      <label for="log-date">Date</label>
+      <input id="log-date" type="date" bind:value={draft.date} />
+    </div>
+    <div class="field add-row">
+      <select bind:value={chosen}>
+        <option value="" disabled>Add exercise…</option>
+        {#each app.templates as t (t.id)}
+          <option value={t.id}>{t.name} ({t.discipline})</option>
+        {/each}
+      </select>
+      <button class="add-btn" onclick={() => addTemplate()} disabled={!chosen}>Add</button>
+    </div>
+    <div class="actions">
+      <button class="link" onclick={addAdhoc}>+ Ad-hoc exercise</button>
+    </div>
   </section>
+
+  {#if draft.exercises.length === 0}
+    <p class="muted center">No exercises yet. Add one above, then fill in what you did.</p>
+  {/if}
 
   {#each draft.exercises as ex, ei (ex.id)}
     <section class="card exercise">
       <div class="ex-head">
-        <span class="ex-name-static">{ex.name}</span>
-        <span class="tags">{ex.discipline}</span>
+        <input class="ex-name" bind:value={ex.name} />
+        <div class="ex-move">
+          <button class="link" onclick={() => removeExercise(ei)} aria-label="Remove exercise">✕</button>
+        </div>
       </div>
+      <div class="field">
+        <span class="lbl">Discipline</span>
+        <select bind:value={ex.discipline}>
+          {#each DISCIPLINES as d}<option value={d}>{d}</option>{/each}
+        </select>
+      </div>
+      {#if ex.discipline === 'STA'}
+        <div class="field">
+          <span class="lbl">Medium</span>
+          <select bind:value={ex.medium}>
+            <option value="wet">wet</option>
+            <option value="dry">dry</option>
+          </select>
+        </div>
+      {/if}
 
       <div class="reps">
         {#each ex.actual.reps as ar, ri (ri)}
