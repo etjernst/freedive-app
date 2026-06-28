@@ -18,6 +18,12 @@ Vital capacity lives in Settings as a single spirometer value, but Emilia wants 
 Each entry should carry the date, vital capacity in liters, an optional packed vital capacity in liters (after glossopharyngeal insufflation), and optional notes.
 Store these as a time series rather than overwriting one setting, surface entry in the capture flow (a dedicated quick-log alongside exercises is fine), and feed the series into the Phase 3 lung-volume trend.
 
+## Automatic backup on every save
+
+Right now syncing between devices is manual: back up on one device, restore on the other.
+Add an option to auto-back-up to Dropbox after every session save (and maybe after settings changes), so a second device stays current with a single restore and no manual "Back up now".
+Debounce or queue so a burst of edits does not fire many uploads, and fail quietly (the existing outbox contract already models retries) so a flaky connection never blocks logging.
+
 ## Smaller deferred items
 
 - The qualitative ratios in `estimate.js` (submax 75 percent, recovery multipliers, and so on) are hardcoded constants; surface them in Settings if they ever need tuning in-app.
