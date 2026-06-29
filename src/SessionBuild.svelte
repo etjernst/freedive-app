@@ -15,6 +15,8 @@
     isDynamic,
     DISCIPLINES,
     SHAPES,
+    LUNG_OPTS,
+    SPEED_OPTS,
   } from './lib/session.js'
   import { suggestionsFor } from './lib/affinities.js'
   import { LIB_FILTERS, filterLibrary, discLabel, roleLabel } from './lib/library.js'
@@ -28,17 +30,6 @@
   import { openInObsidian } from './lib/obsidian.js'
   import MMSS from './lib/MMSS.svelte'
   import Help from './lib/Help.svelte'
-
-  const LUNG_OPTS = [
-    { value: 'FL', label: 'full lung' },
-    { value: 'FRC', label: 'FRC' },
-    { value: 'RV', label: 'empty (EL)' },
-  ]
-  const SPEED_OPTS = [
-    { value: '', label: 'normal' },
-    { value: 'sprint', label: 'sprint' },
-    { value: 'max_sprint', label: 'max sprint' },
-  ]
 
   const HOLD_QUAL = [
     { value: 'submax', label: 'sub-max' },

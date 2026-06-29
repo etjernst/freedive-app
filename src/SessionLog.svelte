@@ -13,10 +13,13 @@
     describeRecovery,
     planOverview,
     clone,
+    isDynamic,
     DISCIPLINES,
     DEVIATION_REASONS,
     INCIDENTS,
     FEELS,
+    LUNG_OPTS,
+    SPEED_OPTS,
   } from './lib/session.js'
   import MMSS from './lib/MMSS.svelte'
   import Help from './lib/Help.svelte'
@@ -27,6 +30,15 @@
   for (const ex of draft.exercises) {
     ex.medium ??= 'wet'
     if (!ex.actual) ex.actual = seedActual(ex)
+    else {
+      // Backfill realized lung volume / pace on sessions logged before these
+      // fields existed, so the new controls bind cleanly. Seed from the matching
+      // planned rep when there is one, else full lung / normal.
+      for (const ar of ex.actual.reps) {
+        ar.lung_volume ??= plannedRep(ex, ar)?.lung_volume ?? 'FL'
+        ar.pace ??= plannedRep(ex, ar)?.pace ?? null
+      }
+    }
   }
   let open = $state({}) // rep details toggles, keyed `${ei}-${ri}`
   let saved = $state(false)
@@ -67,7 +79,26 @@
   }
   function addRep(ex) {
     const last = ex.actual.reps[ex.actual.reps.length - 1]
-    ex.actual.reps = [...ex.actual.reps, blankActualRep(last?.plan_index ?? null)]
+    const ar = blankActualRep(last?.plan_index ?? null)
+    ar.lung_volume = exLung(ex)
+    ar.pace = exSpeed(ex) || null
+    ex.actual.reps = [...ex.actual.reps, ar]
+  }
+
+  // Exercise-level realized lung volume / pace: read the first actual rep and
+  // write all of them, with per-rep overrides under each rep's "More" details.
+  // Mirrors the builder's plan-side controls but writes to ex.actual.reps.
+  function exLung(ex) {
+    return ex.actual.reps[0]?.lung_volume ?? 'FL'
+  }
+  function setExLung(ex, v) {
+    ex.actual.reps = ex.actual.reps.map((r) => ({ ...r, lung_volume: v }))
+  }
+  function exSpeed(ex) {
+    return ex.actual.reps[0]?.pace ?? ''
+  }
+  function setExSpeed(ex, v) {
+    ex.actual.reps = ex.actual.reps.map((r) => ({ ...r, pace: v || null }))
   }
   function removeRep(ex, i) {
     ex.actual.reps = ex.actual.reps.filter((_, j) => j !== i)
@@ -159,6 +190,20 @@
           </select>
         </div>
       {/if}
+      <div class="field">
+        <span class="lbl">Lung volume</span>
+        <select value={exLung(ex)} onchange={(e) => setExLung(ex, e.currentTarget.value)}>
+          {#each LUNG_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
+        </select>
+      </div>
+      {#if isDynamic(ex.discipline)}
+        <div class="field">
+          <span class="lbl">Speed</span>
+          <select value={exSpeed(ex)} onchange={(e) => setExSpeed(ex, e.currentTarget.value)}>
+            {#each SPEED_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
+          </select>
+        </div>
+      {/if}
       {#if ex.plan_note}<p class="muted goal">{ex.plan_note}</p>{/if}
 
       <div class="reps">
@@ -212,6 +257,20 @@
 
             {#if open[`${ei}-${ri}`]}
               <div class="details">
+                <div class="rfield">
+                  <span class="lbl">Lung volume</span>
+                  <select bind:value={ar.lung_volume}>
+                    {#each LUNG_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
+                  </select>
+                </div>
+                {#if isDynamic(ex.discipline)}
+                  <div class="rfield">
+                    <span class="lbl">Speed</span>
+                    <select value={ar.pace ?? ''} onchange={(e) => (ar.pace = e.currentTarget.value || null)}>
+                      {#each SPEED_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
+                    </select>
+                  </div>
+                {/if}
                 <div class="rfield">
                   <span class="lbl">First contraction ({cu === 'time' ? 'mm:ss' : 'm'})</span>
                   {#if cu === 'time'}

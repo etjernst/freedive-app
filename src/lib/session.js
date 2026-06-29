@@ -37,6 +37,20 @@ export const SHAPES = [
   { value: 'continuous-protocol', label: 'Continuous protocol' },
 ]
 
+// Lung-volume and speed option lists, shared by the builder (plan) and the log
+// (actual) so both surfaces offer the same choices. RV is empty lung (EL); an
+// empty pace value means normal speed (stored as null/absent, never "normal").
+export const LUNG_OPTS = [
+  { value: 'FL', label: 'full lung' },
+  { value: 'FRC', label: 'FRC' },
+  { value: 'RV', label: 'empty (EL)' },
+]
+export const SPEED_OPTS = [
+  { value: '', label: 'normal' },
+  { value: 'sprint', label: 'sprint' },
+  { value: 'max_sprint', label: 'max sprint' },
+]
+
 const DYNAMIC = new Set(['DYN', 'DYNb', 'DNF'])
 
 export function isDynamic(discipline) {
@@ -242,6 +256,8 @@ export function blankActualRep(plan_index = null) {
   return {
     plan_index,
     new_pb: false,
+    lung_volume: 'FL',
+    pace: null,
     hold_s: null,
     distance_m: null,
     distance2_m: null,
@@ -270,7 +286,14 @@ export function seedActual(exercise) {
     mental_rpe: null,
     deviation_reason: 'completed',
     remarks: '',
-    reps: expandPlannedSlots(exercise).map((s) => blankActualRep(s.plan_index)),
+    // Seed realized lung volume / pace from the planned rep so a planned-FRC
+    // exercise shows FRC in the log, editable to record a deviation.
+    reps: expandPlannedSlots(exercise).map((s) => {
+      const ar = blankActualRep(s.plan_index)
+      ar.lung_volume = s.rep?.lung_volume ?? 'FL'
+      ar.pace = s.rep?.pace ?? null
+      return ar
+    }),
   }
 }
 
