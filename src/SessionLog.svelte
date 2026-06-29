@@ -62,6 +62,13 @@
   function removeExercise(i) {
     draft.exercises = draft.exercises.filter((_, j) => j !== i)
   }
+  function move(i, dir) {
+    const j = i + dir
+    if (j < 0 || j >= draft.exercises.length) return
+    const next = [...draft.exercises]
+    ;[next[i], next[j]] = [next[j], next[i]]
+    draft.exercises = next
+  }
 
   const breathingPatterns = Object.keys(app.settings.breathing_intensity ?? {})
   const pool = app.settings.pool_length_m ?? 25
@@ -172,6 +179,8 @@
       <div class="ex-head">
         <input class="ex-name" bind:value={ex.name} />
         <div class="ex-move">
+          <button class="link" onclick={() => move(ei, -1)} disabled={ei === 0} aria-label="Move up">↑</button>
+          <button class="link" onclick={() => move(ei, 1)} disabled={ei === draft.exercises.length - 1} aria-label="Move down">↓</button>
           <button class="link" onclick={() => removeExercise(ei)} aria-label="Remove exercise">✕</button>
         </div>
       </div>
