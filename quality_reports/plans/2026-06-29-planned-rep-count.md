@@ -77,11 +77,17 @@ The corrected templates are canon, so they reach Emilia's phone via Settings ->
 untouched). Sessions already built keep their frozen snapshot -- history stays as
 logged, per decision.
 
+## Pyramids (added at Emilia's request)
+
+Pre-build the pyramids as listed reps so she edits less day to day; "+ Add rep"
+extends them:
+- dyn-pyramid: 25-50-75-50-25 (ascend then descend), minimal-but-confident recovery.
+- dyn-inverse-pyramid: 75-50-25-50-75, recovery capped at 90s (< swim time).
+
 ## Out of scope
 
-- The `fixed_n n=1` placeholders that are really multi-rep (dyn-pyramid,
-  dyn-inverse-pyramid, dyn-elastic-sprint-max): left as single editable reps.
-  Flag to Emilia as a possible follow-up if she wants pyramids pre-built.
+- dyn-elastic-sprint-max: stays a single editable rep (one max push after elastic
+  sprints); not a ladder to pre-build.
 - A planned-vs-completed readout (spec A1): separate, later.
 - Rewriting the 2026-06-28 session: untouched.
 

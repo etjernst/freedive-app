@@ -381,30 +381,27 @@ SHAPE = {
 }
 ENV = {"sta-co2-square": "dry"}  # everything else defaults to pool
 
-# Terminations that are intrinsic to the exercise; the rest default to a single
-# rep (fixed_n n=1), to be expanded when the user builds the session.
+# Termination describes only how a set ENDS. A fixed_n carries NO count: the
+# planned count is reps.length x set_repeat (see plannedRepCount in the app). So
+# only the genuinely open-ended / capped / range cases are listed here; every
+# other exercise defaults to {"type": "fixed_n"} with the count in its reps.
 TERMINATION = {
     "sta-co2-increasing": {"type": "until_failure"},
     "sta-get-high": {"type": "until_failure"},
     "sta-el-fl-switch": {"type": "until_failure"},
     "sta-co2-1breath": {"type": "until_quality_drops"},
     "sta-co2-square": {"type": "duration_capped", "duration_s": 1800},
-    "sta-1c-plus": {"type": "fixed_n", "n": 5},
-    "sta-el": {"type": "fixed_n", "n": 5},
-    "sta-co2-short-intense": {"type": "fixed_n", "n": 6},
-    "sta-co2-decreasing-rec": {"type": "fixed_n", "n": 7},
-    "sta-progressive-fl": {"type": "fixed_n", "n": 3},
-    "dyn-sweet16": {"type": "fixed_n", "n": 16},
-    "dyn-descending": {"type": "fixed_n", "n": 3},
     "dyn-transition-ladder": {"type": "range", "n_min": 2, "n_max": 3},
-    "dyn-elastic-sprint-max": {"type": "fixed_n", "n": 1},
-    "dyn-pyramid": {"type": "fixed_n", "n": 1},
-    "dyn-inverse-pyramid": {"type": "fixed_n", "n": 1},
 }
 
-# Outer-repeat count for flattened nested-set exercises (default 1 elsewhere).
+# Outer-repeat count (default 1 elsewhere): flattened nested sets, plus the
+# "identical reps" tables encoded as one rep row repeated N times rather than as
+# N listed rows. Total planned reps is always reps.length x set_repeat.
 SET_REPEAT = {
     "dyn-frc-sprint": 2,
+    "sta-co2-short-intense": 6,  # 6 identical sustainable FL holds, 2-breath rec
+    "sta-el": 5,                 # 5 EL holds (durations set per-rep as they climb)
+    "dyn-sweet16": 16,           # 16 x 25m sprints
 }
 
 # Pre-built rep rows for the compound / nested-set exercises, so a fresh install
@@ -413,6 +410,7 @@ SET_REPEAT = {
 _BREATHS = lambda n: {"type": "absolute", "value": n, "unit": "breaths"}
 _SECS = lambda n: {"type": "absolute", "value": n, "unit": "time"}
 _MINIMAL = {"type": "qualitative", "value": "minimal"}
+_FULL = {"type": "qualitative", "value": "full"}
 REPS = {
     # DYN 1: 80% PB, short leg (min{60m,30% PB}), then a max push.
     "dyn-max-simulator": [
@@ -437,6 +435,51 @@ REPS = {
          "recovery": _BREATHS(4), "lung_volume": "FRC", "note": "FRC"},
         *[{"shape": "simple", "distance_target": {"unit": "absolute", "value": 25},
            "recovery": _SECS(15), "pace": "sprint", "note": "sprint"} for _ in range(6)],
+    ],
+    # STA 15: 6 identical sustainable FL holds (e.g. 2:30), 2-breath recovery.
+    # One rep row repeated 6x via SET_REPEAT.
+    "sta-co2-short-intense": [
+        {"shape": "simple", "hold_target": {"unit": "absolute", "value": 150},
+         "recovery": _BREATHS(2)},
+    ],
+    # STA 16: fixed sub-max hold, recovery shrinks 60s -> 10s across 7 reps.
+    "sta-co2-decreasing-rec": [
+        {"shape": "simple", "hold_target": {"unit": "qualitative", "value": "submax"},
+         "recovery": _SECS(r)} for r in (60, 50, 40, 30, 20, 15, 10)
+    ],
+    # STA 4 / STA 12: 1C+X ladder, +20s per rep, fixed ~2 min recovery.
+    "sta-1c-plus": [
+        {"shape": "simple", "hold_target": {"unit": "contraction_relative", "value": x},
+         "recovery": _SECS(120)} for x in (0, 20, 40, 60, 80)
+    ],
+    # STA 20: comfortable -> strong sub-max -> max-ish FL, full recovery between.
+    "sta-progressive-fl": [
+        {"shape": "simple", "hold_target": {"unit": "qualitative", "value": "submax"}, "recovery": _FULL},
+        {"shape": "simple", "hold_target": {"unit": "qualitative", "value": "strong_submax"}, "recovery": _FULL},
+        {"shape": "simple", "hold_target": {"unit": "qualitative", "value": "max"}},
+    ],
+    # DYN 6 Ex1: long doable distance, then ~20% less, then ~20% less again.
+    "dyn-descending": [
+        {"shape": "simple", "distance_target": {"unit": "qualitative", "value": "long (doable)"}, "recovery": _MINIMAL},
+        {"shape": "simple", "distance_target": {"unit": "qualitative", "value": "~20% less"}, "recovery": _MINIMAL},
+        {"shape": "simple", "distance_target": {"unit": "qualitative", "value": "~20% less again"}},
+    ],
+    # DYN 7: 25-50-75-50-25 pyramid, minimal-but-confident recovery. Add reps to
+    # extend; full recovery between sets.
+    "dyn-pyramid": [
+        {"shape": "simple", "distance_target": {"unit": "absolute", "value": d}, "recovery": _MINIMAL}
+        for d in (25, 50, 75, 50, 25)
+    ],
+    # DYN 10 / DYN 13: 75-50-25-50-75 inverse pyramid, recovery < swim time, cap 90s.
+    "dyn-inverse-pyramid": [
+        {"shape": "simple", "distance_target": {"unit": "absolute", "value": d},
+         "recovery": {"type": "cap", "value": 90, "unit": "time"}}
+        for d in (75, 50, 25, 50, 75)
+    ],
+    # DYN 6 Ex2 / DYN 15: 16 x 25m sprints, 30s recovery. One rep repeated 16x.
+    "dyn-sweet16": [
+        {"shape": "simple", "distance_target": {"unit": "absolute", "value": 25},
+         "pace": "sprint", "recovery": _SECS(30)},
     ],
 }
 
@@ -476,9 +519,18 @@ for (cid, name, discipline, allowed_roles, capacity, structure, options) in cata
         "goal": structure,
         "cues": options,
         "set_repeat": SET_REPEAT.get(cid, 1),
-        "termination": TERMINATION.get(cid, {"type": "fixed_n", "n": 1}),
+        "termination": TERMINATION.get(cid, {"type": "fixed_n"}),
         "reps": reps,
     })
+
+# Convention guard: a fixed_n termination must carry no count. The planned rep
+# count lives in reps.length x set_repeat, so a stray "n" here would reintroduce
+# the two-sources-of-truth bug.
+for t in templates:
+    term = t["termination"]
+    assert not (term.get("type") == "fixed_n" and "n" in term), (
+        f"{t['id']}: fixed_n must not carry n (count = reps x set_repeat)"
+    )
 
 affinity_records = [
     {"exercises": [a, b], "weight": len(sessions), "sessions": sessions}

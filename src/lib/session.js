@@ -163,7 +163,7 @@ export function instantiateExercise(template) {
     plan_note: template.plan_note ?? '',
     shape_default: template.shape_default ?? 'simple',
     set_repeat: template.set_repeat ?? 1,
-    termination: template.termination ?? { type: 'fixed_n', n: 1 },
+    termination: template.termination ?? { type: 'fixed_n' },
     recovery_intra_default: template.recovery_intra_default ?? null,
     recovery_inter: template.recovery_inter ?? null,
     // wet vs dry, only meaningful for STA; seeded from the template environment.
@@ -200,7 +200,7 @@ export function blankExercise() {
     plan_note: '',
     shape_default: 'simple',
     set_repeat: 1,
-    termination: { type: 'fixed_n', n: 1 },
+    termination: { type: 'fixed_n' },
     recovery_intra_default: null,
     recovery_inter: null,
     medium: 'wet',
@@ -233,7 +233,7 @@ export function exerciseToTemplate(ex, name) {
     goal: ex.goal ?? '',
     cues: ex.cues ?? '',
     set_repeat: ex.set_repeat ?? 1,
-    termination: clone(ex.termination ?? { type: 'fixed_n', n: 1 }),
+    termination: clone(ex.termination ?? { type: 'fixed_n' }),
     reps: clone(ex.planned?.reps ?? [{ shape: 'simple' }]),
   }
 }
@@ -250,6 +250,14 @@ export function expandPlannedSlots(exercise) {
     reps.forEach((rep, i) => slots.push({ plan_index: i, set, rep }))
   }
   return slots
+}
+
+// The single source of truth for "how many reps were planned": the listed rep
+// rows times the outer set repeat. `termination` never carries a count (a
+// fixed_n has no n), so this is the only count formula; expandPlannedSlots agrees.
+export function plannedRepCount(exercise) {
+  const reps = exercise.planned?.reps?.length ?? 0
+  return reps * Math.max(1, exercise.set_repeat ?? 1)
 }
 
 export function blankActualRep(plan_index = null) {

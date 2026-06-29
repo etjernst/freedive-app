@@ -13,6 +13,7 @@
     describeDistance,
     clone,
     isDynamic,
+    plannedRepCount,
     DISCIPLINES,
     SHAPES,
     LUNG_OPTS,
@@ -115,7 +116,7 @@
 
   function historySummary(ex) {
     const reps = ex.planned?.reps ?? []
-    const n = reps.length * (ex.set_repeat ?? 1)
+    const n = plannedRepCount(ex)
     const first = reps[0]
     let target = ''
     if (first?.hold_target?.value != null) target = `hold ${describeHold(first.hold_target)}`

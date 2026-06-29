@@ -17,8 +17,7 @@
       "cues": "HV prep (def 5 min 5:5); movement: still|moving (def still); recovery (def full).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -62,8 +61,7 @@
       "cues": "recovery breaths (def 2); start (def ~50% PB); HV prep (def 4:6 soft).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -105,14 +103,22 @@
       ],
       "goal": "5-6 FL holds at a sustainable duration, 2-breath recovery only.",
       "cues": "n holds (def 6); hold (def sustainable, e.g. 2:30); recovery (def 2 breaths).",
-      "set_repeat": 1,
+      "set_repeat": 6,
       "termination": {
-        "type": "fixed_n",
-        "n": 6
+        "type": "fixed_n"
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 150
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 2,
+            "unit": "breaths"
+          }
         }
       ]
     },
@@ -131,12 +137,92 @@
       "cues": "hold (def sized to contraction duration); recovery start (def 60s); step (def -10s).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 7
+        "type": "fixed_n"
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "hold_target": {
+            "unit": "qualitative",
+            "value": "submax"
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 60,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "qualitative",
+            "value": "submax"
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 50,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "qualitative",
+            "value": "submax"
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 40,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "qualitative",
+            "value": "submax"
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 30,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "qualitative",
+            "value": "submax"
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 20,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "qualitative",
+            "value": "submax"
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 15,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "qualitative",
+            "value": "submax"
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 10,
+            "unit": "time"
+          }
         }
       ]
     },
@@ -178,8 +264,7 @@
       "cues": "first hold (def ~70% PB); recovery breaths (def 3); prep (def 5 min 5:5).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -222,10 +307,9 @@
       ],
       "goal": "RV/EL holds, increasing duration.",
       "cues": "n (def 5); style: relaxed-belly|pull-and-release (def relaxed-belly); recovery (def 2-3 min).",
-      "set_repeat": 1,
+      "set_repeat": 5,
       "termination": {
-        "type": "fixed_n",
-        "n": 5
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -272,12 +356,68 @@
       "cues": "prep ramp (def 2->4 min); 1C+X schedule (def +0/20/40/60/80s); recovery mode (def increasing prep|fixed 2 min).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 5
+        "type": "fixed_n"
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "hold_target": {
+            "unit": "contraction_relative",
+            "value": 0
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 120,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "contraction_relative",
+            "value": 20
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 120,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "contraction_relative",
+            "value": 40
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 120,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "contraction_relative",
+            "value": 60
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 120,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "contraction_relative",
+            "value": 80
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 120,
+            "unit": "time"
+          }
         }
       ]
     },
@@ -295,8 +435,7 @@
       "cues": "hold steps (def 15/30/45s); recovery (def 1 min).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -321,8 +460,7 @@
       "cues": "% PB (def 70); n reps (def 3-10); rest (def long/unlimited); reduce-prep-each-rep (def off).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -345,12 +483,37 @@
       "cues": "prep (def 5 min); sequence (def 3 holds).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 3
+        "type": "fixed_n"
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "hold_target": {
+            "unit": "qualitative",
+            "value": "submax"
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "full"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "qualitative",
+            "value": "strong_submax"
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "full"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "qualitative",
+            "value": "max"
+          }
         }
       ]
     },
@@ -368,8 +531,7 @@
       "cues": "HV prep (def 5 min 5:5); lung (def FL).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -391,8 +553,7 @@
       "cues": "hold (def light submax); recovery (def full).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -415,8 +576,7 @@
       "cues": "steps (def 1C+20/40/60); recovery (def 3 min).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -438,8 +598,7 @@
       "cues": "n (def 3); recovery (def 3-4 min).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -463,8 +622,7 @@
       "cues": "trigger (def 1C timing feels right).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -487,8 +645,7 @@
       "cues": "FL target (def ~1.5 min under PB).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -511,8 +668,7 @@
       "cues": "hard hold (def PB-1 min); recovery (def 5 min + strong HV).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -534,8 +690,7 @@
       "cues": "RV recovery (def 3 min); FL recovery (def 5 min).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -558,8 +713,7 @@
       "cues": "% feel (def 70-80); variant: plain|to-1C+contractions (def plain); discipline (def any; DNF shorter).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -581,8 +735,7 @@
       "cues": "discipline (def any; DNF shorter).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -604,8 +757,7 @@
       "cues": "% PB (def 80); short leg (def min{60m,30% PB}); RB (def 2 then 3).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -659,8 +811,7 @@
       "cues": "n reps; distance (def 50/75m; shorter for DNF); recovery; pacing (def even).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -683,8 +834,7 @@
       "cues": "n dives; recovery (often shrinks across session).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -707,8 +857,7 @@
       "cues": "n sets (def 8-10); block (def 50m legs-only + 50m normal); recovery (def minimal).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -731,12 +880,63 @@
       "cues": "ladder (def 25-50-75-50-25); recovery (def minimal/confident); n pyramids (user adds as many as wanted); distances shorter for DNF.",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "minimal"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "minimal"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 75
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "minimal"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "minimal"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "minimal"
+          }
         }
       ]
     },
@@ -755,12 +955,68 @@
       "cues": "ladder (def 75-50-25-50-75); recovery (def < swim time, cap 90s); sets (def 2).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 75
+          },
+          "recovery": {
+            "type": "cap",
+            "value": 90,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "cap",
+            "value": 90,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "recovery": {
+            "type": "cap",
+            "value": 90,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "cap",
+            "value": 90,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 75
+          },
+          "recovery": {
+            "type": "cap",
+            "value": 90,
+            "unit": "time"
+          }
         }
       ]
     },
@@ -778,12 +1034,37 @@
       "cues": "start (def long doable); step (def -20%); n (def 3); recovery (def minimal).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 3
+        "type": "fixed_n"
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "distance_target": {
+            "unit": "qualitative",
+            "value": "long (doable)"
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "minimal"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "qualitative",
+            "value": "~20% less"
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "minimal"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "qualitative",
+            "value": "~20% less again"
+          }
         }
       ]
     },
@@ -800,14 +1081,23 @@
       ],
       "goal": "16 x 25m as quickly as possible.",
       "cues": "reps (def 16); distance (def 25m); recovery (def 0-30s).",
-      "set_repeat": 1,
+      "set_repeat": 16,
       "termination": {
-        "type": "fixed_n",
-        "n": 16
+        "type": "fixed_n"
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "pace": "sprint",
+          "recovery": {
+            "type": "absolute",
+            "value": 30,
+            "unit": "time"
+          }
         }
       ]
     },
@@ -826,8 +1116,7 @@
       "cues": "distance (def 25/50m); n; recovery (short).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -850,8 +1139,7 @@
       "cues": "FRC distance (def 50-100m); sprint ladder (def 3x25m, growing recovery); sets (def 3).",
       "set_repeat": 2,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -968,8 +1256,7 @@
       "cues": "sprints (def 4 x 15s, 15s rest); sets (def 2).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -992,8 +1279,7 @@
       "cues": "STA duration (def 1:30); then distance/sub-max.",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -1016,8 +1302,7 @@
       "cues": "distance; then STA duration.",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -1040,8 +1325,7 @@
       "cues": "leg-1 distance; STA duration; leg-2 distance.",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -1088,8 +1372,7 @@
       "cues": "blocks (def 4x each); count (strokes).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -1112,8 +1395,7 @@
       "cues": "distance cap (def 50m).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -1135,8 +1417,7 @@
       "cues": "structure (def 75/50/3x25); recovery (def minimum, caps 60s/30s/few breaths).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
@@ -1207,8 +1488,7 @@
       "cues": "distance (def 300-500m); breathe every (def 7+ strokes).",
       "set_repeat": 1,
       "termination": {
-        "type": "fixed_n",
-        "n": 1
+        "type": "fixed_n"
       },
       "reps": [
         {
