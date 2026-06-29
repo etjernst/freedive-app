@@ -1094,9 +1094,8 @@
           },
           "pace": "sprint",
           "recovery": {
-            "type": "absolute",
-            "value": 30,
-            "unit": "time"
+            "type": "qualitative",
+            "value": "minimal"
           }
         }
       ]

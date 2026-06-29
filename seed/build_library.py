@@ -476,10 +476,10 @@ REPS = {
          "recovery": {"type": "cap", "value": 90, "unit": "time"}}
         for d in (75, 50, 25, 50, 75)
     ],
-    # DYN 6 Ex2 / DYN 15: 16 x 25m sprints, 30s recovery. One rep repeated 16x.
+    # DYN 6 Ex2 / DYN 15: 16 x 25m sprints, minimal recovery. One rep repeated 16x.
     "dyn-sweet16": [
         {"shape": "simple", "distance_target": {"unit": "absolute", "value": 25},
-         "pace": "sprint", "recovery": _SECS(30)},
+         "pace": "sprint", "recovery": _MINIMAL},
     ],
 }
 
