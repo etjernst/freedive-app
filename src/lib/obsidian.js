@@ -1,9 +1,4 @@
-import {
-  repSegments,
-  describeHold,
-  describeDistance,
-  describeRecovery,
-} from './session.js'
+import { planRepLine } from './session.js'
 import { estimateSession, fmtDuration } from './estimate.js'
 
 // Export a planned session to Obsidian as a daily training-log note, matching
@@ -13,32 +8,11 @@ import { estimateSession, fmtDuration } from './estimate.js'
 
 const VAULT = 'EmiliaNotes'
 
-// One planned rep as a single line: its phases joined, then the recovery that
-// follows. The trailing recovery of a single-set exercise is dropped (it leads
-// nowhere), mirroring the builder.
-function repLine(rep, ex, isLast) {
-  const segs = repSegments(rep.shape ?? 'simple', ex.discipline)
-  const parts = []
-  for (const seg of segs) {
-    if (seg === 'hold') parts.push(describeHold(rep.hold_target))
-    else if (seg === 'distance') parts.push(describeDistance(rep.distance_target))
-    else if (seg === 'distance2') parts.push(describeDistance(rep.distance2_target))
-    else if (seg === 'continuous') parts.push(rep.continuous?.pattern || 'continuous')
-  }
-  let line = parts.filter(Boolean).join(' → ') || '—'
-  const showRec = rep.recovery && !((ex.set_repeat ?? 1) <= 1 && isLast)
-  if (showRec) {
-    const r = describeRecovery(rep.recovery)
-    if (r && r !== '—') line += ` · rec ${r}`
-  }
-  return line
-}
-
 function exerciseBlock(ex) {
   const reps = ex.planned?.reps ?? []
   const sets = ex.set_repeat ?? 1
   const head = `### ${ex.name}${sets > 1 ? ` (×${sets} sets)` : ''}`
-  const lines = reps.map((rep, i) => `- ${repLine(rep, ex, i === reps.length - 1)}`)
+  const lines = reps.map((rep, i) => `- ${planRepLine(rep, ex, i === reps.length - 1)}`)
   const out = [head, ...lines]
   if (ex.plan_note?.trim()) out.push(`Notes: ${ex.plan_note.trim()}`)
   return out.join('\n')

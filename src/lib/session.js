@@ -333,3 +333,46 @@ export function describeRecovery(r) {
       return r.value != null ? `${r.value}${u}` : '—'
   }
 }
+
+// One planned rep as a single compact line: its phases joined, then lung volume
+// (only when not full lung), pace (when set), and the recovery that follows. The
+// trailing recovery of a single-set exercise is dropped (it leads nowhere).
+// Shared by the in-app plan overview and the Obsidian export so the two never
+// drift; RV reads as EL, matching the log view's context line.
+export function planRepLine(rep, ex, isLast) {
+  const segs = repSegments(rep.shape ?? 'simple', ex.discipline)
+  const parts = []
+  for (const seg of segs) {
+    if (seg === 'hold') parts.push(describeHold(rep.hold_target))
+    else if (seg === 'distance') parts.push(describeDistance(rep.distance_target))
+    else if (seg === 'distance2') parts.push(describeDistance(rep.distance2_target))
+    else if (seg === 'continuous') parts.push(rep.continuous?.pattern || 'continuous')
+  }
+  let line = parts.filter(Boolean).join(' → ') || '—'
+  if (rep.lung_volume && rep.lung_volume !== 'FL') {
+    line += ` · ${rep.lung_volume === 'RV' ? 'EL' : rep.lung_volume}`
+  }
+  if (rep.pace) line += ` · ${rep.pace.replace('_', ' ')}`
+  const showRec = rep.recovery && !((ex.set_repeat ?? 1) <= 1 && isLast)
+  if (showRec) {
+    const r = describeRecovery(rep.recovery)
+    if (r && r !== '—') line += ` · rec ${r}`
+  }
+  return line
+}
+
+// Compact read-only plan summary for the log view: one entry per exercise with
+// its planned rep lines and note. Display only; nothing here is persisted.
+export function planOverview(session) {
+  return (session.exercises ?? []).map((ex) => {
+    const reps = ex.planned?.reps ?? []
+    return {
+      id: ex.id,
+      name: ex.name,
+      discipline: ex.discipline,
+      sets: ex.set_repeat ?? 1,
+      lines: reps.map((r, i) => planRepLine(r, ex, i === reps.length - 1)),
+      note: ex.plan_note ?? '',
+    }
+  })
+}

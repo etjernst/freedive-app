@@ -11,6 +11,7 @@
     describeHold,
     describeDistance,
     describeRecovery,
+    planOverview,
     clone,
     DISCIPLINES,
     DEVIATION_REASONS,
@@ -85,6 +86,33 @@
 </script>
 
 <main>
+  <section class="card thoughts">
+    <label class="lbl" for="session-thoughts">Thoughts</label>
+    <textarea
+      id="session-thoughts"
+      class="remarks"
+      bind:value={draft.session_remarks}
+      placeholder="How did it go? Dictate your thoughts here."
+    ></textarea>
+  </section>
+
+  {#if draft.exercises.length > 0}
+    <section class="card overview">
+      <h2>Plan</h2>
+      {#each planOverview(draft) as ov (ov.id)}
+        <div class="ov-ex">
+          <div class="ov-head">
+            <span class="ov-name">{ov.name}</span>
+            {#if ov.sets > 1}<span class="ov-sets">×{ov.sets} sets</span>{/if}
+            <span class="ov-disc">{ov.discipline}</span>
+          </div>
+          {#each ov.lines as line}<div class="ov-line">{line}</div>{/each}
+          {#if ov.note}<div class="ov-note">{ov.note}</div>{/if}
+        </div>
+      {/each}
+    </section>
+  {/if}
+
   <section class="card">
     <div class="field">
       <label for="log-date">Date</label>
@@ -267,7 +295,6 @@
         {#each FEELS as f}<option value={f}>{f}</option>{/each}
       </select>
     </div>
-    <textarea class="remarks" bind:value={draft.session_remarks} placeholder="Session remarks"></textarea>
   </section>
 
   <datalist id="breath-patterns">

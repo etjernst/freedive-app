@@ -1062,3 +1062,60 @@ input.wide {
   font-style: normal;
   font-weight: 600;
 }
+
+/* Log view: top-of-screen thoughts capture, then a read-only plan overview so
+   the whole plan is glanceable without scrolling the editable form. */
+.thoughts label.lbl {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.thoughts .remarks {
+  margin-top: 0;
+  min-height: 64px;
+}
+
+.overview .ov-ex {
+  margin-top: 12px;
+}
+
+.overview .ov-ex:first-of-type {
+  margin-top: 4px;
+}
+
+.overview .ov-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.overview .ov-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.overview .ov-sets {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.overview .ov-disc {
+  margin-left: auto;
+  font-size: 11px;
+  letter-spacing: 0.3px;
+  color: var(--muted);
+}
+
+.overview .ov-line {
+  color: var(--accent-2);
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+.overview .ov-note {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 3px;
+}
