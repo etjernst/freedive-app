@@ -24,6 +24,12 @@ Right now syncing between devices is manual: back up on one device, restore on t
 Add an option to auto-back-up to Dropbox after every session save (and maybe after settings changes), so a second device stays current with a single restore and no manual "Back up now".
 Debounce or queue so a burst of edits does not fire many uploads, and fail quietly (the existing outbox contract already models retries) so a flaky connection never blocks logging.
 
+## Builder toggle for log_mode (per-rep vs aggregate)
+
+Aggregate lap-set logging exists, but `log_mode` is set only in the library, so sweet-16 is the only aggregate exercise.
+Expose a toggle in the session builder so Emilia can mark any exercise (an ad-hoc sprint set, say) as aggregate, and persist the choice on the exercise and on a saved template.
+The model and the aggregate log UI already exist (added 2026-06-30); this is just the builder switch and persistence.
+
 ## Smaller deferred items
 
 - The qualitative ratios in `estimate.js` (submax 75 percent, recovery multipliers, and so on) are hardcoded constants; surface them in Settings if they ever need tuning in-app.
