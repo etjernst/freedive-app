@@ -1119,3 +1119,14 @@ input.wide {
   font-size: 12px;
   margin-top: 3px;
 }
+
+/* Aggregate "lap set" logging (sweet-16): one summary instead of per-rep rows. */
+.aggregate {
+  margin-top: 4px;
+}
+
+.aggregate .agg-derived {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--accent-2);
+}

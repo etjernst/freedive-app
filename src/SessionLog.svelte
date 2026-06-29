@@ -12,6 +12,8 @@
     describeDistance,
     describeRecovery,
     planOverview,
+    aggregatePace,
+    blankAggregate,
     clone,
     isDynamic,
     DISCIPLINES,
@@ -21,6 +23,7 @@
     LUNG_OPTS,
     SPEED_OPTS,
   } from './lib/session.js'
+  import { fmtMMSS } from './lib/settings.js'
   import MMSS from './lib/MMSS.svelte'
   import Help from './lib/Help.svelte'
 
@@ -29,12 +32,15 @@
   let draft = $state(clone(currentSession()))
   for (const ex of draft.exercises) {
     ex.medium ??= 'wet'
+    ex.log_mode ??= 'per_rep'
     if (!ex.actual) ex.actual = seedActual(ex)
-    else {
+    else if (ex.log_mode === 'aggregate') {
+      ex.actual.aggregate ??= blankAggregate(ex)
+    } else {
       // Backfill realized lung volume / pace on sessions logged before these
       // fields existed, so the new controls bind cleanly. Seed from the matching
       // planned rep when there is one, else full lung / normal.
-      for (const ar of ex.actual.reps) {
+      for (const ar of ex.actual.reps ?? []) {
         ar.lung_volume ??= plannedRep(ex, ar)?.lung_volume ?? 'FL'
         ar.pace ??= plannedRep(ex, ar)?.pace ?? null
       }
@@ -199,22 +205,50 @@
           </select>
         </div>
       {/if}
-      <div class="field">
-        <span class="lbl">Lung volume</span>
-        <select value={exLung(ex)} onchange={(e) => setExLung(ex, e.currentTarget.value)}>
-          {#each LUNG_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
-        </select>
-      </div>
-      {#if isDynamic(ex.discipline)}
+      {#if ex.log_mode !== 'aggregate'}
         <div class="field">
-          <span class="lbl">Speed</span>
-          <select value={exSpeed(ex)} onchange={(e) => setExSpeed(ex, e.currentTarget.value)}>
-            {#each SPEED_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
+          <span class="lbl">Lung volume</span>
+          <select value={exLung(ex)} onchange={(e) => setExLung(ex, e.currentTarget.value)}>
+            {#each LUNG_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
           </select>
         </div>
+        {#if isDynamic(ex.discipline)}
+          <div class="field">
+            <span class="lbl">Speed</span>
+            <select value={exSpeed(ex)} onchange={(e) => setExSpeed(ex, e.currentTarget.value)}>
+              {#each SPEED_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
+            </select>
+          </div>
+        {/if}
       {/if}
       {#if ex.plan_note}<p class="muted goal">{ex.plan_note}</p>{/if}
 
+      {#if ex.log_mode === 'aggregate'}
+        {@const agg = ex.actual.aggregate}
+        {@const pace = aggregatePace(agg)}
+        <div class="aggregate">
+          <div class="field">
+            <span class="lbl">Lap distance (m)</span>
+            <select bind:value={agg.lap_distance_m}>
+              <option value={25}>25</option>
+              <option value={50}>50</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="lbl">Reps</span>
+            <input type="number" min="1" bind:value={agg.n_reps} />
+          </div>
+          <div class="field">
+            <span class="lbl">Total time</span>
+            <MMSS bind:seconds={agg.total_time_s} />
+          </div>
+          {#if pace}
+            <p class="muted agg-derived">
+              {fmtMMSS(Math.round(pace.perLap))}/lap · {fmtMMSS(Math.round(pace.per25))}/25 m · {pace.totalDist} m total
+            </p>
+          {/if}
+        </div>
+      {:else}
       <div class="reps">
         {#each ex.actual.reps as ar, ri (ri)}
           {@const p = plannedRep(ex, ar)}
@@ -328,6 +362,7 @@
         {/each}
         <button class="link addrep" onclick={() => addRep(ex)}>+ Add rep</button>
       </div>
+      {/if}
 
       <div class="ex-actual">
         <div class="field rpe-row">

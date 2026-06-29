@@ -162,6 +162,7 @@ export function instantiateExercise(template) {
     // Free-text instructions the user writes for themselves on this exercise.
     plan_note: template.plan_note ?? '',
     shape_default: template.shape_default ?? 'simple',
+    log_mode: template.log_mode ?? 'per_rep',
     set_repeat: template.set_repeat ?? 1,
     termination: template.termination ?? { type: 'fixed_n' },
     recovery_intra_default: template.recovery_intra_default ?? null,
@@ -199,6 +200,7 @@ export function blankExercise() {
     cues: '',
     plan_note: '',
     shape_default: 'simple',
+    log_mode: 'per_rep',
     set_repeat: 1,
     termination: { type: 'fixed_n' },
     recovery_intra_default: null,
@@ -232,6 +234,7 @@ export function exerciseToTemplate(ex, name) {
     capacity_tags: clone(ex.capacity_tags ?? []),
     goal: ex.goal ?? '',
     cues: ex.cues ?? '',
+    log_mode: ex.log_mode ?? 'per_rep',
     set_repeat: ex.set_repeat ?? 1,
     termination: clone(ex.termination ?? { type: 'fixed_n' }),
     reps: clone(ex.planned?.reps ?? [{ shape: 'simple' }]),
@@ -289,11 +292,18 @@ export function blankActualRep(plan_index = null) {
 }
 
 export function seedActual(exercise) {
-  return {
+  const base = {
     physical_rpe: null,
     mental_rpe: null,
     deviation_reason: 'completed',
     remarks: '',
+  }
+  // Aggregate "lap set" exercises (sweet-16) log one summary, not rep by rep.
+  if (exercise.log_mode === 'aggregate') {
+    return { ...base, aggregate: blankAggregate(exercise) }
+  }
+  return {
+    ...base,
     // Seed realized lung volume / pace from the planned rep so a planned-FRC
     // exercise shows FRC in the log, editable to record a deviation.
     reps: expandPlannedSlots(exercise).map((s) => {
@@ -302,6 +312,28 @@ export function seedActual(exercise) {
       ar.pace = s.rep?.pace ?? null
       return ar
     }),
+  }
+}
+
+// Empty summary for an aggregate lap set: lap distance seeded from the planned
+// rep (else 25 m), rep count from the planned count (16 for sweet-16). Pace and
+// total distance are derived from these, never stored (see aggregatePace).
+export function blankAggregate(exercise) {
+  const d = exercise.planned?.reps?.[0]?.distance_target
+  const lap = d?.unit === 'absolute' && d.value != null ? d.value : 25
+  return { lap_distance_m: lap, total_time_s: null, n_reps: plannedRepCount(exercise) }
+}
+
+// Derived readout for an aggregate set: pace per lap (total / reps), pace
+// normalized to 25 m, and total distance. Returns null until time and reps exist.
+export function aggregatePace(agg) {
+  if (!agg || !agg.total_time_s || !agg.n_reps) return null
+  const perLap = agg.total_time_s / agg.n_reps
+  const lap = agg.lap_distance_m
+  return {
+    perLap,
+    per25: lap ? perLap * (25 / lap) : null,
+    totalDist: (lap ?? 0) * agg.n_reps,
   }
 }
 

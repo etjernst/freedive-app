@@ -169,6 +169,7 @@
         "goal": { "type": "string" },
         "cues": { "type": "string" },
         "shape_default": { "$ref": "#/$defs/shape" },
+        "log_mode": { "enum": ["per_rep", "aggregate"] },
         "set_repeat": { "type": "integer", "minimum": 1 },
         "recovery_intra_default": { "$ref": "#/$defs/recoveryTarget" },
         "recovery_inter": { "$ref": "#/$defs/recoveryTarget" },

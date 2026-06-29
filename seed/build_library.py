@@ -495,6 +495,11 @@ LUNG = {
 SPEED = {
     "dyn-sprints": "sprint",
 }
+# Exercises logged as a summary (lap distance + total time + rep count) rather
+# than rep by rep. Everything else defaults to per_rep.
+LOG_MODE = {
+    "dyn-sweet16": "aggregate",
+}
 
 templates = []
 for (cid, name, discipline, allowed_roles, capacity, structure, options) in catalog:
@@ -518,6 +523,7 @@ for (cid, name, discipline, allowed_roles, capacity, structure, options) in cata
         "capacity_tags": caps,
         "goal": structure,
         "cues": options,
+        "log_mode": LOG_MODE.get(cid, "per_rep"),
         "set_repeat": SET_REPEAT.get(cid, 1),
         "termination": TERMINATION.get(cid, {"type": "fixed_n"}),
         "reps": reps,
