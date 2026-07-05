@@ -109,6 +109,16 @@ export function parseMMSS(str) {
   return Number(s)
 }
 
+// Timer-style entry helper for the mobile numeric keypad, which has no ":".
+// Digit-only text of 3+ chars gets a colon before the last two digits
+// ("230" -> "2:30"); shorter digit runs and text with ":" pass through.
+export function autoColon(raw) {
+  const s = String(raw ?? '')
+  const digits = s.replace(/\D/g, '')
+  if (s.includes(':') || digits.length < 3) return s
+  return `${digits.slice(0, -2)}:${digits.slice(-2)}`
+}
+
 export function fmtMMSS(sec) {
   if (sec == null || sec === '') return ''
   const m = Math.floor(sec / 60)

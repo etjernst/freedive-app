@@ -6,6 +6,7 @@
     INTENSITIES,
     parseMMSS,
     fmtMMSS,
+    autoColon,
     numOrNull,
   } from './lib/settings.js'
 
@@ -121,6 +122,11 @@
           id={'pb-' + f.key}
           inputmode="numeric"
           bind:value={sd.pbs[f.key]}
+          oninput={(e) => {
+            if (f.unit !== 'time') return
+            sd.pbs[f.key] = autoColon(e.target.value)
+            e.target.value = sd.pbs[f.key]
+          }}
           placeholder={f.unit === 'time' ? '6:00' : '150'}
         />
       </div>
@@ -162,6 +168,11 @@
           id={'oc-' + b.key}
           inputmode="numeric"
           bind:value={sd.oneC[b.key]}
+          oninput={(e) => {
+            if (b.unit !== 'time') return
+            sd.oneC[b.key] = autoColon(e.target.value)
+            e.target.value = sd.oneC[b.key]
+          }}
           placeholder={b.unit === 'time' ? '3:30' : '40'}
         />
       </div>
