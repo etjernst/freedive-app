@@ -305,14 +305,17 @@ export function seedActual(exercise) {
   return {
     ...base,
     // Seed realized values the plan already fixes (lung volume, pace, absolute
-    // distances, a set recovery), so logging an as-planned rep needs no typing;
-    // every seeded field stays editable to record a deviation. Holds stay
-    // empty: the realized hold time is the measured outcome. Qualitative and
-    // cap recoveries carry no set number, so those are not seeded.
+    // holds and distances, a set recovery), so logging an as-planned rep needs
+    // no typing; every seeded field stays editable to record a deviation.
+    // Relative or qualitative targets (% PB, 1C+X, "submax") and cap
+    // recoveries carry no set number, so those are not seeded.
     reps: expandPlannedSlots(exercise).map((s) => {
       const ar = blankActualRep(s.plan_index)
       ar.lung_volume = s.rep?.lung_volume ?? 'FL'
       ar.pace = s.rep?.pace ?? null
+      if (s.rep?.hold_target?.unit === 'absolute' && s.rep.hold_target.value != null) {
+        ar.hold_s = s.rep.hold_target.value
+      }
       if (s.rep?.distance_target?.unit === 'absolute' && s.rep.distance_target.value != null) {
         ar.distance_m = s.rep.distance_target.value
       }
