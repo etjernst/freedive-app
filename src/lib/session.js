@@ -7,11 +7,14 @@ import { fmtMMSS } from './settings.js'
 
 export const SESSION_SCHEMA_VERSION = 1
 
+// 'stopped_early_felt_off' predates the bailed-* labels and stays as the
+// stored value for "not feeling 100%" so logged sessions keep their meaning.
 export const DEVIATION_REASONS = [
   { value: 'completed', label: 'Completed as planned' },
   { value: 'ran_out_of_time', label: 'Ran out of time' },
-  { value: 'stopped_early_felt_off', label: 'Stopped early — felt off' },
-  { value: 'equipment', label: 'Equipment' },
+  { value: 'bailed_too_hard', label: 'Bailed, too hard' },
+  { value: 'stopped_early_felt_off', label: 'Bailed, not feeling 100%' },
+  { value: 'equipment', label: 'Equipment failure' },
   { value: 'other', label: 'Other' },
 ]
 
