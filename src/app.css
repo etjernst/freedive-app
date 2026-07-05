@@ -93,6 +93,16 @@ main {
   color: var(--muted);
 }
 
+/* Discipline subheadings inside the personal-bests card. */
+.pb-group {
+  margin: 14px 0 2px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--accent, var(--muted));
+}
+
 .muted {
   color: var(--muted);
   font-size: 14px;

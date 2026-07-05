@@ -115,7 +115,10 @@
 <main>
   <section class="card">
     <h2>Personal bests</h2>
-    {#each PB_FIELDS as f (f.key)}
+    {#each PB_FIELDS as f, fi (f.key)}
+      {#if fi === 0 || PB_FIELDS[fi - 1].group !== f.group}
+        <h3 class="pb-group">{f.group}</h3>
+      {/if}
       <div class="field">
         <label for={'pb-' + f.key}>{f.label} {f.unit === 'time' ? '(mm:ss)' : '(m)'}</label>
         <input

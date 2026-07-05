@@ -7,11 +7,19 @@ export const DEFAULT_SETTINGS = {
   // meters; the unit per key lives in PB_FIELDS so the form parses each right.
   pbs: {
     STA: null,
+    STA_NWU: null,
+    STA_MOVE: null,
     STA_FRC: null,
     STA_EL: null,
     DNF: null,
+    DNF_FRC: null,
+    DNF_EL: null,
     DYN: null,
+    DYN_FRC: null,
+    DYN_EL: null,
     DYNb: null,
+    DYNb_FRC: null,
+    DYNb_EL: null,
     tortuga: null,
     sweet16_DNF: null,
     sweet16_DYNb: null,
@@ -49,18 +57,27 @@ export const DEFAULT_SETTINGS = {
 // Personal-best fields surfaced in the settings form, in display order. `unit`
 // drives the input: 'time' (mm:ss, seconds) or 'distance' (meters). STA bests
 // and the named tests (tortuga, the sweet-16 sprint) are times; the bare
-// discipline maxes are distances.
+// discipline maxes are distances. `group` renders a subheading whenever it
+// changes from the previous field, so the 18 fields read as discipline blocks.
 export const PB_FIELDS = [
-  { key: 'STA', label: 'STA full lung', unit: 'time' },
-  { key: 'STA_FRC', label: 'STA FRC', unit: 'time' },
-  { key: 'STA_EL', label: 'STA empty lung (EL)', unit: 'time' },
-  { key: 'DNF', label: 'DNF max', unit: 'distance' },
-  { key: 'DYN', label: 'DYN monofin max', unit: 'distance' },
-  { key: 'DYNb', label: 'DYNb bifins max', unit: 'distance' },
-  { key: 'tortuga', label: 'Tortuga', unit: 'time' },
-  { key: 'sweet16_DNF', label: 'Sweet 16 DNF (16×25)', unit: 'time' },
-  { key: 'sweet16_DYNb', label: 'Sweet 16 DYNb (16×25)', unit: 'time' },
-  { key: 'sweet16_DYN', label: 'Sweet 16 DYN (16×25)', unit: 'time' },
+  { key: 'STA_NWU', label: 'No-warm-up max (FL)', unit: 'time', group: 'STA' },
+  { key: 'STA', label: 'Max full lung', unit: 'time', group: 'STA' },
+  { key: 'STA_MOVE', label: 'Max with movement', unit: 'time', group: 'STA' },
+  { key: 'STA_FRC', label: 'FRC max', unit: 'time', group: 'STA' },
+  { key: 'STA_EL', label: 'Empty lung (EL) max', unit: 'time', group: 'STA' },
+  { key: 'DNF', label: 'Max full lung', unit: 'distance', group: 'DNF' },
+  { key: 'DNF_FRC', label: 'FRC max', unit: 'distance', group: 'DNF' },
+  { key: 'DNF_EL', label: 'Empty lung max', unit: 'distance', group: 'DNF' },
+  { key: 'sweet16_DNF', label: 'Sweet 16 (16×25)', unit: 'time', group: 'DNF' },
+  { key: 'DYN', label: 'Max full lung', unit: 'distance', group: 'DYN (monofin)' },
+  { key: 'DYN_FRC', label: 'FRC max', unit: 'distance', group: 'DYN (monofin)' },
+  { key: 'DYN_EL', label: 'Empty lung max', unit: 'distance', group: 'DYN (monofin)' },
+  { key: 'sweet16_DYN', label: 'Sweet 16 (16×25)', unit: 'time', group: 'DYN (monofin)' },
+  { key: 'DYNb', label: 'Max full lung', unit: 'distance', group: 'DYNb (bifins)' },
+  { key: 'DYNb_FRC', label: 'FRC max', unit: 'distance', group: 'DYNb (bifins)' },
+  { key: 'DYNb_EL', label: 'Empty lung max', unit: 'distance', group: 'DYNb (bifins)' },
+  { key: 'sweet16_DYNb', label: 'Sweet 16 (16×25)', unit: 'time', group: 'DYNb (bifins)' },
+  { key: 'tortuga', label: 'Tortuga', unit: 'time', group: 'Tests' },
 ]
 
 // The first-contraction buckets surfaced in the settings form. Dynamic FRC/EL
