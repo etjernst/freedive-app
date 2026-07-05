@@ -70,6 +70,7 @@
   // Also backfill fields added after a session was first saved.
   for (const ex of draft.exercises) {
     ex.medium ??= 'wet'
+    ex.log_mode ??= 'per_rep'
     ex.plan_estimate ??= { reps: null, distance_m: null }
     ex.plan_note ??= ''
     ensureExercise(ex)
@@ -348,6 +349,20 @@
       <div class="field">
         <span class="lbl">Sets (repeat)</span>
         <input type="number" min="1" bind:value={ex.set_repeat} />
+      </div>
+      <div class="field">
+        <span class="lbl logmode-lbl">
+          Logging
+          <Help>
+            <strong>Log mode</strong><br />
+            <em>per rep</em> — log each rep as its own row<br />
+            <em>one set total</em> — log the whole set as totals (laps, total time), like the sweet-16
+          </Help>
+        </span>
+        <select bind:value={ex.log_mode}>
+          <option value="per_rep">per rep</option>
+          <option value="aggregate">one set total</option>
+        </select>
       </div>
       <div class="field">
         <span class="lbl">Lung volume</span>

@@ -1009,7 +1009,8 @@ input.wide {
   font-style: italic;
 }
 
-.recovery-lbl {
+.recovery-lbl,
+.logmode-lbl {
   display: inline-flex;
   align-items: center;
   gap: 6px;
