@@ -28,8 +28,12 @@ catalog = [
     # ----- STA -----
     ("sta-nwu-submax", "NWU sub-max", "STA", "main",
      "mental, co2, o2_hypoxia",
-     "No warmup; one sub-max hold to read sensations.",
-     "HV prep (def 5 min 5:5); movement: still|moving (def still); recovery (def full)."),
+     "No warmup; one still sub-max hold to read sensations.",
+     "HV prep (def 5 min 5:5); recovery (def full)."),
+    ("sta-nwu-submax-moving", "NWU sub-max with movement", "STA", "main",
+     "mental, co2, o2_hypoxia",
+     "No warmup; one sub-max hold with constant movement (paddle hands, move arms, never still).",
+     "HV prep (def 5 min soft 4:6, belly only); recovery (def full)."),
     ("sta-co2-increasing", "CO2 table, increasing holds", "STA", "main",
      "co2",
      "Fixed recovery breaths; holds increase from a start, until failure.",
@@ -209,9 +213,9 @@ catalog = [
 # ---------------- mapping (one row per source exercise) ----------------
 # section, session, source exercise, role used, canonical id, session params (become editable defaults)
 mapping = [
-    ("STA", "STA 1", "Ex1 NWU sub-max", "main", "sta-nwu-submax", "5 min strong HV (5:5); movement=still; full recovery"),
+    ("STA", "STA 1", "Ex1 NWU sub-max", "main", "sta-nwu-submax", "5 min strong HV (5:5); full recovery"),
     ("STA", "STA 1", "Ex2 short CO2 table", "main", "sta-co2-increasing", "start 2:00, +20-30s, 5xRB, until failure"),
-    ("STA", "STA 2", "Ex1 NWU with movement", "main", "sta-nwu-submax", "soft HV (4:6); movement=moving"),
+    ("STA", "STA 2", "Ex1 NWU with movement", "main", "sta-nwu-submax-moving", "5 min soft HV (4:6, belly only); full recovery"),
     ("STA", "STA 2", "Ex2 long CO2 table V-shaped", "main", "sta-co2-vshape", "4 min soft HV, start ~50% PB, 2xRB"),
     ("STA", "STA 3", "EL 2x5", "main", "sta-el", "5x relaxed belly + 5x pull-and-release, 2-3 min recovery"),
     ("STA", "STA 4", "first contraction-plus", "main", "sta-1c-plus", "2-4 min prep; 1C +0/20/40/60/80s; alt fixed 2-min recovery"),

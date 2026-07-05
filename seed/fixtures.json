@@ -13,8 +13,33 @@
         "co2",
         "o2_hypoxia"
       ],
-      "goal": "No warmup; one sub-max hold to read sensations.",
-      "cues": "HV prep (def 5 min 5:5); movement: still|moving (def still); recovery (def full).",
+      "goal": "No warmup; one still sub-max hold to read sensations.",
+      "cues": "HV prep (def 5 min 5:5); recovery (def full).",
+      "log_mode": "per_rep",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n"
+      },
+      "reps": [
+        {
+          "shape": "simple"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "sta-nwu-submax-moving",
+      "name": "NWU sub-max with movement",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "STA",
+      "capacity_tags": [
+        "mental",
+        "co2",
+        "o2_hypoxia"
+      ],
+      "goal": "No warmup; one sub-max hold with constant movement (paddle hands, move arms, never still).",
+      "cues": "HV prep (def 5 min soft 4:6, belly only); recovery (def full).",
       "log_mode": "per_rep",
       "set_repeat": 1,
       "termination": {
@@ -1942,7 +1967,7 @@
     {
       "exercises": [
         "sta-co2-vshape",
-        "sta-nwu-submax"
+        "sta-nwu-submax-moving"
       ],
       "weight": 1,
       "sessions": [
