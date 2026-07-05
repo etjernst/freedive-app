@@ -19,6 +19,10 @@ export function localIso(d = new Date()) {
   )
 }
 
+// Meta rows that hold credentials, stripped from every export so a shared
+// file can never act on the Dropbox account. Restore compensates below.
+const SENSITIVE_META_KEYS = new Set(['dropbox'])
+
 // Gather every store into one versioned envelope. `schema_version` lets a
 // future import run migrate-on-read; `exported_at` is provenance and names
 // the file. The Dropbox adapter will reuse this same envelope, so export and
@@ -27,6 +31,7 @@ export async function buildExport() {
   const db = await getDB()
   const data = {}
   for (const store of STORES) data[store] = await db.getAll(store)
+  data.meta = (data.meta ?? []).filter((r) => !SENSITIVE_META_KEYS.has(r.key))
   return {
     format: EXPORT_FORMAT,
     schema_version: (await getMeta('schema_version')) ?? DATA_SCHEMA_VERSION,
@@ -76,12 +81,24 @@ export function parseExport(text) {
 export async function restoreFromEnvelope(envelope) {
   const stores = STORES.filter((s) => Array.isArray(envelope.data?.[s]))
   const db = await getDB()
+  // Exports strip credential rows, so restoring one must not sever this
+  // device's Dropbox connection: carry the current rows across the clear
+  // unless the envelope brings its own (pre-strip exports still migrate them).
+  const keep = []
+  if (stores.includes('meta')) {
+    for (const key of SENSITIVE_META_KEYS) {
+      if (envelope.data.meta.some((r) => r.key === key)) continue
+      const row = await db.get('meta', key)
+      if (row) keep.push(row)
+    }
+  }
   const tx = db.transaction(stores, 'readwrite')
   for (const store of stores) {
     const os = tx.objectStore(store)
     await os.clear()
     for (const row of envelope.data[store]) os.put(row)
   }
+  for (const row of keep) tx.objectStore('meta').put(row)
   await tx.done
   return {
     stores,
