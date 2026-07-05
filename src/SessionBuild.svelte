@@ -168,15 +168,30 @@
   }
   let repMore = $state({})
 
+  // Adding a rep duplicates the last one (targets, recovery, lung, pace), so a
+  // table extends with a tweak instead of a re-entry; blank only when empty.
   function addRep(ex) {
-    const rep = ensure(blankRep(ex.shape_default ?? 'simple'), ex.discipline)
-    rep.lung_volume = exLung(ex)
-    const sp = exSpeed(ex)
-    if (sp) rep.pace = sp
+    const last = ex.planned.reps[ex.planned.reps.length - 1]
+    let rep
+    if (last) {
+      rep = clone(last)
+    } else {
+      rep = ensure(blankRep(ex.shape_default ?? 'simple'), ex.discipline)
+      rep.lung_volume = exLung(ex)
+      const sp = exSpeed(ex)
+      if (sp) rep.pace = sp
+    }
     ex.planned.reps = [...ex.planned.reps, rep]
   }
   function removeRep(ex, i) {
     ex.planned.reps = ex.planned.reps.filter((_, j) => j !== i)
+  }
+  function moveRep(ex, i, dir) {
+    const j = i + dir
+    if (j < 0 || j >= ex.planned.reps.length) return
+    const next = [...ex.planned.reps]
+    ;[next[i], next[j]] = [next[j], next[i]]
+    ex.planned.reps = next
   }
   function onShape(rep, ex) {
     ensure(rep, ex.discipline)
@@ -370,6 +385,8 @@
               <select class="shape" bind:value={rep.shape} onchange={() => onShape(rep, ex)}>
                 {#each SHAPES as s}<option value={s.value}>{shapeLabel(s.value, ex.discipline)}</option>{/each}
               </select>
+              <button class="link" onclick={() => moveRep(ex, ri, -1)} disabled={ri === 0} aria-label="Move rep up">↑</button>
+              <button class="link" onclick={() => moveRep(ex, ri, 1)} disabled={ri === ex.planned.reps.length - 1} aria-label="Move rep down">↓</button>
               <button class="link" onclick={() => removeRep(ex, ri)} aria-label="Remove rep">✕</button>
             </div>
             <p class="shape-hint">captures {shapeHint(rep.shape ?? 'simple', ex.discipline)}</p>

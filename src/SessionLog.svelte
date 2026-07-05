@@ -97,6 +97,13 @@
     ar.pace = exSpeed(ex) || null
     ex.actual.reps = [...ex.actual.reps, ar]
   }
+  function moveRep(ex, i, dir) {
+    const j = i + dir
+    if (j < 0 || j >= ex.actual.reps.length) return
+    const next = [...ex.actual.reps]
+    ;[next[i], next[j]] = [next[j], next[i]]
+    ex.actual.reps = next
+  }
 
   // Exercise-level realized lung volume / pace: read the first actual rep and
   // write all of them, with per-rep overrides under each rep's "More" details.
@@ -266,6 +273,8 @@
                   {#if p.recovery} · rec {describeRecovery(p.recovery)}{/if}
                 {:else}extra rep{/if}
               </span>
+              <button class="link" onclick={() => moveRep(ex, ri, -1)} disabled={ri === 0} aria-label="Move rep up">↑</button>
+              <button class="link" onclick={() => moveRep(ex, ri, 1)} disabled={ri === ex.actual.reps.length - 1} aria-label="Move rep down">↓</button>
               <button class="link" onclick={() => removeRep(ex, ri)} aria-label="Remove rep">✕</button>
             </div>
 
