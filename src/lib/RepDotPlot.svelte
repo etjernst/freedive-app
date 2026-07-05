@@ -6,8 +6,9 @@
 
   const W = 400
   const H = 150
-  // Right margin leaves room for the "rep" axis word past the last tick.
-  const M = { top: 10, right: 34, bottom: 26, left: 44 }
+  // Tight side margins so the plot fills the card; the "rep" axis word sits
+  // centered below the tick numbers, inside the bottom margin.
+  const M = { top: 10, right: 8, bottom: 34, left: 34 }
   const innerW = W - M.left - M.right
   const innerH = H - M.top - M.bottom
 
@@ -56,9 +57,9 @@
       <text x={M.left - 6} y={y(t) + 3.5} class="tick" text-anchor="end">{yFmt(t)}</text>
     {/each}
     {#each repTicks as r (r)}
-      <text x={x(r)} y={H - 8} class="tick" text-anchor="middle">{r}</text>
+      <text x={x(r)} y={H - 20} class="tick" text-anchor="middle">{r}</text>
     {/each}
-    <text x={W - 4} y={H - 8} class="tick axis-name" text-anchor="end">rep</text>
+    <text x={M.left + innerW / 2} y={H - 5} class="tick axis-name" text-anchor="middle">rep</text>
     {#each series as s, si (s.label)}
       {#each s.points as p (p.rep)}
         <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
