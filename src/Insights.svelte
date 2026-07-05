@@ -1,7 +1,14 @@
 <script>
   import { app, setView } from './lib/store.svelte.js'
-  import { collectStaHolds, summarize, maxByWarmup } from './lib/insights.js'
+  import {
+    collectStaHolds,
+    summarize,
+    maxByWarmup,
+    exerciseRepHistory,
+    SERIES_COLORS,
+  } from './lib/insights.js'
   import { fmtMMSS } from './lib/settings.js'
+  import RepDotPlot from './lib/RepDotPlot.svelte'
 
   const all = $derived(collectStaHolds(app.sessions))
   const max = $derived(collectStaHolds(app.sessions, { maxOnly: true }))
@@ -11,6 +18,21 @@
   ])
   const warmupRows = $derived(maxByWarmup(app.sessions, { discipline: 'STA' }))
   const hasData = $derived(rows.some((r) => r.wet.n || r.dry.n) || warmupRows.length > 0)
+
+  // Per-exercise history prototype: the V-shaped CO2 table. Headline metric is
+  // total time under hold; the dot plot shows each rep. Only the most recent
+  // five instances get a series color, so hues are never cycled.
+  const vshapeAll = $derived(exerciseRepHistory(app.sessions, 'sta-co2-vshape'))
+  const vshape = $derived(vshapeAll.slice(-SERIES_COLORS.length))
+  const vshapeSeries = $derived(
+    vshape.map((r, i, arr) => ({
+      label: arr.filter((x) => x.date === r.date).length > 1
+        ? `${r.date} #${arr.slice(0, i + 1).filter((x) => x.date === r.date).length}`
+        : r.date,
+      color: SERIES_COLORS[i],
+      points: r.points,
+    })),
+  )
 
   const dash = (s) => fmtMMSS(s) || '—'
 </script>
@@ -50,6 +72,30 @@
         {/if}
       </section>
     {/each}
+
+    {#if vshape.length}
+      <section class="card">
+        <h2>CO2 table, V-shaped</h2>
+        <p class="muted">Total time under hold per session; the dots show every rep.</p>
+        <ul class="rank">
+          {#each vshapeSeries as s, i (s.label)}
+            <li>
+              <span class="rank-name"><span class="swatch" style="background:{s.color}"></span>{s.label}</span>
+              <span class="rank-val">
+                {fmtMMSS(vshape[i].total)}
+                <span class="muted">
+                  · {vshape[i].points.length} reps{i > 0 ? ` · ${vshape[i].total >= vshape[i - 1].total ? '+' : '−'}${fmtMMSS(Math.abs(vshape[i].total - vshape[i - 1].total))} vs prior` : ''}
+                </span>
+              </span>
+            </li>
+          {/each}
+        </ul>
+        <RepDotPlot series={vshapeSeries} yFmt={fmtMMSS} yLabel="hold time" legend={false} />
+        {#if vshapeAll.length > vshape.length}
+          <p class="muted">Showing the last {vshape.length} of {vshapeAll.length} sessions.</p>
+        {/if}
+      </section>
+    {/if}
 
     {#if warmupRows.length}
       <section class="card">

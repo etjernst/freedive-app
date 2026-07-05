@@ -93,6 +93,15 @@ main {
   color: var(--muted);
 }
 
+/* Series-color swatch beside a label (chart legends, ranked lists). */
+.swatch {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
 /* One vital-capacity reading per row: date, values, delete, optional notes. */
 .meas-row {
   display: grid;

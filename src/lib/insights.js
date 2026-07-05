@@ -20,6 +20,38 @@ export function collectStaHolds(sessions, { maxOnly = false } = {}) {
   return out
 }
 
+// Per-exercise rep history: one row per logged instance of the exercise,
+// oldest first. Each row carries the per-rep hold times (index kept, so a
+// skipped rep leaves a gap in the dot plot) and the headline metric for the
+// CO2 tables: total time under hold. Prototype for the per-exercise insight;
+// a metric registry over all templates comes once each exercise has one.
+export function exerciseRepHistory(sessions, templateId) {
+  const rows = []
+  for (const s of sessions ?? []) {
+    for (const ex of s.exercises ?? []) {
+      if (ex.template_id !== templateId) continue
+      const points = (ex.actual?.reps ?? [])
+        .map((r, i) => ({ rep: i + 1, v: r.hold_s }))
+        .filter((p) => typeof p.v === 'number' && p.v > 0)
+      if (!points.length) continue
+      rows.push({
+        date: s.date,
+        total: points.reduce((a, p) => a + p.v, 0),
+        points,
+      })
+    }
+  }
+  // Oldest first so legend order and color assignment read chronologically.
+  rows.sort((a, b) => (a.date ?? '').localeCompare(b.date ?? ''))
+  return rows
+}
+
+// Fixed categorical order for chart series (sessions), validated against the
+// light card surface (#f6f2e8): lightness band, chroma floor, CVD separation,
+// contrast. Assigned oldest-first, never cycled: past six instances, fold the
+// oldest into gray rather than generating new hues.
+export const SERIES_COLORS = ['#5f8323', '#2f6ba8', '#c04a33', '#8c4bb0', '#b07a16']
+
 export function summarize(vals) {
   if (!vals?.length) return { n: 0, best: null, avg: null }
   const sum = vals.reduce((a, b) => a + b, 0)
