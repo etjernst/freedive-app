@@ -93,6 +93,30 @@ main {
   color: var(--muted);
 }
 
+/* One vital-capacity reading per row: date, values, delete, optional notes. */
+.meas-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 4px 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border, rgba(0, 0, 0, 0.08));
+}
+.meas-row:last-child {
+  border-bottom: none;
+}
+.meas-date {
+  font-size: 13px;
+  color: var(--muted);
+}
+.meas-vals {
+  font-weight: 600;
+}
+.meas-notes {
+  grid-column: 1 / -1;
+  font-size: 13px;
+}
+
 /* Discipline subheadings inside the personal-bests card. */
 .pb-group {
   margin: 14px 0 2px;

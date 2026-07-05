@@ -16,6 +16,7 @@ export const app = $state({
   view: 'home',
   templates: [],
   sessions: [],
+  measurements: [],
   currentSessionId: null,
   settings: mergeSettings(null),
   persisted: false,
@@ -79,6 +80,12 @@ export async function refresh() {
   app.templates = await db.getAll('templates')
   // Newest training day first; created_at breaks same-day ties.
   app.sessions = (await db.getAll('sessions')).sort(
+    (a, b) =>
+      (b.date ?? '').localeCompare(a.date ?? '') ||
+      (b.created_at ?? '').localeCompare(a.created_at ?? ''),
+  )
+  // Newest reading first; created_at breaks same-day ties.
+  app.measurements = (await db.getAll('measurements')).sort(
     (a, b) =>
       (b.date ?? '').localeCompare(a.date ?? '') ||
       (b.created_at ?? '').localeCompare(a.created_at ?? ''),
@@ -203,6 +210,20 @@ export async function saveTemplate(template) {
 export async function deleteSession(id) {
   await (await getDB()).delete('sessions', id)
   if (app.currentSessionId === id) app.currentSessionId = null
+  await refresh()
+  queueAutoBackup()
+}
+
+// --- Measurements -------------------------------------------------------------
+
+export async function saveMeasurement(m) {
+  await (await getDB()).put('measurements', clone(m))
+  await refresh()
+  queueAutoBackup()
+}
+
+export async function deleteMeasurement(id) {
+  await (await getDB()).delete('measurements', id)
   await refresh()
   queueAutoBackup()
 }

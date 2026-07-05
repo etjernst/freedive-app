@@ -159,6 +159,7 @@
     <div class="field"><label for="pool">Pool length (m)</label><input id="pool" type="number" bind:value={sd.pool} placeholder="25" /></div>
     <div class="field"><label for="vc">Vital capacity (L)</label><input id="vc" type="number" step="0.1" bind:value={sd.vc} /></div>
     <div class="field"><label for="packed">Packed volume (L)</label><input id="packed" type="number" step="0.1" bind:value={sd.packed} /></div>
+    <p class="muted">To trend VC over time, log dated readings under Log measurement on the home screen.</p>
   </section>
 
   <section class="card">

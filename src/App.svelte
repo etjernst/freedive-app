@@ -20,6 +20,7 @@
   import SessionBuild from './SessionBuild.svelte'
   import SessionLog from './SessionLog.svelte'
   import Insights from './Insights.svelte'
+  import Measurements from './Measurements.svelte'
 
   const TITLES = {
     home: { h1: 'Winnow', tag: 'Capture, tracking, and coaching' },
@@ -28,6 +29,7 @@
     'session-build': { h1: 'Build session', tag: 'Assemble the plan from your library' },
     'session-log': { h1: 'Log session', tag: 'Fill the actuals against your plan' },
     stats: { h1: 'Insights', tag: 'What your logged training shows' },
+    measure: { h1: 'Measurements', tag: 'Dated readings you can trend over time' },
   }
   const head = $derived(TITLES[app.view] ?? TITLES.home)
 
@@ -130,6 +132,8 @@
   <SessionLog />
 {:else if app.view === 'stats'}
   <Insights />
+{:else if app.view === 'measure'}
+  <Measurements />
 {:else}
   <main>
     {#if app.error}
@@ -146,6 +150,7 @@
         <button onclick={() => createSession()}>New session</button>
         <button onclick={() => setView('sessions')}>Open sessions</button>
         <button class="link" onclick={() => setView('stats')}>Insights</button>
+        <button class="link" onclick={() => setView('measure')}>Log measurement</button>
       </div>
     </section>
 

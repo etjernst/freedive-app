@@ -5,7 +5,7 @@ const DB_NAME = 'winnow'
 // IndexedDB structural version: bump only when the object stores or indexes
 // below change shape. Distinct from DATA_SCHEMA_VERSION, which versions the
 // CONTENT of records and drives migrate-on-read at the application layer.
-const DB_VERSION = 1
+const DB_VERSION = 2
 
 export const DATA_SCHEMA_VERSION = 1
 
@@ -19,6 +19,7 @@ export const STORES = [
   'settings',
   'fc_store',
   'outbox',
+  'measurements',
 ]
 
 let dbPromise
@@ -53,6 +54,11 @@ export function getDB() {
           // queued/failed rows without scanning the whole store.
           const ob = db.createObjectStore('outbox', { keyPath: 'id' })
           ob.createIndex('status', 'status')
+        }
+        if (!db.objectStoreNames.contains('measurements')) {
+          // Dated body measurements (vital capacity first), stored as a time
+          // series keyed by `type` so readings can be trended, never overwritten.
+          db.createObjectStore('measurements', { keyPath: 'id' })
         }
       },
     })

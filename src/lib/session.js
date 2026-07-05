@@ -114,7 +114,7 @@ export function shapeHint(shape, discipline) {
     .join(', then ')
 }
 
-function uid(prefix) {
+export function uid(prefix) {
   const raw =
     typeof crypto !== 'undefined' && crypto.randomUUID
       ? crypto.randomUUID().replace(/-/g, '')
