@@ -8,6 +8,7 @@
     disconnectDropbox,
     syncToDropbox,
     restoreFromDropbox,
+    setAutoBackup,
     setView,
     createSession,
     startSessionWith,
@@ -226,6 +227,14 @@
             Restore from Dropbox
           </button>
         </div>
+        <label class="pb-check">
+          <input
+            type="checkbox"
+            checked={app.autoBackup}
+            onchange={(e) => setAutoBackup(e.currentTarget.checked)}
+          />
+          Auto-back up after every save
+        </label>
         <div class="actions">
           <button class="link" onclick={disconnectDropbox} disabled={app.dropbox.busy}>
             Disconnect

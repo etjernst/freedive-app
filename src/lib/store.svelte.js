@@ -22,6 +22,7 @@ export const app = $state({
   usage: null,
   lastExport: null,
   pendingBackup: 0,
+  autoBackup: false,
   dropbox: { connected: false, busy: false, lastSync: null, error: null, justConnected: false },
   exitHint: false,
 })
@@ -62,6 +63,11 @@ export async function initApp() {
     await seedIfNeeded()
     app.dropbox.connected = await dropbox.isConnected()
     await refresh()
+    // A debounced auto-backup still pending when the app is backgrounded would
+    // be lost if the PWA is then killed, so flush it immediately on hide.
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') flushAutoBackup()
+    })
     app.ready = true
   } catch (e) {
     app.error = String(e?.message ?? e)
@@ -81,7 +87,44 @@ export async function refresh() {
   app.lastExport = (await db.get('meta', 'last_export'))?.value ?? null
   app.pendingBackup = await db.count('outbox')
   app.dropbox.lastSync = (await db.get('meta', 'last_dropbox_sync'))?.value ?? null
+  app.autoBackup = (await db.get('meta', 'auto_backup'))?.value ?? false
   app.settings = mergeSettings(await db.get('settings', 'profile'))
+}
+
+// --- Auto-backup ------------------------------------------------------------
+
+// Debounce so a burst of edits produces one upload, not many. syncToDropbox
+// already swallows failures into app.dropbox.error, so a flaky connection can
+// never block or interrupt logging.
+const AUTO_BACKUP_DEBOUNCE_MS = 5000
+let autoBackupTimer = null
+
+function queueAutoBackup() {
+  if (!app.autoBackup || !app.dropbox.connected) return
+  clearTimeout(autoBackupTimer)
+  autoBackupTimer = setTimeout(runAutoBackup, AUTO_BACKUP_DEBOUNCE_MS)
+}
+
+function runAutoBackup() {
+  autoBackupTimer = null
+  // A manual sync in flight already uploads the current state; re-queue
+  // instead of racing it with a second upload.
+  if (app.dropbox.busy) return queueAutoBackup()
+  syncToDropbox()
+}
+
+function flushAutoBackup() {
+  if (autoBackupTimer == null) return
+  clearTimeout(autoBackupTimer)
+  runAutoBackup()
+}
+
+export async function setAutoBackup(on) {
+  await setMeta('auto_backup', Boolean(on))
+  app.autoBackup = Boolean(on)
+  // Turning it on counts as "there is unsynced state": back up right away so
+  // the toggle's effect is visible without waiting for the next save.
+  if (on) queueAutoBackup()
 }
 
 // Overwrite the shipped canon templates with the latest fixtures (by id), so
@@ -101,6 +144,7 @@ export async function saveSettings(next) {
   const db = await getDB()
   await db.put('settings', { ...next, key: 'profile' })
   await refresh()
+  queueAutoBackup()
 }
 
 // --- Sessions ---------------------------------------------------------------
@@ -145,6 +189,7 @@ export async function saveSession(session) {
   doc.updated_at = localIso()
   await (await getDB()).put('sessions', doc)
   await refresh()
+  queueAutoBackup()
 }
 
 // Save a user-authored template to the library (a fresh id, never overwriting).
@@ -152,12 +197,14 @@ export async function saveSession(session) {
 export async function saveTemplate(template) {
   await (await getDB()).put('templates', clone(template))
   await refresh()
+  queueAutoBackup()
 }
 
 export async function deleteSession(id) {
   await (await getDB()).delete('sessions', id)
   if (app.currentSessionId === id) app.currentSessionId = null
   await refresh()
+  queueAutoBackup()
 }
 
 export async function doExport() {
