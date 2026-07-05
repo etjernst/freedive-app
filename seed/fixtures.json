@@ -68,7 +68,148 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 150
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 2,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 135
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 2,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 120
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 2,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 105
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 2,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 90
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 2,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 60
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 2,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 60
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 2,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 90
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 2,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 105
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 2,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 120
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 2,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 135
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 2,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 150
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 2,
+            "unit": "breaths"
+          }
         }
       ]
     },

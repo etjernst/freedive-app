@@ -442,6 +442,13 @@ REPS = {
         {"shape": "simple", "hold_target": {"unit": "absolute", "value": 150},
          "recovery": _BREATHS(2)},
     ],
+    # STA 2: V-shaped CO2 table, holds descend 2:30 -> 1:00 then climb back up,
+    # 2-breath recovery throughout.
+    "sta-co2-vshape": [
+        {"shape": "simple", "hold_target": {"unit": "absolute", "value": s},
+         "recovery": _BREATHS(2)}
+        for s in (150, 135, 120, 105, 90, 60, 60, 90, 105, 120, 135, 150)
+    ],
     # STA 16: fixed sub-max hold, recovery shrinks 60s -> 10s across 7 reps.
     "sta-co2-decreasing-rec": [
         {"shape": "simple", "hold_target": {"unit": "qualitative", "value": "submax"},
