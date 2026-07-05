@@ -98,6 +98,12 @@
   </div>
 {/if}
 
+{#if app.exitHint}
+  <div class="banner" role="status">
+    <span>Press back again to exit.</span>
+  </div>
+{/if}
+
 <header>
   <div class="title">
     <h1>{head.h1}</h1>

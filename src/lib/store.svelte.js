@@ -23,10 +23,27 @@ export const app = $state({
   lastExport: null,
   pendingBackup: 0,
   dropbox: { connected: false, busy: false, lastSync: null, error: null, justConnected: false },
+  exitHint: false,
 })
 
+// In-memory trail of views for hardware-back navigation (see backnav.js).
+// Bounded so a marathon session cannot grow it without limit.
+const viewTrail = []
+
 export function setView(v) {
+  if (v === app.view) return
+  viewTrail.push(app.view)
+  if (viewTrail.length > 50) viewTrail.shift()
   app.view = v
+}
+
+// Step back to the previously shown view. Returns false when the trail is
+// empty, i.e. the user is at their entry view and back should mean "exit".
+export function popView() {
+  const prev = viewTrail.pop()
+  if (!prev) return false
+  app.view = prev
+  return true
 }
 
 export async function initApp() {
@@ -97,7 +114,7 @@ export async function createSession(view = 'session-build') {
   await (await getDB()).put('sessions', s)
   app.currentSessionId = s.id
   await refresh()
-  app.view = view
+  setView(view)
 }
 
 // Start a fresh planned session seeded with one library exercise, then jump to
@@ -112,12 +129,12 @@ export async function startSessionWith(templateId) {
   await (await getDB()).put('sessions', clone(s))
   app.currentSessionId = s.id
   await refresh()
-  app.view = 'session-build'
+  setView('session-build')
 }
 
 export function openSession(id, view = 'session-build') {
   app.currentSessionId = id
-  app.view = view
+  setView(view)
 }
 
 export async function saveSession(session) {
