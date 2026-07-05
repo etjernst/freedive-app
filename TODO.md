@@ -31,6 +31,7 @@ Agreed design, in Emilia's words where it matters:
 - Feelings alongside maxes: RPE now; sentiment on session remarks is a maybe-later.
 - Standard errors on comparisons once n is large enough; until then every card shows its n and degrades to a plain list.
 - Data-gap surfacing: the tab should say where more observations are needed (the warm-up-before-max comparison is the known example), because seeing the gap is itself motivating.
+- More than five sessions of one exercise on the dot plot: deliberately unsolved until it happens; candidate plan B is coloring only the latest five and collapsing older sessions into one gray min-max band.
 
 ## Progress tracking and calendar
 
