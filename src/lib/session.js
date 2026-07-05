@@ -127,7 +127,7 @@ export function todayLocalDate(d = new Date()) {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
 }
 
-export function newSession() {
+export function newSession(pool_length_m = 25) {
   const now = localIso()
   return {
     id: uid('sess'),
@@ -136,6 +136,9 @@ export function newSession() {
     created_at: now,
     updated_at: now,
     status: 'planned', // -> 'logged' once an actual is saved
+    // Where the session happened; drives the turn-count hint in the log.
+    // Seeded from the settings default, overridable per session.
+    pool_length_m,
     exercises: [],
     session_remarks: '',
     overall_feel: null,

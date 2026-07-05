@@ -76,6 +76,9 @@
     ensureExercise(ex)
   }
   draft.session_remarks ??= ''
+  // Sessions saved before pool length moved onto the session document fall
+  // back to the settings default.
+  draft.pool_length_m ??= app.settings.pool_length_m ?? 25
 
   const sessionEstimate = $derived(estimateSession(draft, app.settings))
 
@@ -239,6 +242,10 @@
     <div class="field">
       <label for="sess-date">Date</label>
       <input id="sess-date" type="date" bind:value={draft.date} />
+    </div>
+    <div class="field">
+      <label for="sess-pool">Pool length (m)</label>
+      <input id="sess-pool" type="number" min="1" bind:value={draft.pool_length_m} placeholder="25" />
     </div>
     <textarea
       class="remarks"

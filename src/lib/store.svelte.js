@@ -161,7 +161,7 @@ export function currentSession() {
 }
 
 export async function createSession(view = 'session-build') {
-  const s = newSession()
+  const s = newSession(app.settings.pool_length_m ?? 25)
   await (await getDB()).put('sessions', s)
   app.currentSessionId = s.id
   await refresh()
@@ -172,7 +172,7 @@ export async function createSession(view = 'session-build') {
 // the builder. Mirrors createSession() but pre-adds the chosen template so a
 // tap on a Home library card lands in a buildable session.
 export async function startSessionWith(templateId) {
-  const s = newSession()
+  const s = newSession(app.settings.pool_length_m ?? 25)
   const t = app.templates.find((x) => x.id === templateId)
   // instantiateExercise reads from the $state-proxied template, so clone the
   // assembled session to strip proxies before IndexedDB structured-clones it.

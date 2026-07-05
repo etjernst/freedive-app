@@ -77,7 +77,9 @@
   }
 
   const breathingPatterns = Object.keys(app.settings.breathing_intensity ?? {})
-  const pool = app.settings.pool_length_m ?? 25
+  // Session-level pool length wins; sessions from before the field existed
+  // fall back to the settings default.
+  const pool = draft.pool_length_m ?? app.settings.pool_length_m ?? 25
 
   function plannedRep(ex, ar) {
     const reps = ex.planned?.reps ?? []
