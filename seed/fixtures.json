@@ -778,7 +778,7 @@
     {
       "schema_version": 1,
       "id": "sta-max",
-      "name": "STA max attempt",
+      "name": "Max attempt: STA",
       "environment": "pool",
       "role": "main",
       "discipline": "STA",
@@ -991,7 +991,7 @@
     {
       "schema_version": 1,
       "id": "dyn-max",
-      "name": "Dynamic max attempt",
+      "name": "Max attempt: dynamic",
       "environment": "pool",
       "role": "main",
       "discipline": "any",
@@ -1140,7 +1140,7 @@
     {
       "schema_version": 1,
       "id": "dyn-pyramid",
-      "name": "Pyramid drills",
+      "name": "Pyramid",
       "environment": "pool",
       "role": "main",
       "discipline": "any",
@@ -1216,7 +1216,7 @@
     {
       "schema_version": 1,
       "id": "dyn-inverse-pyramid",
-      "name": "Inverse pyramid",
+      "name": "Pyramid (inverse)",
       "environment": "pool",
       "role": "main",
       "discipline": "any",
@@ -1379,7 +1379,7 @@
     {
       "schema_version": 1,
       "id": "dyn-sprints",
-      "name": "Sprint set",
+      "name": "Sprints",
       "environment": "pool",
       "role": "main",
       "discipline": "any",

@@ -21,8 +21,8 @@ A comparison is gated only where the config changes what the metric counts rathe
 
 | id | exercise | headline metric | figure | better | notes / edge cases |
 |---|---|---|---|---|---|
-| sta-nwu-submax | NWU sub-max or max | hold time | session dots | up | Sub-max by design, so this trends readiness, not capacity; show RPE beside it. |
-| sta-nwu-submax-moving | NWU sub-max or max (moving) | hold time | session dots | up | Same caveat; separate history from the still variant is the point of the split. |
+| sta-nwu-submax | NWU sub-max or max | hold time | session dots | up | Track the hold: readiness adds noise, but it still trends up over time, and reads capacity outright on max days. RPE beside it for context. |
+| sta-nwu-submax-moving | NWU sub-max or max (moving) | hold time | session dots | up | Same as the still variant, kept separate so the with-movement history reads on its own. |
 | sta-co2-increasing | CO2 5 x RB increasing | last completed hold | rep dots | up | Until-failure: last completed hold = how far the ladder got. Total time under hold as secondary line. |
 | sta-co2-vshape | CO2 V-shape | total time under hold | rep dots | up | Shipped. Interrupted tables still count (the total is the point, unlike sweet-16). |
 | sta-co2-1breath | CO2 1 x RB wonka | reps completed | rep dots | up | Quality-drop termination makes reps the ladder length; total time secondary. Always run 1C+X, so no mode gate. |
@@ -37,7 +37,7 @@ A comparison is gated only where the config changes what the metric counts rathe
 | sta-frc-awareness | FL → FRC | total time under hold | rep dots | up | Short holds; total is the honest summary. |
 | sta-high-volume | High-volume 70-80% PB | total time under hold | rep bars | up | Two improvement margins in one figure: taller bars (longer holds) and more bars (added reps), with the total above the chart. %PB shown as context only, per Emilia: it measures intensity against a moving baseline, while reps x hold time is the progress measure. |
 | sta-progressive-fl | Progressive FL | final hold of the sequence | rep dots | up | The last hold is the day's max-ish; the dots show the ramp. |
-| sta-max | STA max attempt | hold time | session dots | up | Feeds the progression chart and the PB auto-update; wet vs dry split already exists. |
+| sta-max | Max attempt: STA | hold time | session dots | up | Feeds the progression chart and the PB auto-update; wet vs dry split already exists. |
 | sta-cooldown-easy | Easy cool-down STA | none | none | n/a | Deliberately easy; tracking it would reward the wrong thing. |
 
 ## STA warm-ups
@@ -55,17 +55,17 @@ A comparison is gated only where the config changes what the metric counts rathe
 
 | id | exercise | headline metric | figure | better | notes / edge cases |
 |---|---|---|---|---|---|
-| dyn-nwu-submax | NWU sub-max (dynamic) | distance | session dots | up | Readiness read, same caveat as the STA twin. |
-| dyn-max | Dynamic max attempt | distance | session dots | up | Per discipline and lung volume; feeds progression and PB auto-update. |
-| dyn-max-simulator | Max dive simulator | max-push distance | session dots | up | The final push is the target; total distance secondary. |
+| dyn-nwu-submax | NWU sub-max (dynamic) | distance | session dots | up | Track the dive length: readiness adds noise, but it still trends up, and reads capacity on max days. Same as the STA twin; RPE for context. |
+| dyn-max | Max attempt: dynamic | distance | session dots | up | Per discipline and lung volume; feeds progression and PB auto-update. |
+| dyn-max-simulator | Max dive simulator | max-push distance and total distance | session dots | up | Both matter: the max push is the day's ceiling, and total distance across the three legs tracks overall capacity. |
 | dyn-volume-fixed | Volume: fixed reps | total distance | session dots | up | Fixed structure, so completion + RPE carry most signal; rep distance shown as context, total meters compare across it. |
 | dyn-volume-maximize | Volume: maximize total distance | total distance | rep dots | up | The goal is literally this number; rep dots show how it was assembled. |
 | dyn-volume-technique | Volume: technique drill | total distance | session dots | up | Stroke counts would be richer but are a data gap (see dyn-technique). |
-| dyn-pyramid | Pyramid drills | pyramids completed | session dots | up | Structure is fixed per pyramid; count completed sets. Distances differ for DNF = different config. |
-| dyn-inverse-pyramid | Inverse pyramid | sets completed | session dots | up | Same logic as the pyramid. |
+| dyn-pyramid | Pyramid | pyramids completed | session dots | up | Structure is fixed per pyramid; count completed sets. Distances differ for DNF = different config. |
+| dyn-inverse-pyramid | Pyramid (inverse) | sets completed | session dots | up | Same logic as the pyramid. |
 | dyn-descending | Descending distance | first (longest) distance | rep dots | up | The opener is the day's long doable; the -20% steps are structure. |
 | dyn-sweet16 | Sweet 16 | total time | session dots | down | Only full 16-lap sets count; interrupted sets are excluded, per your call. |
-| dyn-sprints | Sprint set | average lap time | session dots | down | Needs aggregate logging (total time + laps) to compute; per-rep logs without times are a data gap. |
+| dyn-sprints | Sprints | average lap time | session dots | down | Needs aggregate logging (total time + laps) to compute; per-rep logs without times are a data gap. |
 | dyn-frc-sprint | FRC dive + sprints | FRC dive distance | session dots | up | The sprint ladder is conditioning; the FRC dive is the measured part. |
 | dyn-elastic-sprint-max | Elastic sprints into max | max dive distance | session dots | up | Sprints are setup. |
 | dyn-stop-start | Stop-start (STA then swim) | swim distance | session dots | up | Comparable only when the preceding hold duration matches; card should show the hold as context. |
