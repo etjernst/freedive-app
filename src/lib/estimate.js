@@ -120,66 +120,91 @@ function recoverySeconds(rep, settings, effortSec) {
 function blockSeconds(ex, settings) {
   const reps = ex.planned?.reps ?? []
   let sum = 0
-  let known = true
+  let knownCount = 0
+  let unknownCount = 0
   let lastRec = 0
   reps.forEach((rep, i) => {
     const prep = rep.prep_breathing?.duration_s ?? 0
     const eff = effortSeconds(rep, ex, settings)
     const rec = recoverySeconds(rep, settings, eff)
     if (eff == null || rec == null) {
-      known = false
+      unknownCount++
       return
     }
     sum += prep + eff + rec
+    knownCount++
     if (i === reps.length - 1) lastRec = rec
   })
-  return { sec: sum, known, perRep: reps.length ? sum / reps.length : 0, lastRec }
+  // perRep averages over the reps we could time, so open-ended / range sets
+  // extrapolate from the known ones instead of collapsing on one blank rep.
+  return { sec: sum, knownCount, unknownCount, perRep: knownCount ? sum / knownCount : 0, lastRec }
 }
 
-// Estimate one exercise. Returns { seconds, uncertain, reason }.
+// Estimate one exercise. Returns { seconds, unestimatedReps, reason, openEnded }:
+// seconds is the time of the reps we could estimate (never null; 0 when none),
+// unestimatedReps counts the concrete reps (rep row x sets) we could not time,
+// reason is a hint shown when nothing is estimable, and openEnded flags an
+// open-ended set still missing its expected rep count.
 export function estimateExercise(ex, settings) {
   const term = ex.termination
   const sets = Math.max(1, ex.set_repeat ?? 1)
 
   // Duration-capped (square breathing, timed protocols): the cap is the time.
   if (term?.type === 'duration_capped' && term.duration_s != null) {
-    return { seconds: term.duration_s * sets, uncertain: false }
+    return { seconds: term.duration_s * sets, unestimatedReps: 0, reason: null }
   }
 
   const blk = blockSeconds(ex, settings)
-  if (!blk.known) {
-    return { seconds: null, uncertain: true, reason: 'set the PB / pace / baseline or rep targets it needs' }
-  }
+  const unknown = blk.unknownCount * sets
 
-  // Open-ended sets need an expected rep count to be timed at all.
+  // Open-ended sets need an expected rep count to be timed. With a count and at
+  // least one timable rep we extrapolate; otherwise we flag the missing input.
   if (term && OPEN_TERMS.has(term.type)) {
     const n = ex.plan_estimate?.reps
-    if (n == null) return { seconds: null, uncertain: true, reason: 'open-ended: set an expected rep count' }
-    return { seconds: blk.perRep * n * sets, uncertain: false }
+    if (n != null && blk.knownCount > 0) {
+      return { seconds: blk.perRep * n * sets, unestimatedReps: 0, reason: null }
+    }
+    const reason =
+      n == null
+        ? 'open-ended: set an expected rep count'
+        : 'set the PB / pace / baseline or rep targets it needs'
+    return { seconds: 0, unestimatedReps: unknown, reason, openEnded: n == null }
   }
 
-  // Range: time the midpoint count.
+  // Range: time the midpoint count from the reps we could estimate.
   if (term?.type === 'range') {
     const lo = term.n_min ?? 1
     const hi = term.n_max ?? lo
-    return { seconds: blk.perRep * Math.round((lo + hi) / 2) * sets, uncertain: false }
+    const mid = Math.round((lo + hi) / 2)
+    if (blk.knownCount > 0) return { seconds: blk.perRep * mid * sets, unestimatedReps: 0, reason: null }
+    return { seconds: 0, unestimatedReps: mid * sets, reason: 'set the PB / pace / baseline or rep targets it needs' }
   }
 
-  // A single-set exercise has no effort after its last rep, so the recovery that
-  // would follow it is not real time; drop it.
+  // Fixed count: sum the reps we could time (a single set drops the recovery
+  // after its last rep, which leads nowhere); reps we could not time are
+  // reported as a count rather than zeroing the whole exercise.
   const trailing = sets === 1 ? blk.lastRec : 0
-  return { seconds: blk.sec * sets - trailing, uncertain: false }
+  return {
+    seconds: blk.sec * sets - trailing,
+    unestimatedReps: unknown,
+    reason: blk.knownCount === 0 ? 'set the PB / pace / baseline or rep targets it needs' : null,
+  }
 }
 
+// Sum the estimable time across a session and total the reps we could not time.
+// openSets counts open-ended exercises still missing an expected rep count, which
+// cannot be timed at all (kept separate from the per-rep count).
 export function estimateSession(session, settings) {
-  let total = 0
-  let uncertain = false
+  let seconds = 0
+  let unestimatedReps = 0
+  let openSets = 0
   for (const ex of session.exercises ?? []) {
     const e = estimateExercise(ex, settings)
-    if (e.seconds == null) uncertain = true
-    else total += e.seconds
+    seconds += e.seconds || 0
+    unestimatedReps += e.unestimatedReps || 0
+    if (e.openEnded) openSets++
   }
-  return { seconds: total, uncertain }
+  return { seconds, unestimatedReps, openSets }
 }
 
 // Whether an exercise needs a planning estimate input surfaced in the builder.

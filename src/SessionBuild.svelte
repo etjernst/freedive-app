@@ -335,8 +335,14 @@
         placeholder="Notes / instructions to yourself"
         bind:value={ex.plan_note}
       ></textarea>
-      <p class="est" class:est-unknown={est.seconds == null}>
-        {est.seconds != null ? `Est. ${fmtDuration(est.seconds)}` : `Est. — ${est.reason}`}
+      <p class="est" class:est-unknown={est.seconds === 0 && est.reason}>
+        {#if est.seconds === 0 && est.reason}
+          Est. — {est.reason}
+        {:else}
+          Est. {fmtDuration(est.seconds)}{est.unestimatedReps
+            ? ` + ${est.unestimatedReps} unestimated rep${est.unestimatedReps === 1 ? '' : 's'}`
+            : ''}
+        {/if}
       </p>
 
       <div class="field">
@@ -544,7 +550,11 @@
 
   {#if draft.exercises.length > 0}
     <p class="session-est">
-      Estimated session: <strong>{fmtDuration(sessionEstimate.seconds) ?? '—'}</strong>{sessionEstimate.uncertain ? ' + unestimated exercises' : ''}
+      Estimated session: <strong>{fmtDuration(sessionEstimate.seconds)}</strong>{sessionEstimate.unestimatedReps
+        ? ` + ${sessionEstimate.unestimatedReps} unestimated rep${sessionEstimate.unestimatedReps === 1 ? '' : 's'}`
+        : ''}{sessionEstimate.openSets
+        ? ` + ${sessionEstimate.openSets} open-ended set${sessionEstimate.openSets === 1 ? '' : 's'}`
+        : ''}
     </p>
   {/if}
 
