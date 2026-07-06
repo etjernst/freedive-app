@@ -6,12 +6,14 @@ Drafted 2026-07-06 from the catalog in `seed/build_library.py`; the V-shaped CO2
 
 Figure vocabulary, to keep the table short:
 - rep dots: the shipped dot plot (x = rep, y = value, one color per session).
+- rep bars: grouped bars, x = rep, height = value, one color per session, so an added rep shows as a new bar and a longer hold as a taller one.
 - session dots: the headline metric over time, one dot per session, no connecting line.
 - none: no standalone card; the exercise still counts toward weekly volume and the warm-up comparison.
 
 Conventions proposed:
 - Warm-ups and cool-downs get no standalone card; warm-ups show up in the max-by-warm-up comparison instead.
-- A card only compares like-for-like: if the config changed between sessions (lung volume, fixed distance, box length), the card should say so rather than trend across the change.
+- Configs annotate, they do not gate: absolute realized quantities (time under hold, meters, reps at a given hold) compare across intensity settings, because a relative setting like %PB tracks a moving baseline and would hide real progress; the card shows the setting as context.
+A comparison is gated only where the config changes what the metric counts rather than how hard it was (sweet-16's 16 laps, the 1-breath ladder's absolute vs 1C+X mode, per-rep lung volume).
 - Direction matters: the registry records whether up or down is better, so cards can honestly say improved or declined (stroke counts and recovery ladders improve downward).
 - Every metric needs the underlying field actually logged; rows flagged "data gap" need either a logging habit or a small capture change first.
 
@@ -26,14 +28,14 @@ Conventions proposed:
 | sta-co2-1breath | 1-breath CO2 ladder | reps completed | rep dots | up | Quality-drop termination makes reps the ladder length; total time secondary. 1C+X mode vs absolute mode are different configs. |
 | sta-co2-short-intense | Short & intense CO2 | total time under hold | rep dots | up | Fixed n and duration, so the total mostly reflects showing up; RPE/deviation carry the signal. |
 | sta-co2-decreasing-rec | Medium & moderate CO2 | reps completed | rep dots | up | The hold is fixed; progress = surviving more of the shrinking-recovery ladder. Smallest recovery reached as secondary. |
-| sta-co2-square | Soft & medium CO2 (square breathing) | total duration | session dots | up | Continuous protocol, one number per session. Box length changes = different config. |
+| sta-co2-square | Soft & medium CO2 (square breathing) | total duration | session dots | up | Continuous protocol, one number per session. Box length shown as context (it sets intensity, not what the metric counts). |
 | sta-co2-second-hold | CO2, challenging second hold | second hold time | session dots | up | The first hold is setup; only the second hold is the target. First-hold %PB shown as context. |
 | sta-get-high | Get high (oxygen table) | longest hold | rep dots | up | Ladder shape shows nicely as rep dots. |
-| sta-el | Empty-lung set | longest EL hold | rep dots | up | Relaxed-belly vs pull-and-release are different configs. |
+| sta-el | Empty-lung set | longest EL hold | rep dots | up | Relaxed-belly vs pull-and-release shown as context; the hold time compares either way. |
 | sta-el-fl-switch | EL/FL switch | longest EL hold and longest FL hold | rep dots | up | Two headline numbers; the dot plot needs per-rep lung volume to split the two ladders visually. |
 | sta-1c-plus | First-contraction-plus ladder | longest hold | rep dots | up | The deeper signal is the 1C times themselves, which feed the first-contraction trend, not this card. |
 | sta-frc-awareness | FRC CO2 awareness | total time under hold | rep dots | up | Short holds; total is the honest summary. |
-| sta-high-volume | High-volume holds | total time under hold | rep dots | up | %PB setting is the config; compare only within the same %. |
+| sta-high-volume | High-volume holds | total time under hold | rep bars | up | Two improvement margins in one figure: taller bars (longer holds) and more bars (added reps), with the total above the chart. %PB shown as context only, per Emilia: it measures intensity against a moving baseline, while reps x hold time is the progress measure. |
 | sta-progressive-fl | Progressive FL to max | final hold of the sequence | rep dots | up | The last hold is the day's max-ish; the dots show the ramp. |
 | sta-max | STA max attempt | hold time | session dots | up | Feeds the progression chart and the PB auto-update; wet vs dry split already exists. |
 | sta-cooldown-easy | Easy cool-down STA | none | none | n/a | Deliberately easy; tracking it would reward the wrong thing. |
@@ -56,7 +58,7 @@ Conventions proposed:
 | dyn-nwu-submax | NWU sub-max (dynamic) | distance | session dots | up | Readiness read, same caveat as the STA twin. |
 | dyn-max | Dynamic max attempt | distance | session dots | up | Per discipline and lung volume; feeds progression and PB auto-update. |
 | dyn-max-simulator | Max dive simulator | max-push distance | session dots | up | The final push is the target; total distance secondary. |
-| dyn-volume-fixed | Volume: fixed reps | total distance | session dots | up | Fixed structure, so completion + RPE carry most signal; compare only same rep distance. |
+| dyn-volume-fixed | Volume: fixed reps | total distance | session dots | up | Fixed structure, so completion + RPE carry most signal; rep distance shown as context, total meters compare across it. |
 | dyn-volume-maximize | Volume: maximize total distance | total distance | rep dots | up | The goal is literally this number; rep dots show how it was assembled. |
 | dyn-volume-technique | Volume: technique drill | total distance | session dots | up | Stroke counts would be richer but are a data gap (see dyn-technique). |
 | dyn-pyramid | Pyramid drills | pyramids completed | session dots | up | Structure is fixed per pyramid; count completed sets. Distances differ for DNF = different config. |
