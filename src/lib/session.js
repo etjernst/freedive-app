@@ -366,6 +366,7 @@ export function clone(obj) {
 }
 
 const QUAL_LABELS = {
+  first_discomfort: 'to first discomfort',
   submax: 'sub-max',
   strong_submax: 'strong sub-max',
   max: 'max',

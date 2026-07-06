@@ -2,7 +2,11 @@
   // Dot plot of per-rep values across sessions: x = rep number, y = value,
   // one colored series per session. Pure presentational; the caller passes
   // series [{ label, color, points: [{ rep, v }] }] and a y-axis formatter.
-  let { series = [], yFmt = (v) => String(v), yLabel = '', legend = true } = $props()
+  // connect: join each session's reps into a line ending in a bold dot at the
+  // last completed rep, so ladder length reads as horizontal reach. Off by
+  // default (the shipped V-shape card stays a pure dot plot).
+  let { series = [], yFmt = (v) => String(v), yLabel = '', legend = true, connect = false } =
+    $props()
 
   const W = 400
   const H = 150
@@ -42,6 +46,15 @@
   const repTicks = $derived(
     Array.from({ length: maxRep }, (_, i) => i + 1).filter((r) => maxRep <= 12 || r % 2 === 1),
   )
+
+  // connect mode: the polyline through a session's reps (rep order), and the
+  // last rep it reached (the emphasized terminal dot).
+  const polyOf = (s, si) =>
+    [...s.points]
+      .sort((a, b) => a.rep - b.rep)
+      .map((p) => `${x(p.rep) + dodge(si)},${y(p.v)}`)
+      .join(' ')
+  const lastRepOf = (s) => Math.max(...s.points.map((p) => p.rep))
 </script>
 
 <div class="dotplot">
@@ -60,13 +73,24 @@
       <text x={x(r)} y={H - 20} class="tick" text-anchor="middle">{r}</text>
     {/each}
     <text x={M.left + innerW / 2} y={H - 5} class="tick axis-name" text-anchor="middle">rep</text>
+    {#if connect}
+      {#each series as s, si (s.label)}
+        <polyline
+          points={polyOf(s, si)}
+          fill="none"
+          stroke={s.color}
+          class="trend"
+          class:dim={picked && picked.label !== s.label}
+        />
+      {/each}
+    {/if}
     {#each series as s, si (s.label)}
       {#each s.points as p (p.rep)}
         <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
         <circle
           cx={x(p.rep) + dodge(si)}
           cy={y(p.v)}
-          r="4.5"
+          r={connect ? (p.rep === lastRepOf(s) ? 6 : 2.5) : 4.5}
           fill={s.color}
           class="dot"
           class:dim={picked && !(picked.label === s.label && picked.rep === p.rep)}
@@ -121,6 +145,14 @@
   }
   .dot.dim {
     fill-opacity: 0.3;
+  }
+  .trend {
+    stroke-width: 1.5;
+    fill: none;
+    stroke-opacity: 0.55;
+  }
+  .trend.dim {
+    stroke-opacity: 0.15;
   }
   .tip {
     position: absolute;

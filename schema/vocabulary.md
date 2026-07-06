@@ -23,7 +23,7 @@ The controlled set, multi-valued per exercise, sourced from each exercise's goal
 - environment: pool, dry, gym.
 - pace: sprint, max_sprint, relaxed, race_pace.
 - technique variant (DNF only): legs_only, arms_only, normal, crawl.
-- hold target unit: absolute (s), pct_pb (%), contraction_relative (1C + X s; 0 = until 1C), qualitative (submax / strong_submax / max / close_to_max).
+- hold target unit: absolute (s), pct_pb (%), contraction_relative (1C + X s; 0 = until 1C), qualitative (first_discomfort / submax / strong_submax / max / close_to_max).
 - distance target unit: absolute (m), pct_pb (%), qualitative, computed (e.g. min_of, pct_less_than_previous).
 - recovery target type: absolute, cap, inequality, qualitative (minimal / adequate / full); unit time or breaths.
 - termination: fixed_n, range, until_1c, until_utb, until_failure, until_quality_drops, duration_capped.

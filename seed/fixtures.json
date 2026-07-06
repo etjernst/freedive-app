@@ -4,7 +4,7 @@
     {
       "schema_version": 1,
       "id": "sta-nwu-submax",
-      "name": "NWU sub-max",
+      "name": "NWU sub-max or max",
       "environment": "pool",
       "role": "main",
       "discipline": "STA",
@@ -29,7 +29,7 @@
     {
       "schema_version": 1,
       "id": "sta-nwu-submax-moving",
-      "name": "NWU sub-max with movement",
+      "name": "NWU sub-max or max (moving)",
       "environment": "pool",
       "role": "main",
       "discipline": "STA",
@@ -54,7 +54,7 @@
     {
       "schema_version": 1,
       "id": "sta-co2-increasing",
-      "name": "CO2 table, increasing holds",
+      "name": "CO2 increasing",
       "environment": "pool",
       "role": "main",
       "discipline": "STA",
@@ -77,7 +77,7 @@
     {
       "schema_version": 1,
       "id": "sta-co2-vshape",
-      "name": "CO2 table, V-shaped",
+      "name": "CO2 V-shape",
       "environment": "pool",
       "role": "main",
       "discipline": "STA",
@@ -241,7 +241,7 @@
     {
       "schema_version": 1,
       "id": "sta-co2-1breath",
-      "name": "1-breath CO2 ladder",
+      "name": "CO2 1RB wonka",
       "environment": "pool",
       "role": "main",
       "discipline": "STA",
@@ -264,7 +264,7 @@
     {
       "schema_version": 1,
       "id": "sta-co2-short-intense",
-      "name": "Short & intense CO2",
+      "name": "CO2 2RB repeats",
       "environment": "pool",
       "role": "main",
       "discipline": "STA",
@@ -296,7 +296,7 @@
     {
       "schema_version": 1,
       "id": "sta-co2-decreasing-rec",
-      "name": "Medium & moderate CO2",
+      "name": "CO2 classic",
       "environment": "pool",
       "role": "main",
       "discipline": "STA",
@@ -401,7 +401,7 @@
     {
       "schema_version": 1,
       "id": "sta-co2-square",
-      "name": "Soft & medium CO2 (square breathing)",
+      "name": "Box breathing",
       "environment": "dry",
       "role": "main",
       "discipline": "STA",
@@ -426,7 +426,7 @@
     {
       "schema_version": 1,
       "id": "sta-co2-second-hold",
-      "name": "CO2, challenging second hold",
+      "name": "CO2 two-hold",
       "environment": "pool",
       "role": "main",
       "discipline": "STA",
@@ -472,7 +472,7 @@
     {
       "schema_version": 1,
       "id": "sta-el",
-      "name": "Empty-lung set",
+      "name": "EL reps",
       "environment": "pool",
       "role": "main",
       "discipline": "STA",
@@ -521,7 +521,7 @@
     {
       "schema_version": 1,
       "id": "sta-1c-plus",
-      "name": "First-contraction-plus ladder",
+      "name": "First contraction plus",
       "environment": "pool",
       "role": "main",
       "discipline": "STA",
@@ -602,7 +602,7 @@
     {
       "schema_version": 1,
       "id": "sta-frc-awareness",
-      "name": "FRC CO2 awareness",
+      "name": "FL → FRC",
       "environment": "pool",
       "role": "main",
       "discipline": "STA",
@@ -619,14 +619,91 @@
       "reps": [
         {
           "shape": "simple",
-          "lung_volume": "FRC"
+          "hold_target": {
+            "unit": "absolute",
+            "value": 60
+          },
+          "lung_volume": "FL",
+          "recovery": {
+            "type": "absolute",
+            "value": 0,
+            "unit": "time"
+          },
+          "note": "exhale to FRC, no breath"
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 15
+          },
+          "lung_volume": "FRC",
+          "recovery": {
+            "type": "absolute",
+            "value": 60,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 60
+          },
+          "lung_volume": "FL",
+          "recovery": {
+            "type": "absolute",
+            "value": 0,
+            "unit": "time"
+          },
+          "note": "exhale to FRC, no breath"
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 30
+          },
+          "lung_volume": "FRC",
+          "recovery": {
+            "type": "absolute",
+            "value": 60,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 60
+          },
+          "lung_volume": "FL",
+          "recovery": {
+            "type": "absolute",
+            "value": 0,
+            "unit": "time"
+          },
+          "note": "exhale to FRC, no breath"
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 45
+          },
+          "lung_volume": "FRC",
+          "recovery": {
+            "type": "absolute",
+            "value": 60,
+            "unit": "time"
+          }
         }
       ]
     },
     {
       "schema_version": 1,
       "id": "sta-high-volume",
-      "name": "High-volume holds",
+      "name": "High-volume 70-80% PB",
       "environment": "pool",
       "role": "main",
       "discipline": "STA",
@@ -651,7 +728,7 @@
     {
       "schema_version": 1,
       "id": "sta-progressive-fl",
-      "name": "Progressive FL to max",
+      "name": "Progressive FL",
       "environment": "pool",
       "role": "main",
       "discipline": "STA",

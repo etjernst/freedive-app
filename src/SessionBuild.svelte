@@ -33,6 +33,7 @@
   import Help from './lib/Help.svelte'
 
   const HOLD_QUAL = [
+    { value: 'first_discomfort', label: 'to first discomfort' },
     { value: 'submax', label: 'sub-max' },
     { value: 'strong_submax', label: 'strong sub-max' },
     { value: 'max', label: 'max' },

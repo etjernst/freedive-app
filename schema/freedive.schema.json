@@ -69,7 +69,7 @@
       "properties": {
         "unit": { "enum": ["absolute", "pct_pb", "contraction_relative", "qualitative"] },
         "value": {
-          "description": "absolute -> seconds; pct_pb -> percent; contraction_relative -> seconds added to 1C (0 = until 1C); qualitative -> one of submax/strong_submax/max/close_to_max",
+          "description": "absolute -> seconds; pct_pb -> percent; contraction_relative -> seconds added to 1C (0 = until 1C); qualitative -> one of first_discomfort/submax/strong_submax/max/close_to_max",
           "type": ["number", "string"]
         }
       }

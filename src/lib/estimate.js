@@ -6,7 +6,7 @@ import { repSegments } from './session.js'
 // fake number.
 
 // Qualitative hold/distance target as a fraction of PB.
-export const QUAL_PCT = { submax: 0.75, strong_submax: 0.8, close_to_max: 0.95, max: 1.0 }
+export const QUAL_PCT = { first_discomfort: 0.5, submax: 0.75, strong_submax: 0.8, close_to_max: 0.95, max: 1.0 }
 
 // Qualitative recovery as a multiple of the preceding effort's duration.
 export const QUAL_RECOVERY_MULT = { minimal: 1.0, adequate: 1.5, full: 2.0 }

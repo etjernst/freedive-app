@@ -52,6 +52,55 @@ export function exerciseRepHistory(sessions, templateId) {
 // oldest into gray rather than generating new hues.
 export const SERIES_COLORS = ['#5f8323', '#2f6ba8', '#c04a33', '#8c4bb0', '#b07a16']
 
+// Per-exercise rep-dot cards: the CO2 tables whose figure is the shipped dot
+// plot. `metric` names the headline number ('total' = total time under hold,
+// 'reps' = reps completed = ladder length); all four improve upward. Registry
+// drafted from docs/insights-metrics-review.md; rep-bar and session-dot
+// exercises join once their figure components exist.
+export const EXERCISE_METRICS = [
+  {
+    id: 'sta-co2-vshape',
+    title: 'CO2 V-shape',
+    metric: 'total',
+    blurb: 'Total time under hold per session; the dots show every rep.',
+  },
+  {
+    id: 'sta-co2-1breath',
+    title: 'CO2 1RB wonka',
+    metric: 'reps',
+    blurb: 'Reps completed is how far up the ladder you climbed; the dots show each hold.',
+  },
+  {
+    id: 'sta-co2-short-intense',
+    title: 'CO2 2RB repeats',
+    metric: 'total',
+    blurb: 'Total time under hold; a tough table, so more reps survived reads as more time.',
+  },
+  {
+    id: 'sta-co2-decreasing-rec',
+    title: 'CO2 classic',
+    metric: 'total',
+    blurb: 'Total time under hold across the shrinking-recovery ladder.',
+  },
+]
+
+// Color the most recent SERIES_COLORS.length instances oldest-first (hues are
+// never cycled), disambiguating same-day repeats with a #n suffix. Each series
+// carries total and reps so the card can headline either metric.
+export function exerciseSeries(rows) {
+  const shown = (rows ?? []).slice(-SERIES_COLORS.length)
+  return shown.map((r, i, arr) => ({
+    label:
+      arr.filter((x) => x.date === r.date).length > 1
+        ? `${r.date} #${arr.slice(0, i + 1).filter((x) => x.date === r.date).length}`
+        : r.date,
+    color: SERIES_COLORS[i],
+    points: r.points,
+    total: r.total,
+    reps: r.points.length,
+  }))
+}
+
 export function summarize(vals) {
   if (!vals?.length) return { n: 0, best: null, avg: null }
   const sum = vals.reduce((a, b) => a + b, 0)

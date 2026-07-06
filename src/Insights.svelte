@@ -1,14 +1,16 @@
 <script>
   import { app, setView } from './lib/store.svelte.js'
-  import {
-    collectStaHolds,
-    summarize,
-    maxByWarmup,
-    exerciseRepHistory,
-    SERIES_COLORS,
-  } from './lib/insights.js'
+  import { collectStaHolds, summarize, maxByWarmup, EXERCISE_METRICS } from './lib/insights.js'
   import { fmtMMSS } from './lib/settings.js'
-  import RepDotPlot from './lib/RepDotPlot.svelte'
+  import ExerciseRepCard from './lib/ExerciseRepCard.svelte'
+  import { demoSessions } from './lib/demoSessions.js'
+
+  // Demo mode (?demo=1) draws the per-exercise cards over fabricated 2024 data
+  // so exercises with little or no real history can be previewed; real data and
+  // the rest of the page are untouched.
+  const demo =
+    typeof location !== 'undefined' && new URLSearchParams(location.search).get('demo') === '1'
+  const exSessions = $derived(demo ? demoSessions : app.sessions)
 
   const all = $derived(collectStaHolds(app.sessions))
   const max = $derived(collectStaHolds(app.sessions, { maxOnly: true }))
@@ -19,21 +21,6 @@
   const warmupRows = $derived(maxByWarmup(app.sessions, { discipline: 'STA' }))
   const hasData = $derived(rows.some((r) => r.wet.n || r.dry.n) || warmupRows.length > 0)
 
-  // Per-exercise history prototype: the V-shaped CO2 table. Headline metric is
-  // total time under hold; the dot plot shows each rep. Only the most recent
-  // five instances get a series color, so hues are never cycled.
-  const vshapeAll = $derived(exerciseRepHistory(app.sessions, 'sta-co2-vshape'))
-  const vshape = $derived(vshapeAll.slice(-SERIES_COLORS.length))
-  const vshapeSeries = $derived(
-    vshape.map((r, i, arr) => ({
-      label: arr.filter((x) => x.date === r.date).length > 1
-        ? `${r.date} #${arr.slice(0, i + 1).filter((x) => x.date === r.date).length}`
-        : r.date,
-      color: SERIES_COLORS[i],
-      points: r.points,
-    })),
-  )
-
   const dash = (s) => fmtMMSS(s) || '—'
 </script>
 
@@ -43,14 +30,22 @@
     <p class="muted">Best and average hold by medium, from your logged static sessions.</p>
   </section>
 
-  {#if !hasData}
+  {#if demo}
+    <section class="card">
+      <p class="muted center">Demo data (fabricated 2024 sessions) — for previewing the cards only.</p>
+    </section>
+  {/if}
+
+  {#if !hasData && !demo}
     <section class="card">
       <p class="muted center">
         No static holds logged yet. Tag a static exercise wet or dry in the builder, log its
         actuals, and the comparison shows up here.
       </p>
     </section>
-  {:else}
+  {/if}
+
+  {#if hasData}
     {#each rows as row (row.label)}
       <section class="card">
         <h2>{row.label}</h2>
@@ -72,45 +67,25 @@
         {/if}
       </section>
     {/each}
+  {/if}
 
-    {#if vshape.length}
-      <section class="card">
-        <h2>CO2 table, V-shaped</h2>
-        <p class="muted">Total time under hold per session; the dots show every rep.</p>
-        <ul class="rank">
-          {#each vshapeSeries as s, i (s.label)}
-            <li>
-              <span class="rank-name"><span class="swatch" style="background:{s.color}"></span>{s.label}</span>
-              <span class="rank-val">
-                {fmtMMSS(vshape[i].total)}
-                <span class="muted">
-                  · {vshape[i].points.length} reps{i > 0 ? ` · ${vshape[i].total >= vshape[i - 1].total ? '+' : '−'}${fmtMMSS(Math.abs(vshape[i].total - vshape[i - 1].total))} vs prior` : ''}
-                </span>
-              </span>
-            </li>
-          {/each}
-        </ul>
-        <RepDotPlot series={vshapeSeries} yFmt={fmtMMSS} yLabel="hold time" legend={false} />
-        {#if vshapeAll.length > vshape.length}
-          <p class="muted">Showing the last {vshape.length} of {vshapeAll.length} sessions.</p>
-        {/if}
-      </section>
-    {/if}
+  {#each EXERCISE_METRICS as entry (entry.id)}
+    <ExerciseRepCard sessions={exSessions} {entry} />
+  {/each}
 
-    {#if warmupRows.length}
-      <section class="card">
-        <h2>Static max by warm-up</h2>
-        <p class="muted">Best max-attempt hold, grouped by the warm-up that preceded it.</p>
-        <ul class="rank">
-          {#each warmupRows as r (r.name)}
-            <li>
-              <span class="rank-name">{r.name}</span>
-              <span class="rank-val">{dash(r.best)} <span class="muted">· avg {dash(r.avg)} · n {r.n}</span></span>
-            </li>
-          {/each}
-        </ul>
-      </section>
-    {/if}
+  {#if hasData && warmupRows.length}
+    <section class="card">
+      <h2>Static max by warm-up</h2>
+      <p class="muted">Best max-attempt hold, grouped by the warm-up that preceded it.</p>
+      <ul class="rank">
+        {#each warmupRows as r (r.name)}
+          <li>
+            <span class="rank-name">{r.name}</span>
+            <span class="rank-val">{dash(r.best)} <span class="muted">· avg {dash(r.avg)} · n {r.n}</span></span>
+          </li>
+        {/each}
+      </ul>
+    </section>
   {/if}
 
   <div class="actions">
