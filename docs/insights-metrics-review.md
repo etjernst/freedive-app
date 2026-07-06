@@ -23,10 +23,10 @@ A comparison is gated only where the config changes what the metric counts rathe
 |---|---|---|---|---|---|
 | sta-nwu-submax | NWU sub-max or max | hold time | session dots | up | Sub-max by design, so this trends readiness, not capacity; show RPE beside it. |
 | sta-nwu-submax-moving | NWU sub-max or max (moving) | hold time | session dots | up | Same caveat; separate history from the still variant is the point of the split. |
-| sta-co2-increasing | CO2 increasing | last completed hold | rep dots | up | Until-failure: last completed hold = how far the ladder got. Total time under hold as secondary line. |
+| sta-co2-increasing | CO2 5 x RB increasing | last completed hold | rep dots | up | Until-failure: last completed hold = how far the ladder got. Total time under hold as secondary line. |
 | sta-co2-vshape | CO2 V-shape | total time under hold | rep dots | up | Shipped. Interrupted tables still count (the total is the point, unlike sweet-16). |
-| sta-co2-1breath | CO2 1RB wonka | reps completed | rep dots | up | Quality-drop termination makes reps the ladder length; total time secondary. Always run 1C+X, so no mode gate. |
-| sta-co2-short-intense | CO2 2RB repeats | total time under hold | rep dots | up | A brutal table where completing the intended reps is not a given, so total time is a real progress signal, not just showing up. Rep dots show each hold. |
+| sta-co2-1breath | CO2 1 x RB wonka | reps completed | rep dots | up | Quality-drop termination makes reps the ladder length; total time secondary. Always run 1C+X, so no mode gate. |
+| sta-co2-short-intense | CO2 2 x RB repeats | total time under hold | rep dots | up | A brutal table where completing the intended reps is not a given, so total time is a real progress signal, not just showing up. Rep dots show each hold. |
 | sta-co2-decreasing-rec | CO2 classic | total time under hold | rep dots | up | Reps are meant to be fixed as recovery shrinks, so total time under hold reads cleaner than a rep count and matches the sibling tables. Smallest recovery reached as secondary. |
 | sta-co2-square | Box breathing | total duration | session dots | up | Continuous protocol, one number per session. Box length shown as context (it sets intensity, not what the metric counts). |
 | sta-co2-second-hold | CO2 two-hold | second hold time | session dots | up | The first hold is setup; only the second hold is the target. First-hold %PB shown as context. |

@@ -66,13 +66,13 @@ export const EXERCISE_METRICS = [
   },
   {
     id: 'sta-co2-1breath',
-    title: 'CO2 1RB wonka',
+    title: 'CO2 1 x RB wonka',
     metric: 'reps',
     blurb: 'Reps completed is how far up the ladder you climbed; the dots show each hold.',
   },
   {
     id: 'sta-co2-short-intense',
-    title: 'CO2 2RB repeats',
+    title: 'CO2 2 x RB repeats',
     metric: 'total',
     blurb: 'Total time under hold; a tough table, so more reps survived reads as more time.',
   },

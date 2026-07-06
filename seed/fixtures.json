@@ -54,7 +54,7 @@
     {
       "schema_version": 1,
       "id": "sta-co2-increasing",
-      "name": "CO2 increasing",
+      "name": "CO2 5 x RB increasing",
       "environment": "pool",
       "role": "main",
       "discipline": "STA",
@@ -241,7 +241,7 @@
     {
       "schema_version": 1,
       "id": "sta-co2-1breath",
-      "name": "CO2 1RB wonka",
+      "name": "CO2 1 x RB wonka",
       "environment": "pool",
       "role": "main",
       "discipline": "STA",
@@ -264,7 +264,7 @@
     {
       "schema_version": 1,
       "id": "sta-co2-short-intense",
-      "name": "CO2 2RB repeats",
+      "name": "CO2 2 x RB repeats",
       "environment": "pool",
       "role": "main",
       "discipline": "STA",
