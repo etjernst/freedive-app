@@ -188,10 +188,6 @@ catalog = [
      "mental, co2",
      "A dynamic, then a STA hold, then another dynamic. (Not in the library; added.)",
      "leg-1 distance; STA duration; leg-2 distance."),
-    ("dyn-transition-ladder", "STA-to-dynamic transition ladder", "any", "main",
-     "mental, co2",
-     "2-3x STA to 1C/UTB then a dynamic, swimming further each dive.",
-     "mode: FL|crawl|FRC; n per mode (def 2-3)."),
     ("dyn-technique", "Technique drills", "DNF", "main",
      "technique",
      "Arms-only / legs-only / normal, counting strokes to reduce them.",
@@ -253,7 +249,7 @@ mapping = [
     ("DYN", "DYN 1", "max dive simulator", "main", "dyn-max-simulator", "80% PB, 2xRB, min{60m,30%PB}, 3xRB, max"),
     ("DYN", "DYN 2", "FRC DYNb + sprints", "main", "dyn-frc-sprint", "50-100m FRC, 4xRB, 3x25m sprints 10/20s rec, x3 sets"),
     ("DYN", "DYN 3", "elastic sprint into DNF max", "main", "dyn-elastic-sprint-max", "4x15s elastic, 15s rest, max DNF; 2 sets"),
-    ("DYN", "DYN 4", "STA-to-dynamic", "main", "dyn-transition-ladder", "2-3x STA to 1C/UTB then FL/crawl/FRC, further each dive"),
+    ("DYN", "DYN 4", "STA-to-dynamic", "main", "dyn-stop-start", "2-3x STA to 1C/UTB then FL/crawl/FRC, further each dive (was a transition-ladder exercise; folded into stop-start)"),
     ("DYN", "DYN 5", "Ex1 long dives", "main", "dyn-volume-maximize", "3 x long, 3 min recovery, MAXIMIZE total distance"),
     ("DYN", "DYN 5", "Ex2 DNF legs/normal", "main", "dyn-volume-technique", "8-10x {50m legs-only, 50m normal}; DNF"),
     ("DYN", "DYN 6", "Ex1 descending", "main", "dyn-descending", "long, -20%, -20% again, minimal recovery"),
@@ -395,7 +391,6 @@ TERMINATION = {
     "sta-el-fl-switch": {"type": "until_failure"},
     "sta-co2-1breath": {"type": "until_quality_drops"},
     "sta-co2-square": {"type": "duration_capped", "duration_s": 1800},
-    "dyn-transition-ladder": {"type": "range", "n_min": 2, "n_max": 3},
 }
 
 # Outer-repeat count (default 1 elsewhere): flattened nested sets, plus the

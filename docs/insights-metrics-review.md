@@ -71,7 +71,6 @@ A comparison is gated only where the config changes what the metric counts rathe
 | dyn-stop-start | Stop-start (STA then swim) | swim distance | session dots | up | Comparable only when the preceding hold duration matches; card should show the hold as context. |
 | dyn-start-stop | Start-stop (swim then STA) | hold time after the swim | session dots | up | Mirror case: comparable only at the same swim distance. |
 | dyn-stop-dyn | Stop in the middle (dive-STA-dive) | total distance (both legs) | session dots | up | STA duration shown as context; leg-2 distance is the tiebreaker if totals equal. |
-| dyn-transition-ladder | STA-to-dynamic transition ladder | longest dynamic reached | rep dots | up | Mode (FL/crawl/FRC) is the config. |
 | dyn-technique | Technique drills | strokes per length | session dots | down | Data gap: stroke counts currently live in remarks at best; needs a capture field before this card exists. |
 | dyn-tortuga | Tortuga (slow crawl) | time | session dots | up | Its own discipline; feeds the tortuga PB. |
 | dyn-broken-200 | Broken 200m | none for now | none | n/a | The honest metric is total elapsed time including recoveries, which is not captured; data gap, revisit with aggregate-style logging. |

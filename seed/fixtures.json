@@ -1616,32 +1616,6 @@
     },
     {
       "schema_version": 1,
-      "id": "dyn-transition-ladder",
-      "name": "STA-to-dynamic transition ladder",
-      "environment": "pool",
-      "role": "main",
-      "discipline": "any",
-      "capacity_tags": [
-        "mental",
-        "co2"
-      ],
-      "goal": "2-3x STA to 1C/UTB then a dynamic, swimming further each dive.",
-      "cues": "mode: FL|crawl|FRC; n per mode (def 2-3).",
-      "log_mode": "per_rep",
-      "set_repeat": 1,
-      "termination": {
-        "type": "range",
-        "n_min": 2,
-        "n_max": 3
-      },
-      "reps": [
-        {
-          "shape": "simple"
-        }
-      ]
-    },
-    {
-      "schema_version": 1,
       "id": "dyn-technique",
       "name": "Technique drills",
       "environment": "pool",
