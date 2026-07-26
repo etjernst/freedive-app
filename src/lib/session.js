@@ -54,6 +54,16 @@ export const SPEED_OPTS = [
   { value: 'max_sprint', label: 'max sprint' },
 ]
 
+// Short display form of a lung volume; RV reads as EL everywhere in the UI.
+export function lungShort(v) {
+  return v === 'RV' ? 'EL' : v
+}
+
+// Whether a rep list mixes lung volumes (e.g. an alternating FL/EL table).
+export function mixedLung(reps) {
+  return new Set((reps ?? []).map((r) => r.lung_volume ?? 'FL')).size > 1
+}
+
 const DYNAMIC = new Set(['DYN', 'DYNb', 'DNF'])
 
 export function isDynamic(discipline) {
@@ -422,7 +432,8 @@ export function describeRecovery(r) {
 }
 
 // One planned rep as a single compact line: its phases joined, then lung volume
-// (only when not full lung), pace (when set), and the recovery that follows. The
+// (omitted when full lung, unless the exercise mixes volumes), pace (when set),
+// and the recovery that follows. The
 // trailing recovery of a single-set exercise is dropped (it leads nowhere).
 // Shared by the in-app plan overview and the Obsidian export so the two never
 // drift; RV reads as EL, matching the log view's context line.
@@ -436,8 +447,12 @@ export function planRepLine(rep, ex, isLast) {
     else if (seg === 'continuous') parts.push(rep.continuous?.pattern || 'continuous')
   }
   let line = parts.filter(Boolean).join(' → ') || '—'
-  if (rep.lung_volume && rep.lung_volume !== 'FL') {
-    line += ` · ${rep.lung_volume === 'RV' ? 'EL' : rep.lung_volume}`
+  // FL is the unstated default (an unset volume reads as FL), except in a
+  // mixed-volume exercise (an alternating FL/EL table) where every rep names
+  // its volume.
+  const lung = rep.lung_volume ?? 'FL'
+  if (lung !== 'FL' || mixedLung(ex.planned?.reps)) {
+    line += ` · ${lungShort(lung)}`
   }
   if (rep.pace) line += ` · ${rep.pace.replace('_', ' ')}`
   const showRec = rep.recovery && !((ex.set_repeat ?? 1) <= 1 && isLast)

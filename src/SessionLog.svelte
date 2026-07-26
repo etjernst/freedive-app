@@ -22,6 +22,8 @@
     FEELS,
     LUNG_OPTS,
     SPEED_OPTS,
+    lungShort,
+    mixedLung,
   } from './lib/session.js'
   import { fmtMMSS } from './lib/settings.js'
   import MMSS from './lib/MMSS.svelte'
@@ -95,7 +97,9 @@
   function addRep(ex) {
     const last = ex.actual.reps[ex.actual.reps.length - 1]
     const ar = blankActualRep(last?.plan_index ?? null)
-    ar.lung_volume = exLung(ex)
+    // Seed from the last rep, not exLung: in a mixed-volume exercise exLung
+    // reads 'mixed', which is a selector state, never a rep value.
+    ar.lung_volume = last?.lung_volume ?? 'FL'
     ar.pace = exSpeed(ex) || null
     ex.actual.reps = [...ex.actual.reps, ar]
   }
@@ -110,10 +114,14 @@
   // Exercise-level realized lung volume / pace: read the first actual rep and
   // write all of them, with per-rep overrides under each rep's "More" details.
   // Mirrors the builder's plan-side controls but writes to ex.actual.reps.
+  // Reps with differing volumes (an alternating table) read as 'mixed', a
+  // selector-only state; picking a real volume still overwrites every rep.
   function exLung(ex) {
+    if (mixedLung(ex.actual.reps)) return 'mixed'
     return ex.actual.reps[0]?.lung_volume ?? 'FL'
   }
   function setExLung(ex, v) {
+    if (v === 'mixed') return
     ex.actual.reps = ex.actual.reps.map((r) => ({ ...r, lung_volume: v }))
   }
   function exSpeed(ex) {
@@ -218,6 +226,7 @@
         <div class="field">
           <span class="lbl">Lung volume</span>
           <select value={exLung(ex)} onchange={(e) => setExLung(ex, e.currentTarget.value)}>
+            {#if exLung(ex) === 'mixed'}<option value="mixed">mixed (per rep)</option>{/if}
             {#each LUNG_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
           </select>
         </div>
@@ -270,7 +279,7 @@
                 {#if p}
                   {#if segs.includes('hold')}plan {describeHold(p.hold_target)}{/if}
                   {#if segs.includes('distance')} {describeDistance(p.distance_target)}{/if}
-                  {#if p.lung_volume && p.lung_volume !== 'FL'} · {p.lung_volume === 'RV' ? 'EL' : p.lung_volume}{/if}
+                  {#if (p.lung_volume ?? 'FL') !== 'FL' || mixedLung(ex.planned?.reps)} · {lungShort(p.lung_volume ?? 'FL')}{/if}
                   {#if p.pace} · {p.pace.replace('_', ' ')}{/if}
                   {#if p.recovery} · rec {describeRecovery(p.recovery)}{/if}
                 {:else}extra rep{/if}

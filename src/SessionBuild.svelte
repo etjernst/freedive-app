@@ -18,6 +18,7 @@
     SHAPES,
     LUNG_OPTS,
     SPEED_OPTS,
+    mixedLung,
   } from './lib/session.js'
   import { suggestionsFor } from './lib/affinities.js'
   import { LIB_FILTERS, filterLibrary, discLabel, roleLabel } from './lib/library.js'
@@ -150,10 +151,14 @@
   }
   // Exercise-level lung volume / speed: a convenience that reads the first rep
   // and writes all reps, with per-rep overrides available under "More options".
+  // Reps with differing volumes (an alternating table) read as 'mixed', a
+  // selector-only state; picking a real volume still overwrites every rep.
   function exLung(ex) {
+    if (mixedLung(ex.planned.reps)) return 'mixed'
     return ex.planned.reps[0]?.lung_volume ?? 'FL'
   }
   function setExLung(ex, v) {
+    if (v === 'mixed') return
     ex.planned.reps = ex.planned.reps.map((r) => ({ ...r, lung_volume: v }))
   }
   function exSpeed(ex) {
@@ -381,6 +386,7 @@
       <div class="field">
         <span class="lbl">Lung volume</span>
         <select value={exLung(ex)} onchange={(e) => setExLung(ex, e.currentTarget.value)}>
+          {#if exLung(ex) === 'mixed'}<option value="mixed">mixed (per rep)</option>{/if}
           {#each LUNG_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
         </select>
       </div>
