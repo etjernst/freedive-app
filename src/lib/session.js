@@ -444,7 +444,14 @@ export function planRepLine(rep, ex, isLast) {
     if (seg === 'hold') parts.push(describeHold(rep.hold_target))
     else if (seg === 'distance') parts.push(describeDistance(rep.distance_target))
     else if (seg === 'distance2') parts.push(describeDistance(rep.distance2_target))
-    else if (seg === 'continuous') parts.push(rep.continuous?.pattern || 'continuous')
+    else if (seg === 'continuous') {
+      const c = rep.continuous ?? {}
+      const bits = []
+      if (rep.distance_target) bits.push(describeDistance(rep.distance_target))
+      if (c.duration_s) bits.push(fmtMMSS(c.duration_s))
+      bits.push(c.pattern || c.stroke_cadence || 'continuous')
+      parts.push(bits.join(' '))
+    }
   }
   let line = parts.filter(Boolean).join(' → ') || '—'
   // FL is the unstated default (an unset volume reads as FL), except in a
