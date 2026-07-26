@@ -22,7 +22,15 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "prep_breathing": {
+            "pattern": "5:5",
+            "duration_s": 300
+          },
+          "hold_target": {
+            "unit": "qualitative",
+            "value": "submax"
+          }
         }
       ]
     },
@@ -47,7 +55,16 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "prep_breathing": {
+            "pattern": "4:6",
+            "duration_s": 300
+          },
+          "hold_target": {
+            "unit": "qualitative",
+            "value": "submax"
+          },
+          "note": "constant movement: paddle hands, move arms, never still"
         }
       ]
     },
@@ -70,7 +87,76 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 120
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 5,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 140
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 5,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 160
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 5,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 180
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 5,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 200
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 5,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 220
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 5,
+            "unit": "breaths"
+          }
         }
       ]
     },
@@ -257,7 +343,76 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "hold_target": {
+            "unit": "contraction_relative",
+            "value": 0
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 1,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "contraction_relative",
+            "value": 10
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 1,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "contraction_relative",
+            "value": 20
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 1,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "contraction_relative",
+            "value": 30
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 1,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "contraction_relative",
+            "value": 40
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 1,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "contraction_relative",
+            "value": 50
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 1,
+            "unit": "breaths"
+          }
         }
       ]
     },
@@ -419,7 +574,11 @@
       },
       "reps": [
         {
-          "shape": "continuous-protocol"
+          "shape": "continuous-protocol",
+          "continuous": {
+            "duration_s": 1800,
+            "pattern": "10s square (10 in / 10 hold / 10 out / 10 hold)"
+          }
         }
       ]
     },
@@ -442,7 +601,28 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "prep_breathing": {
+            "pattern": "5:5",
+            "duration_s": 300
+          },
+          "hold_target": {
+            "unit": "pct_pb",
+            "value": 70
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 3,
+            "unit": "breaths"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "qualitative",
+            "value": "max"
+          },
+          "note": "the target: aim to increase this second hold"
         }
       ]
     },
@@ -465,7 +645,100 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "prep_breathing": {
+            "pattern": "2:2",
+            "duration_s": 60
+          },
+          "hold_target": {
+            "unit": "absolute",
+            "value": 60
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 60,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "prep_breathing": {
+            "pattern": "2:2",
+            "duration_s": 60
+          },
+          "hold_target": {
+            "unit": "absolute",
+            "value": 120
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 60,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "prep_breathing": {
+            "pattern": "2:2",
+            "duration_s": 60
+          },
+          "hold_target": {
+            "unit": "absolute",
+            "value": 180
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 60,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "prep_breathing": {
+            "pattern": "2:2",
+            "duration_s": 60
+          },
+          "hold_target": {
+            "unit": "absolute",
+            "value": 240
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 60,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "prep_breathing": {
+            "pattern": "2:2",
+            "duration_s": 60
+          },
+          "hold_target": {
+            "unit": "absolute",
+            "value": 270
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 60,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "prep_breathing": {
+            "pattern": "2:2",
+            "duration_s": 60
+          },
+          "hold_target": {
+            "unit": "absolute",
+            "value": 300
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 60,
+            "unit": "time"
+          }
         }
       ]
     },
@@ -483,14 +756,75 @@
       "goal": "RV/EL holds, increasing duration.",
       "cues": "n (def 5); style: relaxed-belly|pull-and-release (def relaxed-belly); recovery (def 2-3 min).",
       "log_mode": "per_rep",
-      "set_repeat": 5,
+      "set_repeat": 1,
       "termination": {
         "type": "fixed_n"
       },
       "reps": [
         {
           "shape": "simple",
-          "lung_volume": "RV"
+          "lung_volume": "RV",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 60
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 150,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "RV",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 75
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 150,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "RV",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 90
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 150,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "RV",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 105
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 150,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "RV",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 120
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 150,
+            "unit": "time"
+          }
         }
       ]
     },
@@ -514,7 +848,112 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "lung_volume": "RV",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 45
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 120,
+            "unit": "time"
+          },
+          "note": "4:6 HV during recovery"
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "FL",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 150
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 120,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "RV",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 60
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 120,
+            "unit": "time"
+          },
+          "note": "4:6 HV during recovery"
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "FL",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 180
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 120,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "RV",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 75
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 120,
+            "unit": "time"
+          },
+          "note": "4:6 HV during recovery"
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "FL",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 210
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 120,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "RV",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 90
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 120,
+            "unit": "time"
+          },
+          "note": "4:6 HV during recovery"
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "FL",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 240
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 120,
+            "unit": "time"
+          }
         }
       ]
     },
@@ -721,7 +1160,37 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "hold_target": {
+            "unit": "pct_pb",
+            "value": 70
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "full"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "pct_pb",
+            "value": 70
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "full"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "pct_pb",
+            "value": 70
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "full"
+          }
         }
       ]
     },
@@ -794,7 +1263,15 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "prep_breathing": {
+            "pattern": "5:5",
+            "duration_s": 300
+          },
+          "hold_target": {
+            "unit": "qualitative",
+            "value": "max"
+          }
         }
       ]
     },
@@ -817,7 +1294,12 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "hold_target": {
+            "unit": "qualitative",
+            "value": "submax"
+          },
+          "note": "light and relaxed; finish on something easy"
         }
       ]
     },
@@ -841,7 +1323,40 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "hold_target": {
+            "unit": "contraction_relative",
+            "value": 20
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 180,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "contraction_relative",
+            "value": 40
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 180,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "contraction_relative",
+            "value": 60
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 180,
+            "unit": "time"
+          }
         }
       ]
     },
@@ -865,7 +1380,43 @@
       "reps": [
         {
           "shape": "simple",
-          "lung_volume": "FRC"
+          "lung_volume": "FRC",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 90
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 210,
+            "unit": "time"
+          },
+          "note": "through the first hard contractions, not to hypoxia"
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "FRC",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 105
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 210,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "FRC",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 120
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 210,
+            "unit": "time"
+          }
         }
       ]
     },
@@ -889,7 +1440,35 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "hold_target": {
+            "unit": "contraction_relative",
+            "value": 0
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "full"
+          },
+          "note": "repeat until 1C arrives at the right time"
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "contraction_relative",
+            "value": 0
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "full"
+          }
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "qualitative",
+            "value": "max"
+          },
+          "note": "only once the 1C timing feels right"
         }
       ]
     },
@@ -913,7 +1492,55 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "lung_volume": "RV",
+          "hold_target": {
+            "unit": "qualitative",
+            "value": "first_discomfort"
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 180,
+            "unit": "time"
+          },
+          "note": "easy"
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "RV",
+          "hold_target": {
+            "unit": "qualitative",
+            "value": "submax"
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 180,
+            "unit": "time"
+          },
+          "note": "moderate"
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "RV",
+          "hold_target": {
+            "unit": "qualitative",
+            "value": "strong_submax"
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 180,
+            "unit": "time"
+          },
+          "note": "hard"
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "FL",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 240
+          },
+          "note": "~1.5 min under PB; at least 1 min of contractions"
         }
       ]
     },
@@ -937,7 +1564,28 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "prep_breathing": {
+            "pattern": "5:5",
+            "duration_s": 300
+          },
+          "hold_target": {
+            "unit": "absolute",
+            "value": 270
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 300,
+            "unit": "time"
+          },
+          "note": "~PB-1 min; strong HV during recovery"
+        },
+        {
+          "shape": "simple",
+          "hold_target": {
+            "unit": "qualitative",
+            "value": "max"
+          }
         }
       ]
     },
@@ -960,7 +1608,82 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "lung_volume": "RV",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 60
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 180,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "RV",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 75
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 180,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "RV",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 90
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 180,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "FL",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 150
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 300,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "FL",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 180
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 300,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "lung_volume": "FL",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 210
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 300,
+            "unit": "time"
+          }
         }
       ]
     },
@@ -984,7 +1707,12 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "distance_target": {
+            "unit": "qualitative",
+            "value": "70-80% feel"
+          },
+          "note": "no distance in mind; focus on the sensations"
         }
       ]
     },
@@ -1007,7 +1735,11 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "distance_target": {
+            "unit": "qualitative",
+            "value": "max"
+          }
         }
       ]
     },
@@ -1085,7 +1817,52 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 75,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 75,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 75,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 75,
+            "unit": "time"
+          }
         }
       ]
     },
@@ -1109,7 +1886,53 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "distance_target": {
+            "unit": "qualitative",
+            "value": "maximize"
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 120,
+            "unit": "time"
+          },
+          "note": "goal: maximize total distance across the dives"
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "qualitative",
+            "value": "maximize"
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 120,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "qualitative",
+            "value": "maximize"
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 120,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "qualitative",
+            "value": "maximize"
+          },
+          "recovery": {
+            "type": "absolute",
+            "value": 120,
+            "unit": "time"
+          }
         }
       ]
     },
@@ -1127,13 +1950,35 @@
       "goal": "Sets alternating legs-only and normal (or arms-only), minimal recovery.",
       "cues": "n sets (def 8-10); block (def 50m legs-only + 50m normal); recovery (def minimal).",
       "log_mode": "per_rep",
-      "set_repeat": 1,
+      "set_repeat": 8,
+      "recovery_inter": {
+        "type": "absolute",
+        "value": 150,
+        "unit": "time"
+      },
       "termination": {
         "type": "fixed_n"
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "technique_variant": "legs_only",
+          "recovery": {
+            "type": "qualitative",
+            "value": "minimal"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "technique_variant": "normal"
         }
       ]
     },
@@ -1152,6 +1997,11 @@
       "cues": "ladder (def 25-50-75-50-25); recovery (def minimal/confident); n pyramids (user adds as many as wanted); distances shorter for DNF.",
       "log_mode": "per_rep",
       "set_repeat": 1,
+      "recovery_inter": {
+        "type": "absolute",
+        "value": 300,
+        "unit": "time"
+      },
       "termination": {
         "type": "fixed_n"
       },
@@ -1228,6 +2078,10 @@
       "cues": "ladder (def 75-50-25-50-75); recovery (def < swim time, cap 90s); sets (def 2).",
       "log_mode": "per_rep",
       "set_repeat": 1,
+      "recovery_inter": {
+        "type": "qualitative",
+        "value": "adequate"
+      },
       "termination": {
         "type": "fixed_n"
       },
@@ -1397,7 +2251,29 @@
       "reps": [
         {
           "shape": "simple",
-          "pace": "sprint"
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "pace": "max_sprint",
+          "recovery": {
+            "type": "cap",
+            "value": 120,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "pace": "max_sprint",
+          "recovery": {
+            "type": "cap",
+            "value": 120,
+            "unit": "time"
+          }
         }
       ]
     },
@@ -1415,6 +2291,11 @@
       "cues": "FRC distance (def 50-100m); sprint ladder (def 3x25m, growing recovery); sets (def 3).",
       "log_mode": "per_rep",
       "set_repeat": 2,
+      "recovery_inter": {
+        "type": "absolute",
+        "value": 240,
+        "unit": "time"
+      },
       "termination": {
         "type": "fixed_n"
       },
@@ -1532,13 +2413,76 @@
       "goal": "Elastic-band max sprints then straight into a max dive.",
       "cues": "sprints (def 4 x 15s, 15s rest); sets (def 2).",
       "log_mode": "per_rep",
-      "set_repeat": 1,
+      "set_repeat": 2,
+      "recovery_inter": {
+        "type": "absolute",
+        "value": 180,
+        "unit": "time"
+      },
       "termination": {
         "type": "fixed_n"
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "distance_target": {
+            "unit": "qualitative",
+            "value": "15s elastic sprint"
+          },
+          "pace": "max_sprint",
+          "recovery": {
+            "type": "absolute",
+            "value": 15,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "qualitative",
+            "value": "15s elastic sprint"
+          },
+          "pace": "max_sprint",
+          "recovery": {
+            "type": "absolute",
+            "value": 15,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "qualitative",
+            "value": "15s elastic sprint"
+          },
+          "pace": "max_sprint",
+          "recovery": {
+            "type": "absolute",
+            "value": 15,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "qualitative",
+            "value": "15s elastic sprint"
+          },
+          "pace": "max_sprint",
+          "recovery": {
+            "type": "absolute",
+            "value": 0,
+            "unit": "time"
+          },
+          "note": "straight into the max"
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "qualitative",
+            "value": "max"
+          },
+          "note": "max DNF immediately after the last sprint"
         }
       ]
     },
@@ -1562,7 +2506,31 @@
       },
       "reps": [
         {
-          "shape": "stop-start"
+          "shape": "stop-start",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 90
+          },
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "full"
+          },
+          "note": "swim further on each rep"
+        },
+        {
+          "shape": "stop-start",
+          "hold_target": {
+            "unit": "absolute",
+            "value": 90
+          },
+          "distance_target": {
+            "unit": "absolute",
+            "value": 65
+          }
         }
       ]
     },
@@ -1586,7 +2554,31 @@
       },
       "reps": [
         {
-          "shape": "start-stop"
+          "shape": "start-stop",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 60
+          },
+          "hold_target": {
+            "unit": "absolute",
+            "value": 15
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "full"
+          },
+          "note": "hold longer on each rep"
+        },
+        {
+          "shape": "start-stop",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 60
+          },
+          "hold_target": {
+            "unit": "absolute",
+            "value": 20
+          }
         }
       ]
     },
@@ -1610,7 +2602,38 @@
       },
       "reps": [
         {
-          "shape": "stop-in-the-middle"
+          "shape": "stop-in-the-middle",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "hold_target": {
+            "unit": "absolute",
+            "value": 20
+          },
+          "distance2_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "recovery": {
+            "type": "qualitative",
+            "value": "full"
+          }
+        },
+        {
+          "shape": "stop-in-the-middle",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "hold_target": {
+            "unit": "absolute",
+            "value": 30
+          },
+          "distance2_target": {
+            "unit": "absolute",
+            "value": 25
+          }
         }
       ]
     },
@@ -1633,7 +2656,149 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "technique_variant": "arms_only",
+          "recovery": {
+            "type": "qualitative",
+            "value": "adequate"
+          },
+          "note": "count strokes; aim to reduce them"
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "technique_variant": "arms_only",
+          "recovery": {
+            "type": "qualitative",
+            "value": "adequate"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "technique_variant": "arms_only",
+          "recovery": {
+            "type": "qualitative",
+            "value": "adequate"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "technique_variant": "arms_only",
+          "recovery": {
+            "type": "qualitative",
+            "value": "adequate"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "technique_variant": "legs_only",
+          "recovery": {
+            "type": "qualitative",
+            "value": "adequate"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "technique_variant": "legs_only",
+          "recovery": {
+            "type": "qualitative",
+            "value": "adequate"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "technique_variant": "legs_only",
+          "recovery": {
+            "type": "qualitative",
+            "value": "adequate"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "technique_variant": "legs_only",
+          "recovery": {
+            "type": "qualitative",
+            "value": "adequate"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "technique_variant": "normal",
+          "recovery": {
+            "type": "qualitative",
+            "value": "adequate"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "technique_variant": "normal",
+          "recovery": {
+            "type": "qualitative",
+            "value": "adequate"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "technique_variant": "normal",
+          "recovery": {
+            "type": "qualitative",
+            "value": "adequate"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "technique_variant": "normal",
+          "recovery": {
+            "type": "qualitative",
+            "value": "adequate"
+          }
         }
       ]
     },
@@ -1657,7 +2822,25 @@
       },
       "reps": [
         {
-          "shape": "simple"
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "pace": "relaxed",
+          "recovery": {
+            "type": "qualitative",
+            "value": "adequate"
+          },
+          "note": "longest possible time; distance irrelevant"
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "pace": "relaxed"
         }
       ]
     },
@@ -1752,7 +2935,15 @@
       },
       "reps": [
         {
-          "shape": "continuous-protocol"
+          "shape": "continuous-protocol",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 400
+          },
+          "continuous": {
+            "stroke_cadence": "every 7+ strokes"
+          },
+          "note": "300-500m, no stopping"
         }
       ]
     }

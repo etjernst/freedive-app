@@ -396,20 +396,33 @@ TERMINATION = {
 # Outer-repeat count (default 1 elsewhere): flattened nested sets, plus the
 # "identical reps" tables encoded as one rep row repeated N times rather than as
 # N listed rows. Total planned reps is always reps.length x set_repeat.
+_BREATHS = lambda n: {"type": "absolute", "value": n, "unit": "breaths"}
+_SECS = lambda n: {"type": "absolute", "value": n, "unit": "time"}
+_MINIMAL = {"type": "qualitative", "value": "minimal"}
+_ADEQUATE = {"type": "qualitative", "value": "adequate"}
+_FULL = {"type": "qualitative", "value": "full"}
+
 SET_REPEAT = {
     "dyn-frc-sprint": 2,
-    "sta-co2-short-intense": 6,  # 6 identical sustainable FL holds, 2-breath rec
-    "sta-el": 5,                 # 5 EL holds (durations set per-rep as they climb)
-    "dyn-sweet16": 16,           # 16 x 25m sprints
+    "sta-co2-short-intense": 6,      # 6 identical sustainable FL holds, 2-breath rec
+    "dyn-sweet16": 16,               # 16 x 25m sprints
+    "dyn-volume-technique": 8,       # 8 x {50m legs-only + 50m normal}
+    "dyn-elastic-sprint-max": 2,     # 2 sets of {4 elastic sprints + max DNF}
+}
+
+# Between-sets recovery for the set_repeat exercises whose sets are real blocks
+# (not the identical-reps encoding trick, where the per-rep recovery is the rest).
+RECOVERY_INTER = {
+    "dyn-frc-sprint": _SECS(240),          # up to 4 min between sets (DYN 2)
+    "dyn-elastic-sprint-max": _SECS(180),  # 3 min between sets (DYN 3)
+    "dyn-volume-technique": _SECS(150),    # 2-3 min between sets (DYN 5)
+    "dyn-pyramid": _SECS(300),             # 5 min rest, then another set (DYN 7)
+    "dyn-inverse-pyramid": _ADEQUATE,      # adequate recovery between sets (DYN 10)
 }
 
 # Pre-built rep rows for the compound / nested-set exercises, so a fresh install
 # (or a device after "Refresh library") gets the real structure instead of one
 # placeholder rep. Everything else defaults to a single editable rep below.
-_BREATHS = lambda n: {"type": "absolute", "value": n, "unit": "breaths"}
-_SECS = lambda n: {"type": "absolute", "value": n, "unit": "time"}
-_MINIMAL = {"type": "qualitative", "value": "minimal"}
-_FULL = {"type": "qualitative", "value": "full"}
 REPS = {
     # DYN 1: 80% PB, short leg (min{60m,30% PB}), then a max push.
     "dyn-max-simulator": [
@@ -500,20 +513,248 @@ REPS = {
         {"shape": "simple", "distance_target": {"unit": "absolute", "value": 25},
          "pace": "sprint", "recovery": _MINIMAL},
     ],
+    # ---- first-pass structure for the previously bare templates ----
+    # Example values grounded in the library notes and the logged history
+    # (2026-01 to 2026-06); flagged inline where invented.
+    # STA 1 Ex1: 5 min strong HV, one sub-max hold, full recovery.
+    "sta-nwu-submax": [
+        {"shape": "simple", "prep_breathing": {"pattern": "5:5", "duration_s": 300},
+         "hold_target": {"unit": "qualitative", "value": "submax"}},
+    ],
+    # STA 2 Ex1: soft HV, sub-max with constant movement.
+    "sta-nwu-submax-moving": [
+        {"shape": "simple", "prep_breathing": {"pattern": "4:6", "duration_s": 300},
+         "hold_target": {"unit": "qualitative", "value": "submax"},
+         "note": "constant movement: paddle hands, move arms, never still"},
+    ],
+    # STA 1 Ex2: start 2:00, +20s per hold, 5 recovery breaths, until failure.
+    "sta-co2-increasing": [
+        {"shape": "simple", "hold_target": {"unit": "absolute", "value": s},
+         "recovery": _BREATHS(5)} for s in (120, 140, 160, 180, 200, 220)
+    ],
+    # STA 21: 1C ladder, +10s per rep, 1-breath recovery, until quality drops.
+    "sta-co2-1breath": [
+        {"shape": "simple", "hold_target": {"unit": "contraction_relative", "value": x},
+         "recovery": _BREATHS(1)} for x in (0, 10, 20, 30, 40, 50)
+    ],
+    # STA 17: 10s square breathing for 30 minutes (dry).
+    "sta-co2-square": [
+        {"shape": "continuous-protocol",
+         "continuous": {"duration_s": 1800,
+                        "pattern": "10s square (10 in / 10 hold / 10 out / 10 hold)"}},
+    ],
+    # STA 19: ~70% PB, 3 recovery breaths, then the max-effort second hold.
+    "sta-co2-second-hold": [
+        {"shape": "simple", "prep_breathing": {"pattern": "5:5", "duration_s": 300},
+         "hold_target": {"unit": "pct_pb", "value": 70}, "recovery": _BREATHS(3)},
+        {"shape": "simple", "hold_target": {"unit": "qualitative", "value": "max"},
+         "note": "the target: aim to increase this second hold"},
+    ],
+    # STA 7/13/14 oxygen table; ladder from the 2026-02-22 log (1:00 -> 4:30,
+    # 1 min 2:2 HV between), +1 min per hold then +30s once hard, until failure.
+    "sta-get-high": [
+        {"shape": "simple", "prep_breathing": {"pattern": "2:2", "duration_s": 60},
+         "hold_target": {"unit": "absolute", "value": s}, "recovery": _SECS(60)}
+        for s in (60, 120, 180, 240, 270, 300)
+    ],
+    # STA 3/11: EL holds increasing progressively, 2-3 min recovery.
+    # Ladder invented around the logged EL range (0:45-2:00; EL max 2:42).
+    "sta-el": [
+        {"shape": "simple", "lung_volume": "RV",
+         "hold_target": {"unit": "absolute", "value": s}, "recovery": _SECS(150)}
+        for s in (60, 75, 90, 105, 120)
+    ],
+    # STA 9: alternating EL/FL ladder as logged 2026-03-19 (EL +15s, FL +30s),
+    # 2 min 4:6 HV recovery, until failure.
+    "sta-el-fl-switch": [
+        rep
+        for el, fl in ((45, 150), (60, 180), (75, 210), (90, 240))
+        for rep in (
+            {"shape": "simple", "lung_volume": "RV",
+             "hold_target": {"unit": "absolute", "value": el},
+             "recovery": _SECS(120), "note": "4:6 HV during recovery"},
+            {"shape": "simple", "lung_volume": "FL",
+             "hold_target": {"unit": "absolute", "value": fl},
+             "recovery": _SECS(120)},
+        )
+    ],
+    # STA 8: 70% PB repeated (def 3x), unlimited rest.
+    "sta-high-volume": [
+        {"shape": "simple", "hold_target": {"unit": "pct_pb", "value": 70},
+         "recovery": _FULL} for _ in range(3)
+    ],
+    # STA 1 max attempt: 5 min 5:5 prep, one max hold.
+    "sta-max": [
+        {"shape": "simple", "prep_breathing": {"pattern": "5:5", "duration_s": 300},
+         "hold_target": {"unit": "qualitative", "value": "max"}},
+    ],
+    # Light, relaxed sub-max to finish on something easy.
+    "sta-cooldown-easy": [
+        {"shape": "simple", "hold_target": {"unit": "qualitative", "value": "submax"},
+         "note": "light and relaxed; finish on something easy"},
+    ],
+    # WU1: 1C+20 / 1C+40 / 1C+60, 3 min recovery.
+    "sta-wu-fl-progression": [
+        {"shape": "simple", "hold_target": {"unit": "contraction_relative", "value": x},
+         "recovery": _SECS(180)} for x in (20, 40, 60)
+    ],
+    # WU2: 3 FRC holds through the first hard contractions, 3-4 min recovery.
+    # Durations from the 2026-06-21 log (1:30 / 1:45 / 2:00).
+    "sta-wu-frc-progression": [
+        {"shape": "simple", "lung_volume": "FRC",
+         "hold_target": {"unit": "absolute", "value": s}, "recovery": _SECS(210),
+         **({"note": "through the first hard contractions, not to hypoxia"} if s == 90 else {})}
+        for s in (90, 105, 120)
+    ],
+    # WU3: repeat holds to 1C; go for max once 1C arrives at the right time.
+    "sta-wu-contraction-delay": [
+        {"shape": "simple", "hold_target": {"unit": "contraction_relative", "value": 0},
+         "recovery": _FULL, "note": "repeat until 1C arrives at the right time"},
+        {"shape": "simple", "hold_target": {"unit": "contraction_relative", "value": 0},
+         "recovery": _FULL},
+        {"shape": "simple", "hold_target": {"unit": "qualitative", "value": "max"},
+         "note": "only once the 1C timing feels right"},
+    ],
+    # WU4: 3 RV holds (easy/moderate/hard) + 1 FL to ~1.5 min under PB.
+    "sta-wu-rv-fl": [
+        {"shape": "simple", "lung_volume": "RV",
+         "hold_target": {"unit": "qualitative", "value": "first_discomfort"},
+         "recovery": _SECS(180), "note": "easy"},
+        {"shape": "simple", "lung_volume": "RV",
+         "hold_target": {"unit": "qualitative", "value": "submax"},
+         "recovery": _SECS(180), "note": "moderate"},
+        {"shape": "simple", "lung_volume": "RV",
+         "hold_target": {"unit": "qualitative", "value": "strong_submax"},
+         "recovery": _SECS(180), "note": "hard"},
+        {"shape": "simple", "lung_volume": "FL",
+         "hold_target": {"unit": "absolute", "value": 240},
+         "note": "~1.5 min under PB; at least 1 min of contractions"},
+    ],
+    # WU5: hard FL to ~PB-1 min, 5 min recovery with strong HV, then max.
+    "sta-wu-nwu-hard-start": [
+        {"shape": "simple", "prep_breathing": {"pattern": "5:5", "duration_s": 300},
+         "hold_target": {"unit": "absolute", "value": 270},
+         "recovery": _SECS(300), "note": "~PB-1 min; strong HV during recovery"},
+        {"shape": "simple", "hold_target": {"unit": "qualitative", "value": "max"}},
+    ],
+    # WU6: 3 EL (3 min rec) + 3 FL (5 min rec). Durations invented around the
+    # logged EL/FL ladders.
+    "sta-wu-3rv-3fl": [
+        *({"shape": "simple", "lung_volume": "RV",
+           "hold_target": {"unit": "absolute", "value": s}, "recovery": _SECS(180)}
+          for s in (60, 75, 90)),
+        *({"shape": "simple", "lung_volume": "FL",
+           "hold_target": {"unit": "absolute", "value": s}, "recovery": _SECS(300)}
+          for s in (150, 180, 210)),
+    ],
+    # DYN 9/12/13 Ex1: ~70-80% feel, no fixed distance.
+    "dyn-nwu-submax": [
+        {"shape": "simple", "distance_target": {"unit": "qualitative", "value": "70-80% feel"},
+         "note": "no distance in mind; focus on the sensations"},
+    ],
+    # Single maximal attempt.
+    "dyn-max": [
+        {"shape": "simple", "distance_target": {"unit": "qualitative", "value": "max"}},
+    ],
+    # DYN 9 Ex3: 4 x 50m DNF, 1:15-1:30 recovery.
+    "dyn-volume-fixed": [
+        {"shape": "simple", "distance_target": {"unit": "absolute", "value": 50},
+         "recovery": _SECS(75)} for _ in range(4)
+    ],
+    # DYN 8 Ex2: N dives, fixed recovery, maximize total distance.
+    "dyn-volume-maximize": [
+        {"shape": "simple", "distance_target": {"unit": "qualitative", "value": "maximize"},
+         "recovery": _SECS(120),
+         **({"note": "goal: maximize total distance across the dives"} if i == 0 else {})}
+        for i in range(4)
+    ],
+    # DYN 5 Ex2: 8 x {50m legs-only + 50m normal}, minimal recovery in the set.
+    "dyn-volume-technique": [
+        {"shape": "simple", "distance_target": {"unit": "absolute", "value": 50},
+         "technique_variant": "legs_only", "recovery": _MINIMAL},
+        {"shape": "simple", "distance_target": {"unit": "absolute", "value": 50},
+         "technique_variant": "normal"},
+    ],
+    # DYN 17 Ex2: max sprints, capped recovery (def 2 x 50m).
+    "dyn-sprints": [
+        {"shape": "simple", "distance_target": {"unit": "absolute", "value": 50},
+         "pace": "max_sprint", "recovery": {"type": "cap", "value": 120, "unit": "time"}}
+        for _ in range(2)
+    ],
+    # DYN 3: 4 x 15s elastic-band max sprints (15s rest), straight into a max
+    # DNF; 2 sets. The sprints are timed surface efforts, encoded as
+    # qualitative distances.
+    "dyn-elastic-sprint-max": [
+        *({"shape": "simple",
+           "distance_target": {"unit": "qualitative", "value": "15s elastic sprint"},
+           "pace": "max_sprint", "recovery": _SECS(15)} for _ in range(3)),
+        {"shape": "simple",
+         "distance_target": {"unit": "qualitative", "value": "15s elastic sprint"},
+         "pace": "max_sprint", "recovery": _SECS(0), "note": "straight into the max"},
+        {"shape": "simple", "distance_target": {"unit": "qualitative", "value": "max"},
+         "note": "max DNF immediately after the last sprint"},
+    ],
+    # DYN 11/16 + 2026-06-01 log: 1:30 STA then 50m+ DNF, further each rep.
+    "dyn-stop-start": [
+        {"shape": "stop-start", "hold_target": {"unit": "absolute", "value": 90},
+         "distance_target": {"unit": "absolute", "value": 50}, "recovery": _FULL,
+         "note": "swim further on each rep"},
+        {"shape": "stop-start", "hold_target": {"unit": "absolute", "value": 90},
+         "distance_target": {"unit": "absolute", "value": 65}},
+    ],
+    # 2026-06-01 log: DNF to ~60m then a short STA, longer hold each rep.
+    "dyn-start-stop": [
+        {"shape": "start-stop", "distance_target": {"unit": "absolute", "value": 60},
+         "hold_target": {"unit": "absolute", "value": 15}, "recovery": _FULL,
+         "note": "hold longer on each rep"},
+        {"shape": "start-stop", "distance_target": {"unit": "absolute", "value": 60},
+         "hold_target": {"unit": "absolute", "value": 20}},
+    ],
+    # Dive, mid-pool STA, dive again. Example values invented (no log yet).
+    "dyn-stop-dyn": [
+        {"shape": "stop-in-the-middle",
+         "distance_target": {"unit": "absolute", "value": 50},
+         "hold_target": {"unit": "absolute", "value": 20},
+         "distance2_target": {"unit": "absolute", "value": 25}, "recovery": _FULL},
+        {"shape": "stop-in-the-middle",
+         "distance_target": {"unit": "absolute", "value": 50},
+         "hold_target": {"unit": "absolute", "value": 30},
+         "distance2_target": {"unit": "absolute", "value": 25}},
+    ],
+    # DYN 9 Ex2: 4x arms-only / 4x legs-only / 4x normal, counting strokes.
+    "dyn-technique": [
+        *({"shape": "simple", "distance_target": {"unit": "absolute", "value": 25},
+           "technique_variant": "arms_only", "recovery": _ADEQUATE,
+           **({"note": "count strokes; aim to reduce them"} if i == 0 else {})}
+          for i in range(4)),
+        *({"shape": "simple", "distance_target": {"unit": "absolute", "value": 25},
+           "technique_variant": "legs_only", "recovery": _ADEQUATE} for _ in range(4)),
+        *({"shape": "simple", "distance_target": {"unit": "absolute", "value": 25},
+           "technique_variant": "normal", "recovery": _ADEQUATE} for _ in range(4)),
+    ],
+    # DYN 10 Ex1: <=50m in the longest possible time (2 reps logged 2026-04-30).
+    "dyn-tortuga": [
+        {"shape": "simple", "distance_target": {"unit": "absolute", "value": 50},
+         "pace": "relaxed", "recovery": _ADEQUATE,
+         "note": "longest possible time; distance irrelevant"},
+        {"shape": "simple", "distance_target": {"unit": "absolute", "value": 50},
+         "pace": "relaxed"},
+    ],
+    # Cool-down: 300-500m continuous hypercapnic swim, breathe every 7+ strokes.
+    "dyn-hypercapnic": [
+        {"shape": "continuous-protocol",
+         "distance_target": {"unit": "absolute", "value": 400},
+         "continuous": {"stroke_cadence": "every 7+ strokes"},
+         "note": "300-500m, no stopping"},
+    ],
 }
 
-# Uniform lung volume / speed for exercises whose whole structure is one volume
-# or one speed (applied to every rep). Multi-volume exercises (EL/FL switch) keep
-# the default and are set per-rep in the app; REPS-defined exercises above carry
-# their own. lung_volume uses the schema codes FL/FRC/RV (RV is empty lung / EL).
-LUNG = {
-    "sta-el": "RV",
-    "sta-frc-awareness": "FRC",
-    "sta-wu-frc-progression": "FRC",
-}
-SPEED = {
-    "dyn-sprints": "sprint",
-}
+# Uniform lung volume / speed stamped onto placeholder reps (applied to every
+# rep) for exercises NOT in REPS. Every current exercise carries its structure
+# in REPS, so these are empty; they remain for future placeholder templates.
+# lung_volume uses the schema codes FL/FRC/RV (RV is empty lung / EL).
+LUNG = {}
+SPEED = {}
 # Exercises logged as a summary (lap distance + total time + rep count) rather
 # than rep by rep. Everything else defaults to per_rep.
 LOG_MODE = {
@@ -544,6 +785,7 @@ for (cid, name, discipline, allowed_roles, capacity, structure, options) in cata
         "cues": options,
         "log_mode": LOG_MODE.get(cid, "per_rep"),
         "set_repeat": SET_REPEAT.get(cid, 1),
+        **({"recovery_inter": RECOVERY_INTER[cid]} if cid in RECOVERY_INTER else {}),
         "termination": TERMINATION.get(cid, {"type": "fixed_n"}),
         "reps": reps,
     })

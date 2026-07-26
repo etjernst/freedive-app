@@ -125,6 +125,7 @@
         "prep_breathing": { "$ref": "#/$defs/prepBreathing" },
         "hold_target": { "$ref": "#/$defs/holdTarget" },
         "distance_target": { "$ref": "#/$defs/distanceTarget" },
+        "distance2_target": { "$ref": "#/$defs/distanceTarget" },
         "recovery": { "$ref": "#/$defs/recoveryTarget" },
         "continuous": { "$ref": "#/$defs/continuousBlock" },
         "note": { "type": "string" }
