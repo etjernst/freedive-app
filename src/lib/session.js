@@ -409,15 +409,15 @@ export function describeDistance(t) {
 
 export function describeRecovery(r) {
   if (!r) return '—'
-  const u = r.unit === 'breaths' ? ' breaths' : 's'
+  const fmt = (v) => (r.unit === 'breaths' ? `${v} breaths` : fmtMMSS(v))
   switch (r.type) {
     case 'qualitative':
     case 'inequality':
       return String(r.value)
     case 'cap':
-      return `≤ ${r.value}${u}`
+      return `≤ ${fmt(r.value)}`
     default:
-      return r.value != null ? `${r.value}${u}` : '—'
+      return r.value != null ? fmt(r.value) : '—'
   }
 }
 
