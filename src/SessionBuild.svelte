@@ -21,7 +21,8 @@
     mixedLung,
   } from './lib/session.js'
   import { suggestionsFor } from './lib/affinities.js'
-  import { LIB_FILTERS, filterLibrary } from './lib/library.js'
+  import { filterLibrary } from './lib/library.js'
+  import LibraryFilters from './lib/LibraryFilters.svelte'
   import LibraryCard from './lib/LibraryCard.svelte'
   import {
     estimateExercise,
@@ -52,7 +53,8 @@
   // session so adding the first exercise is one tap, not a hunt through a select.
   let showLibrary = $state(clone(currentSession())?.exercises?.length === 0)
   let libFilter = $state('all')
-  const libTemplates = $derived(filterLibrary(app.templates, libFilter))
+  let libCap = $state(null)
+  const libTemplates = $derived(filterLibrary(app.templates, libFilter, libCap))
   // Tapping a card previews it in place; only the "+" adds it to the draft.
   let libPreview = $state(null)
   let justAdded = $state(null)
@@ -281,16 +283,11 @@
       </button>
     </div>
     {#if showLibrary}
-      <div class="filters">
-        {#each LIB_FILTERS as f (f.key)}
-          <button class="chip" class:active={libFilter === f.key} onclick={() => (libFilter = f.key)}>
-            {f.label}
-          </button>
-        {/each}
+      <LibraryFilters bind:disc={libFilter} bind:cap={libCap}>
         {#if libAdded > 0}
           <span class="lib-count">{libAdded} added</span>
         {/if}
-      </div>
+      </LibraryFilters>
       <div class="lib-list">
         {#each libTemplates as t (t.id)}
           <LibraryCard

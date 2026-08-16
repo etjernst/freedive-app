@@ -12,6 +12,18 @@ export const LIB_FILTERS = [
   { key: 'tortuga', label: 'Tortuga' },
 ]
 
+// Second filter axis: the capacity a template trains (schema `capacity_tags`).
+// A template matches when any of its tags equals the chosen key; null = no filter.
+export const CAPACITY_FILTERS = [
+  { key: 'co2', label: 'CO2' },
+  { key: 'o2_hypoxia', label: 'O2' },
+  { key: 'mental', label: 'Mental' },
+  { key: 'volume', label: 'Volume' },
+  { key: 'technique', label: 'Technique' },
+  { key: 'fitness_lactic', label: 'Fitness' },
+  { key: 'performance', label: 'Performance' },
+]
+
 const ROLE_ORDER = { warmup: 0, main: 1, cooldown: 2 }
 
 export function matchesFilter(t, key) {
@@ -20,11 +32,16 @@ export function matchesFilter(t, key) {
   return t.discipline === key
 }
 
-// Filtered, then ordered warm-up -> main -> cool-down, then by name, so a filtered
-// list reads top-to-bottom the way a session is assembled.
-export function filterLibrary(templates, key) {
+export function matchesCapacity(t, key) {
+  if (!key) return true
+  return (t.capacity_tags ?? []).includes(key)
+}
+
+// Filtered on both axes, then ordered warm-up -> main -> cool-down, then by
+// name, so a filtered list reads top-to-bottom the way a session is assembled.
+export function filterLibrary(templates, key, capacity = null) {
   return templates
-    .filter((t) => matchesFilter(t, key))
+    .filter((t) => matchesFilter(t, key) && matchesCapacity(t, capacity))
     .slice()
     .sort(
       (a, b) =>

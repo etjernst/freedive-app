@@ -13,7 +13,8 @@
     createSession,
     startSessionWith,
   } from './lib/store.svelte.js'
-  import { LIB_FILTERS, filterLibrary } from './lib/library.js'
+  import { filterLibrary } from './lib/library.js'
+  import LibraryFilters from './lib/LibraryFilters.svelte'
   import LibraryCard from './lib/LibraryCard.svelte'
   import logoUrl from './assets/winnow_logo.svg'
   import Settings from './Settings.svelte'
@@ -35,7 +36,9 @@
   const head = $derived(TITLES[app.view] ?? TITLES.home)
 
   let libFilter = $state('all')
-  const libTemplates = $derived(filterLibrary(app.templates, libFilter))
+  let libCap = $state(null)
+  const libTemplates = $derived(filterLibrary(app.templates, libFilter, libCap))
+  const libFiltered = $derived(libFilter !== 'all' || libCap !== null)
 
   // Read-only peek into a library exercise: tapping a card opens its contents
   // instead of starting a session; the start button lives inside the preview.
@@ -164,14 +167,11 @@
 
     <section class="card">
       <h2>Exercise library</h2>
-      <p class="muted">{app.templates.length} templates · tap one to see what's in it, + to start a session</p>
-      <div class="filters">
-        {#each LIB_FILTERS as f (f.key)}
-          <button class="chip" class:active={libFilter === f.key} onclick={() => (libFilter = f.key)}>
-            {f.label}
-          </button>
-        {/each}
-      </div>
+      <p class="muted">
+        {#if libFiltered}{libTemplates.length} of {app.templates.length}{:else}{app.templates.length}{/if}
+        templates · tap one to see what's in it, + to start a session
+      </p>
+      <LibraryFilters bind:disc={libFilter} bind:cap={libCap} />
       <div class="lib-list">
         {#each libTemplates as t (t.id)}
           <LibraryCard
