@@ -21,7 +21,8 @@
     mixedLung,
   } from './lib/session.js'
   import { suggestionsFor } from './lib/affinities.js'
-  import { LIB_FILTERS, filterLibrary, discLabel, roleLabel } from './lib/library.js'
+  import { LIB_FILTERS, filterLibrary } from './lib/library.js'
+  import LibraryCard from './lib/LibraryCard.svelte'
   import {
     estimateExercise,
     estimateSession,
@@ -52,6 +53,9 @@
   let showLibrary = $state(clone(currentSession())?.exercises?.length === 0)
   let libFilter = $state('all')
   const libTemplates = $derived(filterLibrary(app.templates, libFilter))
+  // Tapping a card previews it in place; only the "+" adds it to the draft.
+  let libPreview = $state(null)
+  let justAdded = $state(null)
 
   // Give every shown segment a target object to bind to, so the editor never
   // binds through undefined. Idempotent: only fills what is missing.
@@ -90,6 +94,10 @@
     const ex = instantiateExercise(t)
     ensureExercise(ex)
     draft.exercises = [...draft.exercises, ex]
+    justAdded = id
+    setTimeout(() => {
+      if (justAdded === id) justAdded = null
+    }, 1200)
   }
 
   // "Goes well with" suggestions: exercises that co-occurred in the source
@@ -278,19 +286,13 @@
       </div>
       <div class="lib-list">
         {#each libTemplates as t (t.id)}
-          <button class="lib-card" onclick={() => addTemplate(t.id)}>
-            <span class="lib-top">
-              <span class="name">{t.name ?? t.id}</span>
-              <span class="badges">
-                <span class="disc">{discLabel(t.discipline)}</span>
-                {#if roleLabel(t.role)}<span class="role">{roleLabel(t.role)}</span>{/if}
-              </span>
-            </span>
-            {#if t.capacity_tags?.length}
-              <span class="tags">{t.capacity_tags.join(' · ')}</span>
-            {/if}
-            {#if t.goal}<span class="lib-goal muted">{t.goal}</span>{/if}
-          </button>
+          <LibraryCard
+            {t}
+            open={libPreview === t.id}
+            ontoggle={() => (libPreview = libPreview === t.id ? null : t.id)}
+            onact={() => addTemplate(t.id)}
+            acted={justAdded === t.id}
+          />
         {/each}
       </div>
     {/if}
