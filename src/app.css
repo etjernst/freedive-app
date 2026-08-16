@@ -1127,6 +1127,19 @@ input.wide {
   min-height: 48px;
 }
 
+/* Passive autosave indicator in the builder's sticky footer. */
+.save-state {
+  flex: 1;
+  align-self: center;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.save-state.pending {
+  color: var(--accent-2);
+}
+
 .log-btn {
   flex: 1;
   background: var(--panel-2);

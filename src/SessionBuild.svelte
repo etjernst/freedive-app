@@ -1,4 +1,5 @@
 <script>
+  import { onDestroy } from 'svelte'
   import { app, currentSession, saveSession, saveTemplate, setView } from './lib/store.svelte.js'
   import {
     instantiateExercise,
@@ -44,10 +45,15 @@
   ]
   const REC_QUAL = ['minimal', 'adequate', 'full']
 
-  // Working copy: clone the loaded session, edit freely, persist on save. The
-  // plan we assemble here is what gets snapshotted; logging never touches it.
+  // Working copy: clone the loaded session, edit freely; every change is
+  // written back after a short pause (and on leaving the screen), so a
+  // backgrounded phone never loses the plan. Logging never touches it.
   let draft = $state(clone(currentSession()))
-  let saved = $state(false)
+  // 'saved' | 'dirty' | 'saving'; drives the passive indicator by the log button.
+  let saveState = $state('saved')
+  let lastSavedJson = JSON.stringify($state.snapshot(draft))
+  let saveTimer = null
+  const AUTOSAVE_MS = 800
   let showHistory = $state(false)
   // Library picker mirrors Home's filter + cards. Open by default on an empty
   // session so adding the first exercise is one tap, not a hunt through a select.
@@ -247,13 +253,33 @@
     setTimeout(() => { if (tmplSaved === ex.id) tmplSaved = null }, 1500)
   }
 
-  async function save(then) {
-    await saveSession($state.snapshot(draft))
-    if (then === 'log') setView('session-log')
-    else {
-      saved = true
-      setTimeout(() => (saved = false), 1500)
-    }
+  async function flush() {
+    clearTimeout(saveTimer)
+    saveTimer = null
+    const snap = $state.snapshot(draft)
+    const json = JSON.stringify(snap)
+    if (json === lastSavedJson) return
+    saveState = 'saving'
+    await saveSession(snap)
+    lastSavedJson = json
+    // A keystroke that landed while the write was in flight keeps it dirty.
+    saveState = JSON.stringify($state.snapshot(draft)) === json ? 'saved' : 'dirty'
+  }
+  $effect(() => {
+    // Reading the whole draft registers every nested field as a dependency.
+    const json = JSON.stringify(draft)
+    if (json === lastSavedJson) return
+    saveState = 'dirty'
+    clearTimeout(saveTimer)
+    saveTimer = setTimeout(flush, AUTOSAVE_MS)
+  })
+  onDestroy(() => {
+    if (saveTimer) flush()
+  })
+
+  async function toLog() {
+    await flush()
+    setView('session-log')
   }
 </script>
 
@@ -572,8 +598,10 @@
   {/if}
 
   <div class="actions sticky-save">
-    <button onclick={() => save('plan')}>{saved ? 'Saved ✓' : 'Save plan'}</button>
-    <button class="log-btn" onclick={() => save('log')} disabled={draft.exercises.length === 0}>Log actuals →</button>
+    <span class="save-state" class:pending={saveState !== 'saved'}>
+      {saveState === 'saved' ? 'Saved ✓' : saveState === 'saving' ? 'Saving…' : 'Unsaved changes'}
+    </span>
+    <button class="log-btn" onclick={toLog} disabled={draft.exercises.length === 0}>Log actuals →</button>
   </div>
   <div class="actions">
     <button class="link" onclick={toObsidian} disabled={draft.exercises.length === 0}>Add to Obsidian</button>
