@@ -296,6 +296,7 @@
             ontoggle={() => (libPreview = libPreview === t.id ? null : t.id)}
             onact={() => addTemplate(t.id)}
             acted={justAdded === t.id}
+            quick
           />
         {/each}
       </div>

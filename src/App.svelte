@@ -169,7 +169,7 @@
       <h2>Exercise library</h2>
       <p class="muted">
         {#if libFiltered}{libTemplates.length} of {app.templates.length}{:else}{app.templates.length}{/if}
-        templates · tap one to see what's in it, + to start a session
+        templates · tap one to see what's in it
       </p>
       <LibraryFilters bind:disc={libFilter} bind:cap={libCap} />
       <div class="lib-list">

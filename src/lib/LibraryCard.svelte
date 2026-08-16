@@ -3,9 +3,10 @@
   import { instantiateExercise, planRepLine, describeRecovery } from './session.js'
 
   // One library exercise as a card. Tapping the body toggles a read-only
-  // preview in place; the "+" (or the button inside the preview) performs
-  // the caller's action, so browsing never adds anything by accident.
-  let { t, open = false, ontoggle, onact, actLabel = 'Add to session', acted = false } = $props()
+  // preview in place; the button inside the preview (and, when `quick` is
+  // set, a round "+" on the card) performs the caller's action, so browsing
+  // never adds anything by accident.
+  let { t, open = false, ontoggle, onact, actLabel = 'Add to session', acted = false, quick = false } = $props()
 
   const TERMINATION_LABELS = {
     until_failure: 'until failure',
@@ -55,9 +56,11 @@
       {/if}
       {#if t.goal}<span class="lib-goal muted">{t.goal}</span>{/if}
     </button>
-    <button class="lib-add" class:done={acted} onclick={onact} aria-label={actLabel} title={actLabel}>
-      {acted ? '✓' : '+'}
-    </button>
+    {#if quick}
+      <button class="lib-add" class:done={acted} onclick={onact} aria-label={actLabel} title={actLabel}>
+        {acted ? '✓' : '+'}
+      </button>
+    {/if}
   </div>
   {#if open}
     {@const ov = templateOverview(t)}
