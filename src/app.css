@@ -234,8 +234,10 @@ main {
   color: inherit;
 }
 
-/* Tally of library picks made since the picker was opened. */
+/* Tally of library picks made since the picker was opened; sits at the
+   right end of the filter-chip row. */
 .lib-count {
+  margin-left: auto;
   align-self: center;
   font-size: 12px;
   font-weight: 600;

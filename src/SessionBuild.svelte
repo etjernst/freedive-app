@@ -275,9 +275,6 @@
       <button class="link" onclick={() => ((showLibrary = !showLibrary), (libAdded = 0))}>
         {showLibrary ? 'Hide library' : '+ From library'}
       </button>
-      {#if showLibrary && libAdded > 0}
-        <span class="lib-count">{libAdded} added</span>
-      {/if}
       <button class="link" onclick={addAdhoc}>+ Ad-hoc exercise</button>
       <button class="link" onclick={() => (showHistory = !showHistory)} disabled={historyItems.length === 0}>
         {showHistory ? 'Hide history' : '+ From history'}
@@ -290,6 +287,9 @@
             {f.label}
           </button>
         {/each}
+        {#if libAdded > 0}
+          <span class="lib-count">{libAdded} added</span>
+        {/if}
       </div>
       <div class="lib-list">
         {#each libTemplates as t (t.id)}
