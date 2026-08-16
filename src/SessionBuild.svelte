@@ -56,6 +56,9 @@
   // Tapping a card previews it in place; only the "+" adds it to the draft.
   let libPreview = $state(null)
   let justAdded = $state(null)
+  // Running tally of picks from the library while it is open, so the added
+  // exercises (which land in the plan further down) register without scrolling.
+  let libAdded = $state(0)
 
   // Give every shown segment a target object to bind to, so the editor never
   // binds through undefined. Idempotent: only fills what is missing.
@@ -95,6 +98,7 @@
     ensureExercise(ex)
     draft.exercises = [...draft.exercises, ex]
     justAdded = id
+    libAdded += 1
     setTimeout(() => {
       if (justAdded === id) justAdded = null
     }, 1200)
@@ -268,9 +272,12 @@
       bind:value={draft.session_remarks}
     ></textarea>
     <div class="actions">
-      <button class="link" onclick={() => (showLibrary = !showLibrary)}>
+      <button class="link" onclick={() => ((showLibrary = !showLibrary), (libAdded = 0))}>
         {showLibrary ? 'Hide library' : '+ From library'}
       </button>
+      {#if showLibrary && libAdded > 0}
+        <span class="lib-count">{libAdded} added</span>
+      {/if}
       <button class="link" onclick={addAdhoc}>+ Ad-hoc exercise</button>
       <button class="link" onclick={() => (showHistory = !showHistory)} disabled={historyItems.length === 0}>
         {showHistory ? 'Hide history' : '+ From history'}
