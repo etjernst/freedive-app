@@ -360,6 +360,11 @@ main {
   margin-top: 6px;
 }
 
+.lib-preview .lp-label {
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
 .lib-preview .actions {
   margin-top: 10px;
 }

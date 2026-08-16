@@ -25,9 +25,18 @@
       lines: lines.length === 1 && lines[0] === '—' ? [] : lines,
       until: TERMINATION_LABELS[ex.termination?.type] ?? null,
       rest: rest && rest !== '—' ? rest : null,
-      cues: ex.cues,
+      cues: ex.cues ? readableCues(ex.cues) : null,
       note: ex.plan_note,
     }
+  }
+  // The library stores the tunable options as "knob (def X); knob (def Y)."
+  // Show them as a labeled list with "def" spelled out.
+  function readableCues(cues) {
+    return cues
+      .replace(/\.\s*$/, '')
+      .split(/;\s*/)
+      .map((c) => c.replace(/\(def\s+/g, '(default '))
+      .join(' · ')
   }
 </script>
 
@@ -61,7 +70,7 @@
         </div>
       {/if}
       {#each ov.lines as line}<div class="lp-line">{line}</div>{/each}
-      {#if ov.cues}<div class="lp-note">{ov.cues}</div>{/if}
+      {#if ov.cues}<div class="lp-note"><span class="lp-label">Adjustable:</span> {ov.cues}</div>{/if}
       {#if ov.note}<div class="lp-note">{ov.note}</div>{/if}
       <div class="actions">
         <button onclick={onact}>{acted ? 'Added ✓' : actLabel}</button>
