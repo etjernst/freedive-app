@@ -19,6 +19,10 @@
   --phase: #4d6b7a;
   --phase-soft: #e3eaee;
   --phase-border: #c9d4da;
+  /* The log screen's own hue, so logging never looks like planning. */
+  --log: #8a4b3a;
+  --log-soft: #f4e6df;
+  --log-border: #e4cfc4;
 
   font: 16px/1.5 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
   color: var(--text);
@@ -1362,4 +1366,229 @@ input.wide {
   margin-top: 10px;
   font-size: 13px;
   color: var(--accent-2);
+}
+
+/* --- Plan lock, collapse, rests (builder) ------------------------------- */
+
+fieldset.bare {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+fieldset.bare:disabled {
+  opacity: 0.7;
+}
+
+.lock-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 4px 0 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel-2);
+  font-size: 13.5px;
+}
+
+.lock-btn {
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.lock-btn.is-locked {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: var(--accent);
+}
+
+.lock-btn:disabled {
+  opacity: 0.5;
+}
+
+.ex-head .fold {
+  background: none;
+  border: none;
+  padding: 4px 8px 4px 0;
+  font: inherit;
+  font-size: 15px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.ex-title {
+  flex: 1;
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: 8px 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.ex-summary {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: 0 0 0 20px;
+  font: inherit;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.ex-summary .ov-head,
+.ex-summary .ov-line,
+.ex-summary .ov-note,
+.ex-summary .est {
+  display: block;
+}
+
+.ex-summary .ov-line,
+.ex-summary .ov-note {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.ex-summary .est {
+  margin-top: 4px;
+}
+
+.exercise.collapsed {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.between {
+  display: flex;
+  justify-content: center;
+  padding: 2px 0;
+}
+
+.between .add-rest {
+  background: none;
+  border: none;
+  font: inherit;
+  font-size: 12.5px;
+  color: var(--muted);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.rest-pill button.link {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.rest-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel-2);
+  font-size: 13px;
+}
+
+.rest-pill input {
+  width: 64px;
+}
+
+.inter {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.est-note {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+/* --- Log view: its own hue ----------------------------------------------- */
+
+header.log-header {
+  border-top: 4px solid var(--log);
+  padding-top: 20px;
+}
+
+header.log-header h1 {
+  color: var(--log);
+}
+
+.log-ribbon {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 6px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--log-soft);
+  border: 1px solid var(--log-border);
+  font-size: 13px;
+}
+
+.log-ribbon-label {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--log);
+}
+
+.log-view .card {
+  border-top-color: var(--log-border);
+}
+
+.log-view .card.exercise {
+  border-left: 3px solid var(--log-border);
+  padding-left: 12px;
+}
+
+.log-view .ex-name {
+  background: var(--log-soft);
+  border-color: var(--log-border);
+}
+
+.log-view .sticky-save {
+  border-top: 2px solid var(--log-border);
+}
+
+.log-view .log-btn {
+  background: var(--log);
+  color: var(--on-accent);
+  border-color: var(--log);
+}
+
+.log-view .save-state.pending {
+  color: var(--log);
+}
+
+.log-view .ov-rest {
+  font-size: 12.5px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.badge.locked {
+  background: transparent;
+  border: 0;
+  padding: 0 2px;
 }

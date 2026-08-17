@@ -5,7 +5,7 @@
   // The mobile numeric keypad has no ":", so digit-only entry is formatted
   // timer-style: the last two digits are seconds ("230" -> "2:30"). One or two
   // bare digits stay plain seconds; text containing ":" is left as typed.
-  let { seconds = $bindable(null), placeholder = 'm:ss', id = undefined } = $props()
+  let { seconds = $bindable(null), placeholder = 'm:ss', id = undefined, disabled = false } = $props()
   let text = $state(fmtMMSS(seconds))
 
   // Re-sync the display when seconds changes from outside (e.g. a rep reorder
@@ -23,4 +23,4 @@
   }
 </script>
 
-<input {id} {placeholder} inputmode="numeric" value={text} oninput={onInput} />
+<input {id} {placeholder} {disabled} inputmode="numeric" value={text} oninput={onInput} />

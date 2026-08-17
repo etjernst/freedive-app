@@ -19,7 +19,10 @@
     SHAPES,
     LUNG_OPTS,
     SPEED_OPTS,
+    TECHNIQUE_OPTS,
     mixedLung,
+    planRepLine,
+    describeRecovery,
   } from './lib/session.js'
   import { suggestionsFor } from './lib/affinities.js'
   import { filterLibrary, hasPhases } from './lib/library.js'
@@ -46,6 +49,8 @@
     { value: 'close_to_max', label: 'close to max' },
   ]
   const REC_QUAL = ['minimal', 'adequate', 'full']
+  // Rest between exercises starts at two minutes when added; edit from there.
+  const DEFAULT_REST_AFTER_S = 120
 
   // Working copy: clone the loaded session, edit freely; every change is
   // written back after a short pause (and on leaving the screen), so a
@@ -91,6 +96,11 @@
   }
   function ensureExercise(ex) {
     for (const rep of ex.planned.reps) ensure(rep, ex.discipline)
+    // Rest between sets binds through an object; a null value means none.
+    if (!ex.recovery_inter) ex.recovery_inter = { type: 'absolute', value: null, unit: 'time' }
+    ex.recovery_inter.unit ??= 'time'
+    ex.rest_after_s ??= null
+    ex.collapsed ??= false
   }
   // Seed-time pass so reloaded sessions render without a flash of empty binds.
   // Also backfill fields added after a session was first saved.
@@ -102,6 +112,8 @@
     ensureExercise(ex)
   }
   draft.session_remarks ??= ''
+  draft.plan_locked ??= false
+  const locked = $derived(!!draft.plan_locked)
   // Sessions saved before pool length moved onto the session document fall
   // back to the settings default.
   draft.pool_length_m ??= app.settings.pool_length_m ?? 25
@@ -213,6 +225,50 @@
     if (v) rep.pace = v
     else delete rep.pace
   }
+  // DNF technique (arms-only / legs-only): exercise-level reads the first rep
+  // and writes all reps; per-rep overrides live under "More options". The
+  // full stroke is stored as absent (the library's 'normal' reads the same).
+  function exTechnique(ex) {
+    const v = ex.planned.reps[0]?.technique_variant
+    return v && v !== 'normal' ? v : ''
+  }
+  function setExTechnique(ex, v) {
+    ex.planned.reps = ex.planned.reps.map((r) => {
+      const n = { ...r }
+      if (v) n.technique_variant = v
+      else delete n.technique_variant
+      return n
+    })
+  }
+  function setRepTechnique(rep, v) {
+    if (v) rep.technique_variant = v
+    else delete rep.technique_variant
+  }
+  function addRestAfter(ex) {
+    ex.rest_after_s = DEFAULT_REST_AFTER_S
+  }
+  function clearRestAfter(ex) {
+    ex.rest_after_s = null
+  }
+  // Rest between sets uses the same type families as a rep recovery.
+  function onInterType(ex) {
+    const t = ex.recovery_inter.type
+    if (t === 'qualitative') ex.recovery_inter.value = 'adequate'
+    else if (typeof ex.recovery_inter.value !== 'number') ex.recovery_inter.value = null
+  }
+  // Collapsed summary of an exercise: the same lines the log's plan overview shows.
+  function summaryLines(ex) {
+    const reps = ex.planned?.reps ?? []
+    return reps.map((r, i) => planRepLine(r, ex, i === reps.length - 1))
+  }
+  function interLabel(ex) {
+    if ((ex.set_repeat ?? 1) <= 1) return null
+    const r = describeRecovery(ex.recovery_inter)
+    return r && r !== '—' ? r : null
+  }
+  function toggleLock() {
+    draft.plan_locked = !draft.plan_locked
+  }
   let repMore = $state({})
 
   // Adding a rep duplicates the last one (targets, recovery, lung, pace), so a
@@ -301,7 +357,14 @@
 </script>
 
 <main>
+  {#if locked}
+    <div class="lock-banner">
+      <span>Plan locked: logging only. Unlock to edit the plan.</span>
+      <button class="link" onclick={toggleLock}>Unlock plan</button>
+    </div>
+  {/if}
   <section class="card">
+    <fieldset class="bare" disabled={locked}>
     <div class="field">
       <label for="sess-date">Date</label>
       <input id="sess-date" type="date" bind:value={draft.date} />
@@ -371,6 +434,7 @@
         {/each}
       </div>
     {/if}
+    </fieldset>
   </section>
 
   {#if draft.exercises.length === 0}
@@ -379,16 +443,40 @@
 
   {#each draft.exercises as ex, ei (ex.id)}
     {@const est = estimateExercise(ex, estSettings)}
-    <section class="card exercise">
+    <section class="card exercise" class:collapsed={ex.collapsed}>
       <div class="ex-head">
-        <input class="ex-name" bind:value={ex.name} />
+        <button
+          class="link fold"
+          onclick={() => (ex.collapsed = !ex.collapsed)}
+          aria-label={ex.collapsed ? 'Expand exercise' : 'Collapse exercise'}
+          aria-expanded={!ex.collapsed}
+        >{ex.collapsed ? '▸' : '▾'}</button>
+        {#if ex.collapsed}
+          <button class="ex-name-static ex-title" onclick={() => (ex.collapsed = false)}>{ex.name}</button>
+        {:else}
+          <input class="ex-name" bind:value={ex.name} disabled={locked} />
+        {/if}
         <div class="ex-move">
-          <button class="link" onclick={() => move(ei, -1)} disabled={ei === 0} aria-label="Move up">↑</button>
-          <button class="link" onclick={() => move(ei, 1)} disabled={ei === draft.exercises.length - 1} aria-label="Move down">↓</button>
-          <button class="link" onclick={() => removeExercise(ei)} aria-label="Remove exercise">✕</button>
+          <button class="link" onclick={() => move(ei, -1)} disabled={locked || ei === 0} aria-label="Move up">↑</button>
+          <button class="link" onclick={() => move(ei, 1)} disabled={locked || ei === draft.exercises.length - 1} aria-label="Move down">↓</button>
+          <button class="link" onclick={() => removeExercise(ei)} disabled={locked} aria-label="Remove exercise">✕</button>
         </div>
       </div>
 
+      {#if ex.collapsed}
+        <button class="ex-summary" onclick={() => (ex.collapsed = false)}>
+          <span class="ov-head">
+            <span class="ov-disc">{ex.discipline}</span>
+            {#if (ex.set_repeat ?? 1) > 1}<span class="ov-sets">×{ex.set_repeat} sets{interLabel(ex) ? `, rest ${interLabel(ex)}` : ''}</span>{/if}
+          </span>
+          {#each summaryLines(ex) as line}<span class="ov-line">{line}</span>{/each}
+          {#if ex.plan_note}<span class="ov-note">{ex.plan_note}</span>{/if}
+          <span class="est">
+            {#if est.seconds === 0 && est.reason}Est. — {est.reason}{:else}Est. {fmtDuration(est.seconds)}{est.unestimatedReps ? ` + ${est.unestimatedReps} unestimated` : ''}{/if}
+          </span>
+        </button>
+      {:else}
+      <fieldset class="bare" disabled={locked}>
       {#if ex.goal}<p class="muted goal">{ex.goal}</p>{/if}
       <textarea
         class="plan-note"
@@ -404,6 +492,7 @@
             ? ` + ${est.unestimatedReps} unestimated rep${est.unestimatedReps === 1 ? '' : 's'}`
             : ''}
         {/if}
+        {#if est.notes?.length}<span class="est-note"> · {est.notes.join('; ')}</span>{/if}
       </p>
 
       <div class="field">
@@ -425,6 +514,33 @@
         <span class="lbl">Sets (repeat)</span>
         <input type="number" min="1" bind:value={ex.set_repeat} />
       </div>
+      {#if (ex.set_repeat ?? 1) > 1 && ex.recovery_inter}
+        <div class="field">
+          <span class="lbl">Rest between sets</span>
+          <span class="inter">
+            <select class="unit" bind:value={ex.recovery_inter.type} onchange={() => onInterType(ex)}>
+              <option value="absolute">fixed</option>
+              <option value="cap">cap (≤)</option>
+              <option value="qualitative">qualitative</option>
+            </select>
+            {#if ex.recovery_inter.type === 'qualitative'}
+              <select bind:value={ex.recovery_inter.value}>
+                {#each REC_QUAL as r}<option value={r}>{r}</option>{/each}
+              </select>
+            {:else}
+              {#if ex.recovery_inter.unit === 'breaths'}
+                <input type="number" bind:value={ex.recovery_inter.value} placeholder="breaths" />
+              {:else}
+                <MMSS bind:seconds={ex.recovery_inter.value} />
+              {/if}
+              <select class="unit" bind:value={ex.recovery_inter.unit}>
+                <option value="time">time</option>
+                <option value="breaths">breaths</option>
+              </select>
+            {/if}
+          </span>
+        </div>
+      {/if}
       <div class="field">
         <span class="lbl logmode-lbl">
           Logging
@@ -453,6 +569,14 @@
           <span class="lbl">Speed</span>
           <select value={exSpeed(ex)} onchange={(e) => setExSpeed(ex, e.currentTarget.value)}>
             {#each SPEED_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
+          </select>
+        </div>
+      {/if}
+      {#if ex.discipline === 'DNF'}
+        <div class="field">
+          <span class="lbl">Technique</span>
+          <select value={exTechnique(ex)} onchange={(e) => setExTechnique(ex, e.currentTarget.value)}>
+            {#each TECHNIQUE_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
           </select>
         </div>
       {/if}
@@ -514,7 +638,7 @@
                   <option value="qualitative">qualitative</option>
                 </select>
                 {#if rep.distance_target.unit === 'qualitative'}
-                  <input bind:value={rep.distance_target.value} placeholder="long but doable" />
+                  <input bind:value={rep.distance_target.value} list="qual-words" placeholder="max, submax, or free text" />
                 {:else}
                   <input type="number" bind:value={rep.distance_target.value} placeholder={rep.distance_target.unit === 'pct_pb' ? '%' : 'm'} />
                 {/if}
@@ -595,6 +719,14 @@
                   </select>
                 </div>
               {/if}
+              {#if ex.discipline === 'DNF'}
+                <div class="seg">
+                  <span class="lbl">Technique</span>
+                  <select value={rep.technique_variant && rep.technique_variant !== 'normal' ? rep.technique_variant : ''} onchange={(e) => setRepTechnique(rep, e.currentTarget.value)}>
+                    {#each TECHNIQUE_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
+                  </select>
+                </div>
+              {/if}
             {/if}
 
             {#if rep.prep_breathing}
@@ -609,8 +741,26 @@
           {tmplSaved === ex.id ? 'Saved to library ✓' : 'Save as template'}
         </button>
       </div>
+      </fieldset>
+      {/if}
     </section>
+    {#if ei < draft.exercises.length - 1}
+      <div class="between">
+        {#if ex.rest_after_s != null}
+          <span class="rest-pill">
+            <span class="lbl">Rest</span>
+            <MMSS bind:seconds={ex.rest_after_s} disabled={locked} />
+            <button class="link" onclick={() => clearRestAfter(ex)} disabled={locked} aria-label="Remove rest">✕</button>
+          </span>
+        {:else}
+          <button class="link add-rest" onclick={() => addRestAfter(ex)} disabled={locked}>+ rest</button>
+        {/if}
+      </div>
+    {/if}
   {/each}
+  <datalist id="qual-words">
+    {#each HOLD_QUAL as q}<option value={q.value}>{q.label}</option>{/each}
+  </datalist>
 
   {#if draft.exercises.length > 0}
     <p class="session-est">
@@ -619,6 +769,7 @@
         : ''}{sessionEstimate.openSets
         ? ` + ${sessionEstimate.openSets} open-ended set${sessionEstimate.openSets === 1 ? '' : 's'}`
         : ''}
+      {#if sessionEstimate.notes?.length}<span class="est-note"><br />{sessionEstimate.notes.join('; ')}</span>{/if}
     </p>
     {#if IS_SEALS}
     <div class="filters estimate-for">
@@ -637,6 +788,9 @@
     <span class="save-state" class:pending={saveState !== 'saved'}>
       {saveState === 'saved' ? 'Saved ✓' : saveState === 'saving' ? 'Saving…' : 'Unsaved changes'}
     </span>
+    <button class="lock-btn" class:is-locked={locked} onclick={toggleLock} disabled={draft.exercises.length === 0}>
+      {locked ? '🔒 Locked' : 'Lock plan'}
+    </button>
     <button class="log-btn" onclick={toLog} disabled={draft.exercises.length === 0}>Log actuals →</button>
   </div>
   <div class="actions">

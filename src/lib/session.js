@@ -53,6 +53,26 @@ export const SPEED_OPTS = [
   { value: 'sprint', label: 'sprint' },
   { value: 'max_sprint', label: 'max sprint' },
 ]
+// DNF technique drills (rep.technique_variant): arms-only or legs-only; an
+// empty value is the full stroke (stored as null/absent; the library also
+// uses 'normal' for it).
+export const TECHNIQUE_OPTS = [
+  { value: '', label: 'full stroke' },
+  { value: 'arms_only', label: 'arms only' },
+  { value: 'legs_only', label: 'legs only' },
+]
+export function techniqueLabel(v) {
+  const key = v == null || v === 'normal' ? '' : v
+  return TECHNIQUE_OPTS.find((o) => o.value === key)?.label ?? String(v)
+}
+
+// Qualitative words that make a rep a max attempt; the estimate adds
+// preparation before and recovery after such a rep, and the plan says so.
+const ATTEMPT_QUAL = new Set(['max', 'close_to_max'])
+export function isMaxAttempt(rep) {
+  const q = (t) => t?.unit === 'qualitative' && ATTEMPT_QUAL.has(t.value)
+  return q(rep?.hold_target) || q(rep?.distance_target) || q(rep?.distance2_target)
+}
 
 // Short display form of a lung volume; RV reads as EL everywhere in the UI.
 export function lungShort(v) {
@@ -148,6 +168,9 @@ export function newSession(pool_length_m = 25) {
     created_at: now,
     updated_at: now,
     status: 'planned', // -> 'logged' once an actual is saved
+    // Set from the builder once the plan is final: the builder goes read-only
+    // and the session opens in the log, so logging never edits the plan.
+    plan_locked: false,
     // Where the session happened; drives the turn-count hint in the log.
     // Seeded from the settings default, overridable per session.
     pool_length_m,
@@ -193,6 +216,10 @@ export function instantiateExercise(template, phase = null) {
     medium: template.environment === 'dry' ? 'dry' : 'wet',
     // Which training phase's defaults populated this exercise, if any.
     phase: phase ?? null,
+    // Rest after this exercise before the next one (seconds), if any.
+    rest_after_s: null,
+    // Builder display state: a finished exercise folds to a summary card.
+    collapsed: false,
     // Planning hint used only for the time estimate of open-ended/qualitative sets.
     plan_estimate: { reps: null, distance_m: null },
     planned: { reps: reps.length ? reps : [blankRep('simple')] },
@@ -230,6 +257,8 @@ export function blankExercise() {
     recovery_intra_default: null,
     recovery_inter: null,
     medium: 'wet',
+    rest_after_s: null,
+    collapsed: false,
     plan_estimate: { reps: null, distance_m: null },
     planned: { reps: [blankRep('simple')] },
     actual: null,
@@ -293,6 +322,7 @@ export function blankActualRep(plan_index = null) {
     new_pb: false,
     lung_volume: 'FL',
     pace: null,
+    technique_variant: null,
     hold_s: null,
     distance_m: null,
     distance2_m: null,
@@ -337,6 +367,7 @@ export function seedActual(exercise) {
       const ar = blankActualRep(s.plan_index)
       ar.lung_volume = s.rep?.lung_volume ?? 'FL'
       ar.pace = s.rep?.pace ?? null
+      ar.technique_variant = s.rep?.technique_variant ?? null
       if (s.rep?.hold_target?.unit === 'absolute' && s.rep.hold_target.value != null) {
         ar.hold_s = s.rep.hold_target.value
       }
@@ -470,6 +501,8 @@ export function planRepLine(rep, ex, isLast) {
     line += ` · ${lungShort(lung)}`
   }
   if (rep.pace) line += ` · ${rep.pace.replace('_', ' ')}`
+  if (rep.technique_variant && rep.technique_variant !== 'normal') line += ` · ${techniqueLabel(rep.technique_variant)}`
+  if (isMaxAttempt(rep)) line += ' · max attempt: prep before, recovery after'
   const showRec = rep.recovery && !((ex.set_repeat ?? 1) <= 1 && isLast)
   if (showRec) {
     const r = describeRecovery(rep.recovery)
@@ -483,12 +516,17 @@ export function planRepLine(rep, ex, isLast) {
 export function planOverview(session) {
   return (session.exercises ?? []).map((ex) => {
     const reps = ex.planned?.reps ?? []
+    const inter = (ex.set_repeat ?? 1) > 1 && ex.recovery_inter ? describeRecovery(ex.recovery_inter) : null
     return {
       id: ex.id,
       name: ex.name,
       discipline: ex.discipline,
       sets: ex.set_repeat ?? 1,
       lines: reps.map((r, i) => planRepLine(r, ex, i === reps.length - 1)),
+      // Rest between sets, shown when it is set and there is more than one set.
+      inter: inter && inter !== '—' ? inter : null,
+      // Rest after this exercise, before the next (seconds).
+      restAfter: ex.rest_after_s || null,
       note: ex.plan_note ?? '',
     }
   })

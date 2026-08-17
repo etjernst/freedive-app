@@ -1,4 +1,4 @@
-import { repSegments } from './session.js'
+import { repSegments, isMaxAttempt } from './session.js'
 
 // Time estimation for exercises and sessions. Everything returns seconds (or
 // null when an input the estimate depends on is missing, e.g. an unset PB or
@@ -11,16 +11,10 @@ import { repSegments } from './session.js'
 // the % PB unit.
 export const QUAL_PCT = { first_discomfort: 0.5, submax: 0.7, strong_submax: 0.8, close_to_max: 0.85, max: 0.9 }
 
-// Qualitative words that make a rep a max attempt, which adds preparation
-// before and recovery after (settings.attempt_prep_s / attempt_recovery_s).
-const ATTEMPT_QUAL = new Set(['max', 'close_to_max'])
+// A max attempt (see isMaxAttempt in session.js) adds preparation before and
+// recovery after (settings.attempt_prep_s / attempt_recovery_s).
 export const DEFAULT_ATTEMPT_PREP_S = 300
 export const DEFAULT_ATTEMPT_RECOVERY_S = 300
-
-export function isMaxAttempt(rep) {
-  const q = (t) => t?.unit === 'qualitative' && ATTEMPT_QUAL.has(t.value)
-  return q(rep?.hold_target) || q(rep?.distance_target) || q(rep?.distance2_target)
-}
 
 export function attemptOverheadSeconds(settings) {
   return {

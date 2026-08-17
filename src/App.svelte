@@ -120,7 +120,7 @@
   </div>
 {/if}
 
-<header>
+<header class:log-header={app.view === 'session-log'}>
   <div class="title">
     <h1>{head.h1}</h1>
     <p class="tagline">{head.tag}</p>

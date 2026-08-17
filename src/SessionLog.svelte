@@ -23,6 +23,8 @@
     FEELS,
     LUNG_OPTS,
     SPEED_OPTS,
+    TECHNIQUE_OPTS,
+    techniqueLabel,
     lungShort,
     mixedLung,
   } from './lib/session.js'
@@ -46,6 +48,7 @@
       for (const ar of ex.actual.reps ?? []) {
         ar.lung_volume ??= plannedRep(ex, ar)?.lung_volume ?? 'FL'
         ar.pace ??= plannedRep(ex, ar)?.pace ?? null
+        ar.technique_variant ??= plannedRep(ex, ar)?.technique_variant ?? null
       }
     }
   }
@@ -101,13 +104,19 @@
   function toggle(key) {
     open[key] = !open[key]
   }
+  // A new rep copies the realized numbers of the rep above (hold, distance,
+  // duration, recovery, lung, pace, technique, prep), so a table extends with a
+  // tweak; the per-rep record (PB flag, incident, HR, SpO2, contraction, notes)
+  // starts blank. Lung is read from the last rep, not exLung: in a mixed-volume
+  // exercise exLung reads 'mixed', a selector state, never a rep value.
+  const COPY_FROM_ABOVE = [
+    'lung_volume', 'pace', 'technique_variant', 'hold_s', 'distance_m', 'distance2_m',
+    'duration_s', 'recovery_value', 'recovery_unit', 'prep_pattern', 'prep_duration_s',
+  ]
   function addRep(ex) {
     const last = ex.actual.reps[ex.actual.reps.length - 1]
     const ar = blankActualRep(last?.plan_index ?? null)
-    // Seed from the last rep, not exLung: in a mixed-volume exercise exLung
-    // reads 'mixed', which is a selector state, never a rep value.
-    ar.lung_volume = last?.lung_volume ?? 'FL'
-    ar.pace = exSpeed(ex) || null
+    if (last) for (const k of COPY_FROM_ABOVE) ar[k] = last[k] ?? ar[k]
     ex.actual.reps = [...ex.actual.reps, ar]
   }
   function moveRep(ex, i, dir) {
@@ -136,6 +145,13 @@
   }
   function setExSpeed(ex, v) {
     ex.actual.reps = ex.actual.reps.map((r) => ({ ...r, pace: v || null }))
+  }
+  function exTechnique(ex) {
+    const v = ex.actual.reps[0]?.technique_variant
+    return v && v !== 'normal' ? v : ''
+  }
+  function setExTechnique(ex, v) {
+    ex.actual.reps = ex.actual.reps.map((r) => ({ ...r, technique_variant: v || null }))
   }
   function removeRep(ex, i) {
     ex.actual.reps = ex.actual.reps.filter((_, j) => j !== i)
@@ -169,7 +185,11 @@
   }
 </script>
 
-<main>
+<main class="log-view">
+  <div class="log-ribbon">
+    <span class="log-ribbon-label">Logging actuals</span>
+    <span class="muted">{draft.date}{draft.plan_locked ? ' · plan locked' : ''}</span>
+  </div>
   <section class="card thoughts">
     <label class="lbl" for="session-thoughts">Thoughts</label>
     <textarea
@@ -187,11 +207,12 @@
         <div class="ov-ex">
           <div class="ov-head">
             <span class="ov-name">{ov.name}</span>
-            {#if ov.sets > 1}<span class="ov-sets">×{ov.sets} sets</span>{/if}
+            {#if ov.sets > 1}<span class="ov-sets">×{ov.sets} sets{ov.inter ? `, rest ${ov.inter}` : ''}</span>{/if}
             <span class="ov-disc">{ov.discipline}</span>
           </div>
           {#each ov.lines as line}<div class="ov-line">{line}</div>{/each}
           {#if ov.note}<div class="ov-note">{ov.note}</div>{/if}
+          {#if ov.restAfter}<div class="ov-rest">rest {fmtMMSS(ov.restAfter)} before the next exercise</div>{/if}
         </div>
       {/each}
     </section>
@@ -261,6 +282,14 @@
             </select>
           </div>
         {/if}
+        {#if ex.discipline === 'DNF'}
+          <div class="field">
+            <span class="lbl">Technique</span>
+            <select value={exTechnique(ex)} onchange={(e) => setExTechnique(ex, e.currentTarget.value)}>
+              {#each TECHNIQUE_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
+            </select>
+          </div>
+        {/if}
       {/if}
       {#if ex.plan_note}<p class="muted goal">{ex.plan_note}</p>{/if}
 
@@ -304,6 +333,7 @@
                   {#if segs.includes('distance')} {describeDistance(p.distance_target)}{/if}
                   {#if (p.lung_volume ?? 'FL') !== 'FL' || mixedLung(ex.planned?.reps)} · {lungShort(p.lung_volume ?? 'FL')}{/if}
                   {#if p.pace} · {p.pace.replace('_', ' ')}{/if}
+                  {#if p.technique_variant && p.technique_variant !== 'normal'} · {techniqueLabel(p.technique_variant)}{/if}
                   {#if p.recovery} · rec {describeRecovery(p.recovery)}{/if}
                 {:else}extra rep{/if}
               </span>
@@ -354,6 +384,14 @@
                     <span class="lbl">Speed</span>
                     <select value={ar.pace ?? ''} onchange={(e) => (ar.pace = e.currentTarget.value || null)}>
                       {#each SPEED_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
+                    </select>
+                  </div>
+                {/if}
+                {#if ex.discipline === 'DNF'}
+                  <div class="rfield">
+                    <span class="lbl">Technique</span>
+                    <select value={ar.technique_variant && ar.technique_variant !== 'normal' ? ar.technique_variant : ''} onchange={(e) => (ar.technique_variant = e.currentTarget.value || null)}>
+                      {#each TECHNIQUE_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
                     </select>
                   </div>
                 {/if}
@@ -454,7 +492,7 @@
     <button class="log-btn" onclick={done}>Done</button>
   </div>
   <div class="actions">
-    <button class="link" onclick={() => setView('session-build')}>Edit plan</button>
+    <button class="link" onclick={() => setView('session-build')}>{draft.plan_locked ? 'View plan (locked)' : 'Edit plan'}</button>
     <button class="link" onclick={() => setView('sessions')}>Back to sessions</button>
   </div>
 </main>

@@ -34,10 +34,11 @@
       <ul class="library">
         {#each app.sessions as s, i (s.id)}
           <li class="session-row" class:is-current={i === 0}>
-            <button class="session-open" onclick={() => openSession(s.id, s.status === 'logged' ? 'session-log' : 'session-build')}>
+            <button class="session-open" onclick={() => openSession(s.id, s.status === 'logged' || s.plan_locked ? 'session-log' : 'session-build')}>
               <span class="row-head">
                 <span class="name">{fmtDate(s.date)}</span>
                 <span class="badge {s.status}">{s.status}</span>
+                {#if s.plan_locked}<span class="badge locked" title="Plan locked">🔒</span>{/if}
               </span>
               <span class="tags">{summary(s)}</span>
             </button>
