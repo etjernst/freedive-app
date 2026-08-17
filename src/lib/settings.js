@@ -62,7 +62,7 @@ export const DEFAULT_SETTINGS = {
     pbs: { DYNb: 100, tortuga: 90 },
     pace_s_per_25: { DYNb: 25 },
     sprint_pace_s_per_25: { DYNb: 17.5 },
-    swim_pace_s_per_25: 30,
+    swim_pace_s_per_25: 40,
     recovery_breath_s: 10,
   },
 }
