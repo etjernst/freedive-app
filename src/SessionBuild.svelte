@@ -79,6 +79,12 @@
     if (segs.includes('distance') && !rep.distance_target) rep.distance_target = { unit: 'absolute', value: null }
     if (segs.includes('distance2') && !rep.distance2_target) rep.distance2_target = { unit: 'absolute', value: null }
     if (segs.includes('continuous') && !rep.continuous) rep.continuous = { duration_s: null, pattern: '' }
+    // A seeded continuous block may name only a cadence; the bound inputs need
+    // explicit nulls, not missing keys.
+    if (rep.continuous) {
+      rep.continuous.duration_s ??= null
+      rep.continuous.pattern ??= rep.continuous.stroke_cadence ?? ''
+    }
     if (!rep.recovery) rep.recovery = { type: 'absolute', value: null, unit: 'time' }
     if (rep.lung_volume == null) rep.lung_volume = 'FL'
     return rep
@@ -433,6 +439,7 @@
           <option value="aggregate">one set total</option>
         </select>
       </div>
+      {#if ex.discipline !== 'swim'}
       <div class="field">
         <span class="lbl">Lung volume</span>
         <select value={exLung(ex)} onchange={(e) => setExLung(ex, e.currentTarget.value)}>
@@ -440,7 +447,8 @@
           {#each LUNG_OPTS as o}<option value={o.value}>{o.label}</option>{/each}
         </select>
       </div>
-      {#if isDynamic(ex.discipline)}
+      {/if}
+      {#if isDynamic(ex.discipline) && ex.discipline !== 'swim'}
         <div class="field">
           <span class="lbl">Speed</span>
           <select value={exSpeed(ex)} onchange={(e) => setExSpeed(ex, e.currentTarget.value)}>

@@ -28,7 +28,7 @@ export const INCIDENTS = [
 
 export const FEELS = ['great', 'good', 'meh', 'bad', 'terrible']
 
-export const DISCIPLINES = ['STA', 'DYN', 'DYNb', 'DNF', 'tortuga']
+export const DISCIPLINES = ['STA', 'DYN', 'DYNb', 'DNF', 'tortuga', 'swim']
 
 // Effort shapes. `simple` resolves to hold or distance from the discipline; the
 // rest fix an explicit segment order (see repSegments).
@@ -64,7 +64,9 @@ export function mixedLung(reps) {
   return new Set((reps ?? []).map((r) => r.lung_volume ?? 'FL')).size > 1
 }
 
-const DYNAMIC = new Set(['DYN', 'DYNb', 'DNF'])
+// Surface swimming ('swim') is distance-based like the dynamic apnea
+// disciplines, so it shares their rep shape; it has no PB or apnea pace.
+const DYNAMIC = new Set(['DYN', 'DYNb', 'DNF', 'swim'])
 
 export function isDynamic(discipline) {
   return DYNAMIC.has(discipline)

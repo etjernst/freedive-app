@@ -47,7 +47,7 @@
       <span class="lib-top">
         <span class="name">{t.name ?? t.id}</span>
         <span class="badges">
-          <span class="disc">{discLabel(t.discipline)}</span>
+          {#if t.discipline !== 'swim'}<span class="disc">{discLabel(t.discipline)}</span>{/if}
           {#if roleLabel(t.role)}<span class="role">{roleLabel(t.role)}</span>{/if}
         </span>
       </span>

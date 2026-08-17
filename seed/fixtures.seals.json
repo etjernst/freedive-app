@@ -395,7 +395,7 @@
       "name": "Hypercapnic surface swim",
       "environment": "pool",
       "role": "main",
-      "discipline": "any",
+      "discipline": "swim",
       "capacity_tags": [
         "co2"
       ],
@@ -496,7 +496,7 @@
       "name": "Recovery swim",
       "environment": "pool",
       "role": "cooldown",
-      "discipline": "any",
+      "discipline": "swim",
       "capacity_tags": [],
       "collections": [
         "seals"

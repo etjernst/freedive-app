@@ -43,7 +43,7 @@
         }
       }
     },
-    "discipline": { "enum": ["STA", "DYN", "DYNb", "DNF", "tortuga", "any"] },
+    "discipline": { "enum": ["STA", "DYN", "DYNb", "DNF", "tortuga", "swim", "any"] },
     "lungVolume": { "enum": ["FL", "FRC", "RV"] },
     "shape": { "enum": ["simple", "stop-start", "start-stop", "stop-in-the-middle", "continuous-protocol"] },
     "role": { "enum": ["warmup", "main", "cooldown"] },

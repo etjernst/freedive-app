@@ -20,7 +20,7 @@ const SPRINT_TEMPLATES = new Set(['dyn-sprints'])
 const SURFACE_TEMPLATES = new Set(['dyn-hypercapnic', 'seals-hypercapnic-swim', 'seals-recovery-swim'])
 
 function paceFor(rep, ex, settings) {
-  if (SURFACE_TEMPLATES.has(ex.template_id)) return settings.swim_pace_s_per_25 ?? null
+  if (ex.discipline === 'swim' || SURFACE_TEMPLATES.has(ex.template_id)) return settings.swim_pace_s_per_25 ?? null
   // Per-rep speed wins; the sprint-template list is a fallback for legacy data.
   const sprint =
     rep?.pace === 'sprint' || rep?.pace === 'max_sprint' || SPRINT_TEMPLATES.has(ex.template_id)
@@ -88,9 +88,16 @@ function effortSeconds(rep, ex, settings) {
       if (ds == null) return null
       total += ds
     } else if (seg === 'continuous') {
+      // A continuous block is timed by its duration when it has one, else by
+      // its distance at the exercise's pace (a hypercapnic surface swim).
       const c = rep.continuous?.duration_s
-      if (c == null) return null
-      total += c
+      if (c != null) {
+        total += c
+      } else {
+        const ds = distanceSeconds(distanceMeters(rep, ex, settings, 'distance_target'), rep, ex, settings)
+        if (ds == null) return null
+        total += ds
+      }
     }
   }
   return total
