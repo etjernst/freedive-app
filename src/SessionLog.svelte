@@ -1,4 +1,5 @@
 <script>
+  import { onDestroy } from 'svelte'
   import { app, currentSession, saveSession, setView } from './lib/store.svelte.js'
   import {
     seedActual,
@@ -49,7 +50,13 @@
     }
   }
   let open = $state({}) // rep details toggles, keyed `${ei}-${ri}`
-  let saved = $state(false)
+  // Autosave: the first real edit marks the session logged and every change is
+  // written back after a short pause and on leaving; the footer shows the state.
+  // Baseline is taken after the seeding above so merely opening the log saves nothing.
+  let saveState = $state('saved')
+  let lastSavedJson = JSON.stringify($state.snapshot(draft))
+  let saveTimer = null
+  const AUTOSAVE_MS = 800
   let chosen = $state('')
 
   // Add an exercise straight in the log (for quick-logging a past session with
@@ -134,15 +141,31 @@
     ex.actual.reps = ex.actual.reps.filter((_, j) => j !== i)
   }
 
-  async function save(back) {
+  async function flush() {
+    clearTimeout(saveTimer)
+    saveTimer = null
     const snap = $state.snapshot(draft)
+    const json = JSON.stringify(snap)
+    if (json === lastSavedJson) return
+    saveState = 'saving'
     snap.status = 'logged'
     await saveSession(snap)
-    if (back) setView('sessions')
-    else {
-      saved = true
-      setTimeout(() => (saved = false), 1500)
-    }
+    lastSavedJson = json
+    saveState = JSON.stringify($state.snapshot(draft)) === json ? 'saved' : 'dirty'
+  }
+  $effect(() => {
+    const json = JSON.stringify(draft)
+    if (json === lastSavedJson) return
+    saveState = 'dirty'
+    clearTimeout(saveTimer)
+    saveTimer = setTimeout(flush, AUTOSAVE_MS)
+  })
+  onDestroy(() => {
+    if (saveTimer) flush()
+  })
+  async function done() {
+    await flush()
+    setView('sessions')
   }
 </script>
 
@@ -425,8 +448,10 @@
   </datalist>
 
   <div class="actions sticky-save">
-    <button onclick={() => save(false)}>{saved ? 'Saved ✓' : 'Save log'}</button>
-    <button class="log-btn" onclick={() => save(true)}>Save & close</button>
+    <span class="save-state" class:pending={saveState !== 'saved'}>
+      {saveState === 'saved' ? 'Saved ✓' : saveState === 'saving' ? 'Saving…' : 'Unsaved changes'}
+    </span>
+    <button class="log-btn" onclick={done}>Done</button>
   </div>
   <div class="actions">
     <button class="link" onclick={() => setView('session-build')}>Edit plan</button>
