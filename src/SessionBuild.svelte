@@ -108,7 +108,7 @@
 
   // The profile the estimator reads: the user's own settings, or the template
   // student's when the toggle below is set to it.
-  const estSettings = $derived(estimateSettings(app.settings))
+  const estSettings = $derived(IS_SEALS ? estimateSettings(app.settings) : app.settings)
   const sessionEstimate = $derived(estimateSession(draft, estSettings))
 
   async function setEstimateFor(v) {
@@ -620,6 +620,7 @@
         ? ` + ${sessionEstimate.openSets} open-ended set${sessionEstimate.openSets === 1 ? '' : 's'}`
         : ''}
     </p>
+    {#if IS_SEALS}
     <div class="filters estimate-for">
       <span class="muted">Estimate for</span>
       <button class="chip" class:active={app.settings.estimate_for !== 'student'} onclick={() => setEstimateFor('me')}>
@@ -629,6 +630,7 @@
         template student
       </button>
     </div>
+    {/if}
   {/if}
 
   <div class="actions sticky-save">

@@ -1,0 +1,12 @@
+# Plan: planner and log fixes (2026-08-17)
+
+Spec: [2026-08-17-planner-and-log-fixes.md](file:///C:/git/freedive-app/quality_reports/specs/2026-08-17-planner-and-log-fixes.md).
+Mode: Implementation, main thread (each step touches Svelte components whose state wiring needs judgment; nothing is mechanical enough to farm out).
+One commit per numbered step; `npm run build` and `npm run build:seals` after each, browser check with `vite preview` at the end.
+
+1. Estimator (`src/lib/estimate.js`, `src/lib/settings.js`, `src/Settings.svelte`): new QUAL_PCT, qualitative distances via QUAL_PCT, sprint → cruise fallback with a `fallbacks` list in the result, `attempt_prep_s` / `attempt_recovery_s` settings (default 300) added for `max` / `close_to_max` reps, `recovery_inter` × (sets − 1), `rest_after_s`; result gains `notes` for the estimate line. Settings form gets the two overhead fields under a "Time estimate" heading. Re-run the backup script from the scratchpad to confirm the 14 August sessions now estimate.
+2. Template student gated to Seals (`src/Settings.svelte`, `src/SessionBuild.svelte`): `IS_SEALS` around the section and the toggle; builder uses `app.settings` directly in the full edition.
+3. Session model (`src/lib/session.js`, `schema/freedive.schema.json`): `technique` on reps (planned and actual, seeded from plan), `rest_after_s`, `collapsed`, `plan_locked` on `newSession`; `planRepLine` shows technique and the max overhead; `planOverview` shows rest-between-sets and rest-after; `describeTechnique` helper.
+4. Builder (`src/SessionBuild.svelte`, `src/app.css`): rest-between-sets field when sets > 1; "+ rest" control between cards with a pill; DNF technique select at exercise level and under "More options"; collapsed card rendering with a chevron; "Lock plan" button next to "Log actuals →", read-only banner and `fieldset[disabled]` when locked; qualitative distance input gains a datalist of the five words.
+5. Log (`src/SessionLog.svelte`, `src/Sessions.svelte`, `src/App.svelte`, `src/app.css`): `log-view` class with its own accent (header band, card left stripe, footer), "Logging actuals" label; sessions list opens locked or logged sessions in the log; addRep copies from the rep above; technique in planned context and on actual reps.
+6. Verify: both builds, `python schema/validate.py`, browser pass through build → lock → log → back, one collapsed card, one rest pill, one DNF technique exercise, and the estimate on a max-attempt exercise; session log; commit and push.

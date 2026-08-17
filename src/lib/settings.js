@@ -26,12 +26,17 @@ export const DEFAULT_SETTINGS = {
     sweet16_DYN: null,
   },
   pace_s_per_25: { DNF: null, DYN: null, DYNb: null },
-  // Sprint pace (faster than cruise) per dynamic discipline, and a single
-  // surface-swim pace for hypercapnic swims. Both seconds per 25 m.
+  // Full-sprint pace per dynamic discipline (a 'sprint' rep swims at the
+  // midpoint between this and cruise), and a single surface-swim pace for
+  // hypercapnic swims. Both seconds per 25 m.
   sprint_pace_s_per_25: { DNF: null, DYN: null, DYNb: null },
   swim_pace_s_per_25: null,
   // Seconds a single recovery breath takes, for breath-counted recoveries.
   recovery_breath_s: 10,
+  // Time the estimate adds around a max attempt (a rep whose target is the
+  // qualitative max or close-to-max): preparation before, recovery after.
+  attempt_prep_s: 300,
+  attempt_recovery_s: 300,
   pool_length_m: 25,
   spirometer: { vital_capacity_l: null, packed_l: null },
   // Cold-start first-contraction baseline, keyed "DISCIPLINE|LUNG", until
@@ -119,6 +124,8 @@ export function mergeSettings(stored) {
     sprint_pace_s_per_25: { ...DEFAULT_SETTINGS.sprint_pace_s_per_25, ...(s.sprint_pace_s_per_25 ?? {}) },
     swim_pace_s_per_25: s.swim_pace_s_per_25 ?? null,
     recovery_breath_s: s.recovery_breath_s ?? DEFAULT_SETTINGS.recovery_breath_s,
+    attempt_prep_s: s.attempt_prep_s ?? DEFAULT_SETTINGS.attempt_prep_s,
+    attempt_recovery_s: s.attempt_recovery_s ?? DEFAULT_SETTINGS.attempt_recovery_s,
     pool_length_m: s.pool_length_m ?? DEFAULT_SETTINGS.pool_length_m,
     spirometer: { ...DEFAULT_SETTINGS.spirometer, ...(s.spirometer ?? {}) },
     one_c_baseline: { ...(s.one_c_baseline ?? {}) },

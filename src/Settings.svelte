@@ -1,5 +1,6 @@
 <script>
   import { app, saveSettings, setView, refreshLibrary } from './lib/store.svelte.js'
+  import { IS_SEALS } from './lib/edition.js'
   import {
     PB_FIELDS,
     ONE_C_BUCKETS,
@@ -33,6 +34,8 @@
       },
       swimPace: s.swim_pace_s_per_25 ?? '',
       recBreath: s.recovery_breath_s ?? '',
+      attemptPrep: fmtMMSS(s.attempt_prep_s),
+      attemptRec: fmtMMSS(s.attempt_recovery_s),
       pool: s.pool_length_m ?? '',
       vc: s.spirometer.vital_capacity_l ?? '',
       packed: s.spirometer.packed_l ?? '',
@@ -99,6 +102,8 @@
       },
       swim_pace_s_per_25: numOrNull(sd.swimPace),
       recovery_breath_s: numOrNull(sd.recBreath) ?? 10,
+      attempt_prep_s: parseMMSS(sd.attemptPrep) ?? 300,
+      attempt_recovery_s: parseMMSS(sd.attemptRec) ?? 300,
       pool_length_m: numOrNull(sd.pool) ?? 25,
       spirometer: { vital_capacity_l: numOrNull(sd.vc), packed_l: numOrNull(sd.packed) },
       one_c_baseline: oneC,
@@ -160,9 +165,10 @@
     <div class="field"><label for="pace-dnf">DNF cruise</label><input id="pace-dnf" type="number" bind:value={sd.pace.DNF} /></div>
     <div class="field"><label for="pace-dyn">DYN cruise</label><input id="pace-dyn" type="number" bind:value={sd.pace.DYN} /></div>
     <div class="field"><label for="pace-dynb">DYNb cruise</label><input id="pace-dynb" type="number" bind:value={sd.pace.DYNb} /></div>
-    <div class="field"><label for="spr-dnf">DNF sprint</label><input id="spr-dnf" type="number" bind:value={sd.sprintPace.DNF} /></div>
-    <div class="field"><label for="spr-dyn">DYN sprint</label><input id="spr-dyn" type="number" bind:value={sd.sprintPace.DYN} /></div>
-    <div class="field"><label for="spr-dynb">DYNb sprint</label><input id="spr-dynb" type="number" bind:value={sd.sprintPace.DYNb} /></div>
+    <div class="field"><label for="spr-dnf">DNF full sprint</label><input id="spr-dnf" type="number" bind:value={sd.sprintPace.DNF} /></div>
+    <div class="field"><label for="spr-dyn">DYN full sprint</label><input id="spr-dyn" type="number" bind:value={sd.sprintPace.DYN} /></div>
+    <div class="field"><label for="spr-dynb">DYNb full sprint</label><input id="spr-dynb" type="number" bind:value={sd.sprintPace.DYNb} /></div>
+    <p class="muted">A "sprint" rep is timed at the midpoint between cruise and full sprint; "max sprint" at full sprint. Without a sprint pace, sprints are timed at cruise.</p>
     <div class="field"><label for="swim">Surface swim (hypercapnic)</label><input id="swim" type="number" bind:value={sd.swimPace} /></div>
   </section>
 
@@ -172,6 +178,38 @@
     <div class="field"><label for="recb">Seconds per breath</label><input id="recb" type="number" bind:value={sd.recBreath} placeholder="10" /></div>
   </section>
 
+  <section class="card">
+    <h2>Max attempts</h2>
+    <p class="muted">Time the estimate adds around a max or close-to-max attempt: preparation before, recovery after.</p>
+    <div class="field">
+      <label for="att-prep">Preparation (mm:ss)</label>
+      <input
+        id="att-prep"
+        inputmode="numeric"
+        bind:value={sd.attemptPrep}
+        oninput={(e) => {
+          sd.attemptPrep = autoColon(e.target.value)
+          e.target.value = sd.attemptPrep
+        }}
+        placeholder="5:00"
+      />
+    </div>
+    <div class="field">
+      <label for="att-rec">Recovery after (mm:ss)</label>
+      <input
+        id="att-rec"
+        inputmode="numeric"
+        bind:value={sd.attemptRec}
+        oninput={(e) => {
+          sd.attemptRec = autoColon(e.target.value)
+          e.target.value = sd.attemptRec
+        }}
+        placeholder="5:00"
+      />
+    </div>
+  </section>
+
+  {#if IS_SEALS}
   <section class="card">
     <h2>Template student</h2>
     <p class="muted">
@@ -197,6 +235,7 @@
       />
     </div>
   </section>
+  {/if}
 
   <section class="card">
     <h2>Pool and spirometer</h2>
