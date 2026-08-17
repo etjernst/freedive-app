@@ -1,4 +1,4 @@
-import fixtures from '../../seed/fixtures.json'
+import fixtures from '$fixtures'
 import { getDB, getMeta, setMeta, DATA_SCHEMA_VERSION } from './db.js'
 
 // Merge the shipped exercise library into IndexedDB on every load, additively:

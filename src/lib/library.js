@@ -26,6 +26,15 @@ export const CAPACITY_FILTERS = [
 
 const ROLE_ORDER = { warmup: 0, main: 1, cooldown: 2 }
 
+// Third filter axis, seals-only: the training-block phase a template's
+// defaults are tuned for (schema `phase_tags`). null = no filter.
+export const PHASE_FILTERS = [
+  { key: 'base', label: 'Base' },
+  { key: 'build', label: 'Build' },
+  { key: 'specialization', label: 'Specialization' },
+  { key: 'taper', label: 'Taper' },
+]
+
 export function matchesFilter(t, key) {
   if (key === 'all') return true
   if (key === 'dynamic') return DYNAMIC_DISC.has(t.discipline)
@@ -37,11 +46,22 @@ export function matchesCapacity(t, key) {
   return (t.capacity_tags ?? []).includes(key)
 }
 
-// Filtered on both axes, then ordered warm-up -> main -> cool-down, then by
-// name, so a filtered list reads top-to-bottom the way a session is assembled.
-export function filterLibrary(templates, key, capacity = null) {
+export function matchesPhase(t, key) {
+  if (!key) return true
+  return (t.phase_tags ?? []).includes(key)
+}
+
+// Whether any template in the given list carries phase tags at all, so the
+// phase chip row only renders for a library that has phases (the seals one).
+export function hasPhases(templates) {
+  return (templates ?? []).some((t) => (t.phase_tags ?? []).length > 0)
+}
+
+// Filtered on all three axes, then ordered warm-up -> main -> cool-down, then
+// by name, so a filtered list reads top-to-bottom the way a session is assembled.
+export function filterLibrary(templates, key, capacity = null, phase = null) {
   return templates
-    .filter((t) => matchesFilter(t, key) && matchesCapacity(t, capacity))
+    .filter((t) => matchesFilter(t, key) && matchesCapacity(t, capacity) && matchesPhase(t, phase))
     .slice()
     .sort(
       (a, b) =>

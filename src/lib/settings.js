@@ -52,6 +52,19 @@ export const DEFAULT_SETTINGS = {
     tidal: 'neutral',
     '3 big breaths': 'neutral',
   },
+  // Which profile the session-builder time estimate reads: the signed-in
+  // user's own numbers, or the template student below.
+  estimate_for: 'me', // 'me' | 'student'
+  // A representative "template student" profile, so a coach can time a
+  // session before anyone has entered their own personal bests.
+  template_student: {
+    label: 'Template student',
+    pbs: { DYNb: 100, tortuga: 90 },
+    pace_s_per_25: { DYNb: 25 },
+    sprint_pace_s_per_25: { DYNb: 17.5 },
+    swim_pace_s_per_25: 30,
+    recovery_breath_s: 10,
+  },
 }
 
 // Personal-best fields surfaced in the settings form, in display order. `unit`
@@ -112,6 +125,37 @@ export function mergeSettings(stored) {
     breathing_intensity: s.breathing_intensity
       ? { ...s.breathing_intensity }
       : { ...DEFAULT_SETTINGS.breathing_intensity },
+    estimate_for: s.estimate_for === 'student' ? 'student' : 'me',
+    template_student: {
+      ...DEFAULT_SETTINGS.template_student,
+      ...(s.template_student ?? {}),
+      pbs: { ...DEFAULT_SETTINGS.template_student.pbs, ...(s.template_student?.pbs ?? {}) },
+      pace_s_per_25: {
+        ...DEFAULT_SETTINGS.template_student.pace_s_per_25,
+        ...(s.template_student?.pace_s_per_25 ?? {}),
+      },
+      sprint_pace_s_per_25: {
+        ...DEFAULT_SETTINGS.template_student.sprint_pace_s_per_25,
+        ...(s.template_student?.sprint_pace_s_per_25 ?? {}),
+      },
+    },
+  }
+}
+
+// The settings object the estimator should read: the user's own profile as
+// stored, or the template-student profile layered over it when
+// estimate_for === 'student' (student paces replace the user's; PBs merge on
+// top so an unset student PB still falls back to the user's own).
+export function estimateSettings(settings) {
+  if (settings.estimate_for !== 'student') return settings
+  const ts = settings.template_student
+  return {
+    ...settings,
+    pbs: { ...settings.pbs, ...ts.pbs },
+    pace_s_per_25: { ...ts.pace_s_per_25 },
+    sprint_pace_s_per_25: { ...ts.sprint_pace_s_per_25 },
+    swim_pace_s_per_25: ts.swim_pace_s_per_25,
+    recovery_breath_s: ts.recovery_breath_s,
   }
 }
 

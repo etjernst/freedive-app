@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:seals": "vite --mode seals",
     "build": "vite build",
+    "build:seals": "vite build --mode seals",
     "preview": "vite preview"
   },
   "devDependencies": {

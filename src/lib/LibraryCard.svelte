@@ -54,6 +54,9 @@
       {#if t.capacity_tags?.length}
         <span class="tags">{t.capacity_tags.join(' · ')}</span>
       {/if}
+      {#if t.phase_tags?.length}
+        <span class="tags">{t.phase_tags.join(' · ')}</span>
+      {/if}
       {#if t.goal}<span class="lib-goal muted">{t.goal}</span>{/if}
     </button>
     {#if quick}

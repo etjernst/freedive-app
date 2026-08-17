@@ -1,4 +1,4 @@
-import fixtures from '../../seed/fixtures.json'
+import fixtures from '$fixtures'
 
 // Co-occurrence affinities shipped with the seed: pairs of exercises that
 // appeared together in the same source session. Used to suggest "goes well

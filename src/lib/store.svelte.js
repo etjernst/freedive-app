@@ -1,5 +1,5 @@
 import { getDB, setMeta } from './db.js'
-import fixtures from '../../seed/fixtures.json'
+import fixtures from '$fixtures'
 import { seedIfNeeded } from './seed.js'
 import { requestPersistence, storageEstimate } from './persist.js'
 import { exportToFile, restoreFromFile, buildExport, restoreFromEnvelope, parseExport, localIso } from './backup.js'

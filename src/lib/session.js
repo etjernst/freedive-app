@@ -158,8 +158,12 @@ export function newSession(pool_length_m = 25) {
 // Snapshot a library template into a session exercise. The template's rep block
 // becomes the immutable plan; discipline is forced concrete ('any' -> STA, then
 // editable in the build view); actual starts empty.
-export function instantiateExercise(template) {
-  const reps = (template.reps ?? []).map((r) => clone(r))
+export function instantiateExercise(template, phase = null) {
+  // A phase-tagged template (the seals library) carries per-phase reps and,
+  // optionally, its own set_repeat / recovery_inter; fall back to the
+  // template's own fields when no phase is selected or the template has none.
+  const phaseDefaults = phase ? template.phase_defaults?.[phase] : null
+  const reps = (phaseDefaults?.reps ?? template.reps ?? []).map((r) => clone(r))
   // 'any' is a template-only placeholder; every 'any' exercise in the library is
   // a dynamic one (the static exercises all carry a concrete STA), so resolve it
   // to a dynamic default the user can change, not STA.
@@ -179,12 +183,14 @@ export function instantiateExercise(template) {
     plan_note: template.plan_note ?? '',
     shape_default: template.shape_default ?? 'simple',
     log_mode: template.log_mode ?? 'per_rep',
-    set_repeat: template.set_repeat ?? 1,
+    set_repeat: phaseDefaults?.set_repeat ?? template.set_repeat ?? 1,
     termination: template.termination ?? { type: 'fixed_n' },
     recovery_intra_default: template.recovery_intra_default ?? null,
-    recovery_inter: template.recovery_inter ?? null,
+    recovery_inter: phaseDefaults?.recovery_inter ?? template.recovery_inter ?? null,
     // wet vs dry, only meaningful for STA; seeded from the template environment.
     medium: template.environment === 'dry' ? 'dry' : 'wet',
+    // Which training phase's defaults populated this exercise, if any.
+    phase: phase ?? null,
     // Planning hint used only for the time estimate of open-ended/qualitative sets.
     plan_estimate: { reps: null, distance_m: null },
     planned: { reps: reps.length ? reps : [blankRep('simple')] },

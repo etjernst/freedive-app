@@ -46,6 +46,15 @@
         pattern,
         intensity,
       })),
+      estimateFor: s.estimate_for ?? 'me',
+      student: {
+        dynbPb: s.template_student.pbs.DYNb ?? '',
+        tortugaS: fmtMMSS(s.template_student.pbs.tortuga),
+        cruisePace: s.template_student.pace_s_per_25.DYNb ?? '',
+        sprintPace: s.template_student.sprint_pace_s_per_25.DYNb ?? '',
+        swimPace: s.template_student.swim_pace_s_per_25 ?? '',
+        breathS: s.template_student.recovery_breath_s ?? '',
+      },
     }
   }
 
@@ -94,6 +103,15 @@
       spirometer: { vital_capacity_l: numOrNull(sd.vc), packed_l: numOrNull(sd.packed) },
       one_c_baseline: oneC,
       breathing_intensity: breathing,
+      estimate_for: sd.estimateFor === 'student' ? 'student' : 'me',
+      template_student: {
+        label: 'Template student',
+        pbs: { DYNb: numOrNull(sd.student.dynbPb), tortuga: parseMMSS(sd.student.tortugaS) },
+        pace_s_per_25: { DYNb: numOrNull(sd.student.cruisePace) },
+        sprint_pace_s_per_25: { DYNb: numOrNull(sd.student.sprintPace) },
+        swim_pace_s_per_25: numOrNull(sd.student.swimPace),
+        recovery_breath_s: numOrNull(sd.student.breathS),
+      },
     }
   }
 
@@ -152,6 +170,32 @@
     <h2>Recovery</h2>
     <p class="muted">Seconds one recovery breath takes, for breath-counted recoveries.</p>
     <div class="field"><label for="recb">Seconds per breath</label><input id="recb" type="number" bind:value={sd.recBreath} placeholder="10" /></div>
+  </section>
+
+  <section class="card">
+    <h2>Template student</h2>
+    <p class="muted">
+      Used by the session estimate when 'Estimate for: template student' is on, so a coach can
+      time a session before anyone enters their own numbers.
+    </p>
+    <div class="field"><label for="ts-dynb">DYNb PB (m)</label><input id="ts-dynb" type="number" bind:value={sd.student.dynbPb} placeholder="100" /></div>
+    <div class="field"><label for="ts-cruise">Cruise pace (s per 25 m)</label><input id="ts-cruise" type="number" bind:value={sd.student.cruisePace} placeholder="25" /></div>
+    <div class="field"><label for="ts-sprint">Sprint pace (s per 25 m)</label><input id="ts-sprint" type="number" bind:value={sd.student.sprintPace} placeholder="17.5" /></div>
+    <div class="field"><label for="ts-swim">Surface-swim pace (s per 25 m)</label><input id="ts-swim" type="number" bind:value={sd.student.swimPace} placeholder="30" /></div>
+    <div class="field"><label for="ts-breath">Breath length (s)</label><input id="ts-breath" type="number" bind:value={sd.student.breathS} placeholder="10" /></div>
+    <div class="field">
+      <label for="ts-tortuga">Tortuga time (mm:ss)</label>
+      <input
+        id="ts-tortuga"
+        inputmode="numeric"
+        bind:value={sd.student.tortugaS}
+        oninput={(e) => {
+          sd.student.tortugaS = autoColon(e.target.value)
+          e.target.value = sd.student.tortugaS
+        }}
+        placeholder="1:30"
+      />
+    </div>
   </section>
 
   <section class="card">

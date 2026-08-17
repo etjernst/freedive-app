@@ -1,6 +1,6 @@
 <script>
   import { onDestroy } from 'svelte'
-  import { app, currentSession, saveSession, saveTemplate, setView } from './lib/store.svelte.js'
+  import { app, currentSession, saveSession, saveSettings, saveTemplate, setView } from './lib/store.svelte.js'
   import {
     instantiateExercise,
     blankExercise,
@@ -22,7 +22,7 @@
     mixedLung,
   } from './lib/session.js'
   import { suggestionsFor } from './lib/affinities.js'
-  import { filterLibrary } from './lib/library.js'
+  import { filterLibrary, hasPhases } from './lib/library.js'
   import LibraryFilters from './lib/LibraryFilters.svelte'
   import LibraryCard from './lib/LibraryCard.svelte'
   import {
@@ -32,7 +32,9 @@
     needsPlanningReps,
     needsPlanningDistance,
   } from './lib/estimate.js'
+  import { estimateSettings } from './lib/settings.js'
   import { openInObsidian } from './lib/obsidian.js'
+  import { IS_SEALS } from './lib/edition.js'
   import MMSS from './lib/MMSS.svelte'
   import Help from './lib/Help.svelte'
 
@@ -60,7 +62,8 @@
   let showLibrary = $state(clone(currentSession())?.exercises?.length === 0)
   let libFilter = $state('all')
   let libCap = $state(null)
-  const libTemplates = $derived(filterLibrary(app.templates, libFilter, libCap))
+  let libPhase = $state(null)
+  const libTemplates = $derived(filterLibrary(app.templates, libFilter, libCap, libPhase))
   // Tapping a card previews it in place; only the "+" adds it to the draft.
   let libPreview = $state(null)
   let justAdded = $state(null)
@@ -97,12 +100,20 @@
   // back to the settings default.
   draft.pool_length_m ??= app.settings.pool_length_m ?? 25
 
-  const sessionEstimate = $derived(estimateSession(draft, app.settings))
+  // The profile the estimator reads: the user's own settings, or the template
+  // student's when the toggle below is set to it.
+  const estSettings = $derived(estimateSettings(app.settings))
+  const sessionEstimate = $derived(estimateSession(draft, estSettings))
+
+  async function setEstimateFor(v) {
+    if (app.settings.estimate_for === v) return
+    await saveSettings({ ...$state.snapshot(app.settings), estimate_for: v })
+  }
 
   function addTemplate(id) {
     const t = app.templates.find((x) => x.id === id)
     if (!t) return
-    const ex = instantiateExercise(t)
+    const ex = instantiateExercise(t, libPhase)
     ensureExercise(ex)
     draft.exercises = [...draft.exercises, ex]
     justAdded = id
@@ -309,7 +320,12 @@
       </button>
     </div>
     {#if showLibrary}
-      <LibraryFilters bind:disc={libFilter} bind:cap={libCap}>
+      <LibraryFilters
+        bind:disc={libFilter}
+        bind:cap={libCap}
+        bind:phase={libPhase}
+        showPhases={hasPhases(app.templates)}
+      >
         {#if libAdded > 0}
           <span class="lib-count">{libAdded} added</span>
         {/if}
@@ -355,7 +371,7 @@
   {/if}
 
   {#each draft.exercises as ex, ei (ex.id)}
-    {@const est = estimateExercise(ex, app.settings)}
+    {@const est = estimateExercise(ex, estSettings)}
     <section class="card exercise">
       <div class="ex-head">
         <input class="ex-name" bind:value={ex.name} />
@@ -595,6 +611,15 @@
         ? ` + ${sessionEstimate.openSets} open-ended set${sessionEstimate.openSets === 1 ? '' : 's'}`
         : ''}
     </p>
+    <div class="filters estimate-for">
+      <span class="muted">Estimate for</span>
+      <button class="chip" class:active={app.settings.estimate_for !== 'student'} onclick={() => setEstimateFor('me')}>
+        me
+      </button>
+      <button class="chip" class:active={app.settings.estimate_for === 'student'} onclick={() => setEstimateFor('student')}>
+        template student
+      </button>
+    </div>
   {/if}
 
   <div class="actions sticky-save">
@@ -604,7 +629,9 @@
     <button class="log-btn" onclick={toLog} disabled={draft.exercises.length === 0}>Log actuals →</button>
   </div>
   <div class="actions">
-    <button class="link" onclick={toObsidian} disabled={draft.exercises.length === 0}>Add to Obsidian</button>
+    {#if !IS_SEALS}
+      <button class="link" onclick={toObsidian} disabled={draft.exercises.length === 0}>Add to Obsidian</button>
+    {/if}
     <button class="link" onclick={() => setView('sessions')}>Back to sessions</button>
   </div>
 </main>

@@ -1,6 +1,9 @@
 import { openDB } from 'idb'
+import { IS_SEALS } from './edition.js'
 
-const DB_NAME = 'winnow'
+// Both editions can be served from the same GitHub Pages origin, so the DB
+// name is what keeps their data apart.
+const DB_NAME = IS_SEALS ? 'winnow-seals' : 'winnow'
 
 // IndexedDB structural version: bump only when the object stores or indexes
 // below change shape. Distinct from DATA_SCHEMA_VERSION, which versions the

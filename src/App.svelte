@@ -13,9 +13,10 @@
     createSession,
     startSessionWith,
   } from './lib/store.svelte.js'
-  import { filterLibrary } from './lib/library.js'
+  import { filterLibrary, hasPhases } from './lib/library.js'
   import LibraryFilters from './lib/LibraryFilters.svelte'
   import LibraryCard from './lib/LibraryCard.svelte'
+  import { IS_SEALS, APP_NAME, APP_TAGLINE } from './lib/edition.js'
   import logoUrl from './assets/winnow_logo.svg'
   import Settings from './Settings.svelte'
   import Sessions from './Sessions.svelte'
@@ -25,7 +26,7 @@
   import Measurements from './Measurements.svelte'
 
   const TITLES = {
-    home: { h1: 'Winnow', tag: 'Capture, tracking, and coaching' },
+    home: { h1: APP_NAME, tag: APP_TAGLINE },
     settings: { h1: 'Settings', tag: 'Personal bests, pace, and training baselines' },
     sessions: { h1: 'Sessions', tag: 'Build, log, and review your training' },
     'session-build': { h1: 'Build session', tag: 'Assemble the plan from your library' },
@@ -37,8 +38,9 @@
 
   let libFilter = $state('all')
   let libCap = $state(null)
-  const libTemplates = $derived(filterLibrary(app.templates, libFilter, libCap))
-  const libFiltered = $derived(libFilter !== 'all' || libCap !== null)
+  let libPhase = $state(null)
+  const libTemplates = $derived(filterLibrary(app.templates, libFilter, libCap, libPhase))
+  const libFiltered = $derived(libFilter !== 'all' || libCap !== null || libPhase !== null)
 
   // Read-only peek into a library exercise: tapping a card opens its contents
   // instead of starting a session; the start button lives inside the preview.
@@ -100,7 +102,7 @@
 <div class="splash" aria-hidden="true">
   <div class="splash-inner">
     <img class="splash-logo" src={logoUrl} alt="" />
-    <div class="wordmark">Winnow</div>
+    <div class="wordmark">{APP_NAME}</div>
     <p class="mantra">No quick decisions</p>
   </div>
 </div>
@@ -171,7 +173,12 @@
         {#if libFiltered}{libTemplates.length} of {app.templates.length}{:else}{app.templates.length}{/if}
         templates · tap one to see what's in it
       </p>
-      <LibraryFilters bind:disc={libFilter} bind:cap={libCap} />
+      <LibraryFilters
+        bind:disc={libFilter}
+        bind:cap={libCap}
+        bind:phase={libPhase}
+        showPhases={hasPhases(app.templates)}
+      />
       <div class="lib-list">
         {#each libTemplates as t (t.id)}
           <LibraryCard
@@ -217,6 +224,7 @@
       {#if notice}<p class="notice">{notice}</p>{/if}
     </section>
 
+    {#if !IS_SEALS}
     <section class="card">
       <h2>Cloud backup (Dropbox)</h2>
       {#if app.dropbox.connected}
@@ -256,6 +264,7 @@
       {#if app.dropbox.error}<p class="notice err">{app.dropbox.error}</p>{/if}
       {#if app.dropbox.justConnected}<p class="notice">Connected to Dropbox</p>{/if}
     </section>
+    {/if}
 
     <p class="phase-note">Phase 2a — capture. Calendar and capacities to come.</p>
   </main>

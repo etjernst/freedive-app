@@ -17,7 +17,7 @@ const OPEN_TERMS = new Set(['until_failure', 'until_quality_drops', 'until_1c', 
 
 // Templates that swim at a pace other than the cruise pace_s_per_25.
 const SPRINT_TEMPLATES = new Set(['dyn-sprints'])
-const SURFACE_TEMPLATES = new Set(['dyn-hypercapnic'])
+const SURFACE_TEMPLATES = new Set(['dyn-hypercapnic', 'seals-hypercapnic-swim', 'seals-recovery-swim'])
 
 function paceFor(rep, ex, settings) {
   if (SURFACE_TEMPLATES.has(ex.template_id)) return settings.swim_pace_s_per_25 ?? null
@@ -71,6 +71,10 @@ function distanceMeters(rep, ex, settings, key) {
 }
 
 function effortSeconds(rep, ex, settings) {
+  // Tortuga is scored on time, not distance: "cover at most 50 m in the
+  // longest possible time", so its PB is a duration and there is no pace to
+  // multiply a distance by.
+  if (ex.discipline === 'tortuga') return settings.pbs?.tortuga ?? null
   const segs = repSegments(rep.shape ?? 'simple', ex.discipline)
   let total = 0
   for (const seg of segs) {
