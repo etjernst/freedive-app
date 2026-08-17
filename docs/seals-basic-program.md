@@ -19,7 +19,7 @@ An exercise can have more than one phase tag; the hypercapnic swim, for instance
 Adding a `phase_tags` array to the template schema, next to `capacity_tags`, is the schema change the Seals edition needs, and it doubles as the "show me base-phase exercises" filter in the library.
 
 The phase tags follow Jeranko's four blocks.
-Base is CO2 tolerance: short-rest sets, pyramids, hypercapnic swimming, dry CO2 tables.
+Base is CO2 tolerance: short-rest sets, pyramids, hypercapnic swimming.
 Build adds speed and the first submax dives while the CO2 work tightens.
 Specialization is submax dives at a rising percentage of PB plus an endurance ladder.
 Taper is the same sessions with the interval count cut week on week and intensity held.
