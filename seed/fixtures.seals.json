@@ -1,0 +1,1545 @@
+{
+  "schema_version": 1,
+  "templates": [
+    {
+      "schema_version": 1,
+      "id": "seals-fixed-rest",
+      "name": "Fixed-rest set",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "DYNb",
+      "capacity_tags": [
+        "co2"
+      ],
+      "collections": [
+        "seals"
+      ],
+      "phase_tags": [
+        "base",
+        "specialization",
+        "taper"
+      ],
+      "phase_defaults": {
+        "base": {
+          "reps": [
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "cap",
+                "value": 60,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "cap",
+                "value": 60,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "cap",
+                "value": 60,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "cap",
+                "value": 60,
+                "unit": "time"
+              }
+            }
+          ]
+        },
+        "specialization": {
+          "reps": [
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "cap",
+                "value": 45,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "cap",
+                "value": 45,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "cap",
+                "value": 45,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "cap",
+                "value": 45,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "cap",
+                "value": 45,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "cap",
+                "value": 45,
+                "unit": "time"
+              }
+            }
+          ]
+        },
+        "taper": {
+          "reps": [
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "cap",
+                "value": 45,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "cap",
+                "value": 45,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "cap",
+                "value": 45,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "cap",
+                "value": 45,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "cap",
+                "value": 45,
+                "unit": "time"
+              }
+            }
+          ]
+        }
+      },
+      "goal": "Repeated 50 m at your normal dive pace with a rest cap. Base: 4, 5, 6, 7 reps across the four weeks, cap 60 s. Specialization: 6 reps, cap 45 s. Taper: 5 then 4 reps, cap 45 s.",
+      "cues": "reps (def 4); distance (def 50m, 25m for newer members); rest cap (def 60s).",
+      "log_mode": "per_rep",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n"
+      },
+      "reps": [
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "cap",
+            "value": 60,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "cap",
+            "value": 60,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "cap",
+            "value": 60,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "cap",
+            "value": 60,
+            "unit": "time"
+          }
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "seals-pyramid",
+      "name": "Pyramid",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "DYNb",
+      "capacity_tags": [
+        "co2"
+      ],
+      "collections": [
+        "seals"
+      ],
+      "phase_tags": [
+        "base"
+      ],
+      "phase_defaults": {
+        "base": {
+          "reps": [
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "cap",
+                "value": 60,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 25
+              },
+              "recovery": {
+                "type": "cap",
+                "value": 60,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 25
+              },
+              "recovery": {
+                "type": "cap",
+                "value": 60,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              }
+            }
+          ]
+        }
+      },
+      "goal": "50-25-25-50 in weeks 1-2, 50-50-25-50-50 in weeks 3-4, rest no longer than 60 s and shorter when you can.",
+      "cues": "ladder (def 50-25-25-50); rest cap (def 60s).",
+      "log_mode": "per_rep",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n"
+      },
+      "reps": [
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "cap",
+            "value": 60,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "recovery": {
+            "type": "cap",
+            "value": 60,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "recovery": {
+            "type": "cap",
+            "value": 60,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          }
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "seals-hypercapnic-swim",
+      "name": "Hypercapnic surface swim",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "any",
+      "capacity_tags": [
+        "co2"
+      ],
+      "collections": [
+        "seals"
+      ],
+      "phase_tags": [
+        "base",
+        "build",
+        "specialization",
+        "taper"
+      ],
+      "phase_defaults": {
+        "base": {
+          "reps": [
+            {
+              "shape": "continuous-protocol",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 100
+              },
+              "continuous": {
+                "stroke_cadence": "3 breaths per 25 m"
+              },
+              "note": "100 to 250 m across the block"
+            }
+          ]
+        },
+        "build": {
+          "reps": [
+            {
+              "shape": "continuous-protocol",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 300
+              },
+              "continuous": {
+                "stroke_cadence": "3 breaths per 25 m"
+              },
+              "note": "300 to 350 m across the block"
+            }
+          ]
+        },
+        "specialization": {
+          "reps": [
+            {
+              "shape": "continuous-protocol",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 400
+              },
+              "continuous": {
+                "stroke_cadence": "3 breaths per 25 m"
+              }
+            }
+          ]
+        },
+        "taper": {
+          "reps": [
+            {
+              "shape": "continuous-protocol",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 300
+              },
+              "continuous": {
+                "stroke_cadence": "3 breaths per 25 m"
+              },
+              "note": "300 then 200 m"
+            }
+          ]
+        }
+      },
+      "goal": "Freestyle on the surface in short fins, no wetsuit, breathing a fixed 3 times per 25 m, no stopping. Base 100 to 250 m, build 300 to 350 m, specialization 400 m, taper 300 then 200 m.",
+      "cues": "distance (def 100m); breaths per 25m (def 3).",
+      "log_mode": "per_rep",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n"
+      },
+      "reps": [
+        {
+          "shape": "continuous-protocol",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 100
+          },
+          "continuous": {
+            "stroke_cadence": "3 breaths per 25 m"
+          },
+          "note": "100 to 250 m across the block"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "seals-recovery-swim",
+      "name": "Recovery swim",
+      "environment": "pool",
+      "role": "cooldown",
+      "discipline": "any",
+      "capacity_tags": [],
+      "collections": [
+        "seals"
+      ],
+      "phase_tags": [
+        "base",
+        "build",
+        "specialization",
+        "taper"
+      ],
+      "phase_defaults": {
+        "base": {
+          "reps": [
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 100
+              },
+              "pace": "relaxed",
+              "note": "any style, breathe normally"
+            }
+          ]
+        },
+        "build": {
+          "reps": [
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 100
+              },
+              "pace": "relaxed",
+              "note": "any style, breathe normally"
+            }
+          ]
+        },
+        "specialization": {
+          "reps": [
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 100
+              },
+              "pace": "relaxed",
+              "note": "any style, breathe normally"
+            }
+          ]
+        },
+        "taper": {
+          "reps": [
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 100
+              },
+              "pace": "relaxed",
+              "note": "any style, breathe normally"
+            }
+          ]
+        }
+      },
+      "goal": "100 m any style, relaxed, breathing normally, to close every session.",
+      "cues": "distance (def 100m).",
+      "log_mode": "per_rep",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n"
+      },
+      "reps": [
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 100
+          },
+          "pace": "relaxed",
+          "note": "any style, breathe normally"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "seals-over-under",
+      "name": "Over-under warm-up",
+      "environment": "pool",
+      "role": "warmup",
+      "discipline": "DYNb",
+      "capacity_tags": [
+        "technique"
+      ],
+      "collections": [
+        "seals"
+      ],
+      "phase_tags": [
+        "base",
+        "build"
+      ],
+      "phase_defaults": {
+        "base": {
+          "reps": [
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 25
+              },
+              "note": "freestyle on the surface"
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 25
+              },
+              "note": "turn, DYNb underwater, no stop"
+            }
+          ],
+          "set_repeat": 2
+        },
+        "build": {
+          "reps": [
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 25
+              },
+              "note": "freestyle on the surface"
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 25
+              },
+              "note": "turn, DYNb underwater, no stop"
+            }
+          ],
+          "set_repeat": 2
+        }
+      },
+      "goal": "25 m freestyle on the surface, turn, 25 m DYNb underwater without stopping; twice for 100 m.",
+      "cues": "rounds (def 2).",
+      "log_mode": "per_rep",
+      "set_repeat": 2,
+      "termination": {
+        "type": "fixed_n"
+      },
+      "reps": [
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "note": "freestyle on the surface"
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "note": "turn, DYNb underwater, no stop"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "seals-sprints",
+      "name": "Sprints",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "DYNb",
+      "capacity_tags": [
+        "fitness_lactic"
+      ],
+      "collections": [
+        "seals"
+      ],
+      "phase_tags": [
+        "base",
+        "build"
+      ],
+      "phase_defaults": {
+        "base": {
+          "reps": [
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 25
+              },
+              "pace": "max_sprint",
+              "recovery": {
+                "type": "absolute",
+                "value": 20,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 25
+              },
+              "pace": "max_sprint",
+              "recovery": {
+                "type": "absolute",
+                "value": 20,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 25
+              },
+              "pace": "max_sprint",
+              "recovery": {
+                "type": "absolute",
+                "value": 20,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 25
+              },
+              "pace": "max_sprint",
+              "recovery": {
+                "type": "absolute",
+                "value": 20,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 25
+              },
+              "pace": "max_sprint",
+              "recovery": {
+                "type": "absolute",
+                "value": 20,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 25
+              },
+              "pace": "max_sprint",
+              "recovery": {
+                "type": "absolute",
+                "value": 20,
+                "unit": "time"
+              }
+            }
+          ],
+          "set_repeat": 2,
+          "recovery_inter": {
+            "type": "absolute",
+            "value": 120,
+            "unit": "time"
+          }
+        },
+        "build": {
+          "reps": [
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 75
+              },
+              "pace": "max_sprint",
+              "recovery": {
+                "type": "cap",
+                "value": 120,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 75
+              },
+              "pace": "max_sprint",
+              "recovery": {
+                "type": "cap",
+                "value": 120,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 75
+              },
+              "pace": "max_sprint",
+              "recovery": {
+                "type": "cap",
+                "value": 120,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 75
+              },
+              "pace": "max_sprint",
+              "recovery": {
+                "type": "cap",
+                "value": 120,
+                "unit": "time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 75
+              },
+              "pace": "max_sprint",
+              "recovery": {
+                "type": "cap",
+                "value": 120,
+                "unit": "time"
+              }
+            }
+          ],
+          "set_repeat": 1
+        }
+      },
+      "goal": "All-out DYNb sprints. Base: 2 sets of 6 x 25 m, 20 s between reps, 2 min between sets (weeks 1-2), then 6 x 50 m with 60 s (weeks 3-4). Build: 5-6 x 75 m with 75-120 s.",
+      "cues": "distance (def 25m); reps (def 6); sets (def 2); rest (def 20s); rest between sets (def 2 min).",
+      "log_mode": "per_rep",
+      "set_repeat": 2,
+      "recovery_inter": {
+        "type": "absolute",
+        "value": 120,
+        "unit": "time"
+      },
+      "termination": {
+        "type": "fixed_n"
+      },
+      "reps": [
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "pace": "max_sprint",
+          "recovery": {
+            "type": "absolute",
+            "value": 20,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "pace": "max_sprint",
+          "recovery": {
+            "type": "absolute",
+            "value": 20,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "pace": "max_sprint",
+          "recovery": {
+            "type": "absolute",
+            "value": 20,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "pace": "max_sprint",
+          "recovery": {
+            "type": "absolute",
+            "value": 20,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "pace": "max_sprint",
+          "recovery": {
+            "type": "absolute",
+            "value": 20,
+            "unit": "time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "pace": "max_sprint",
+          "recovery": {
+            "type": "absolute",
+            "value": 20,
+            "unit": "time"
+          }
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "seals-dolphin-sprints",
+      "name": "Dolphin sprints",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "DYNb",
+      "capacity_tags": [
+        "fitness_lactic"
+      ],
+      "collections": [
+        "seals"
+      ],
+      "phase_tags": [
+        "build"
+      ],
+      "phase_defaults": {
+        "build": {
+          "reps": [
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 25
+              },
+              "pace": "max_sprint",
+              "note": "surface dolphin kick, snorkel or on your back"
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 10
+              },
+              "pace": "max_sprint",
+              "recovery": {
+                "type": "cap",
+                "value": 90,
+                "unit": "time"
+              },
+              "note": "duck dive, underwater sprint"
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 25
+              },
+              "pace": "max_sprint",
+              "note": "surface dolphin kick, snorkel or on your back"
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 10
+              },
+              "pace": "max_sprint",
+              "recovery": {
+                "type": "cap",
+                "value": 90,
+                "unit": "time"
+              },
+              "note": "duck dive, underwater sprint"
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 25
+              },
+              "pace": "max_sprint",
+              "note": "surface dolphin kick, snorkel or on your back"
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 10
+              },
+              "pace": "max_sprint",
+              "recovery": {
+                "type": "cap",
+                "value": 90,
+                "unit": "time"
+              },
+              "note": "duck dive, underwater sprint"
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 25
+              },
+              "pace": "max_sprint",
+              "note": "surface dolphin kick, snorkel or on your back"
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 10
+              },
+              "pace": "max_sprint",
+              "recovery": {
+                "type": "cap",
+                "value": 90,
+                "unit": "time"
+              },
+              "note": "duck dive, underwater sprint"
+            }
+          ],
+          "set_repeat": 2,
+          "recovery_inter": {
+            "type": "absolute",
+            "value": 180,
+            "unit": "time"
+          }
+        }
+      },
+      "goal": "Each rep is 25 m of all-out dolphin kick on the surface (snorkel, or on your back so you can breathe), then a duck dive straight into 10 m underwater at sprint pace. 2 sets of 4 (weeks 5-6), 2 sets of 5 (weeks 7-8), 60-90 s between reps, 3 min between sets, short fins, no wetsuit.",
+      "cues": "reps (def 4); sets (def 2); rest (def 90s); rest between sets (def 3 min).",
+      "log_mode": "per_rep",
+      "set_repeat": 2,
+      "recovery_inter": {
+        "type": "absolute",
+        "value": 180,
+        "unit": "time"
+      },
+      "termination": {
+        "type": "fixed_n"
+      },
+      "reps": [
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "pace": "max_sprint",
+          "note": "surface dolphin kick, snorkel or on your back"
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 10
+          },
+          "pace": "max_sprint",
+          "recovery": {
+            "type": "cap",
+            "value": 90,
+            "unit": "time"
+          },
+          "note": "duck dive, underwater sprint"
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "pace": "max_sprint",
+          "note": "surface dolphin kick, snorkel or on your back"
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 10
+          },
+          "pace": "max_sprint",
+          "recovery": {
+            "type": "cap",
+            "value": 90,
+            "unit": "time"
+          },
+          "note": "duck dive, underwater sprint"
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "pace": "max_sprint",
+          "note": "surface dolphin kick, snorkel or on your back"
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 10
+          },
+          "pace": "max_sprint",
+          "recovery": {
+            "type": "cap",
+            "value": 90,
+            "unit": "time"
+          },
+          "note": "duck dive, underwater sprint"
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 25
+          },
+          "pace": "max_sprint",
+          "note": "surface dolphin kick, snorkel or on your back"
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 10
+          },
+          "pace": "max_sprint",
+          "recovery": {
+            "type": "cap",
+            "value": 90,
+            "unit": "time"
+          },
+          "note": "duck dive, underwater sprint"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "seals-submax",
+      "name": "Submax dive",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "DYNb",
+      "capacity_tags": [
+        "o2_hypoxia",
+        "mental"
+      ],
+      "collections": [
+        "seals"
+      ],
+      "phase_tags": [
+        "build",
+        "specialization",
+        "taper"
+      ],
+      "phase_defaults": {
+        "build": {
+          "reps": [
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "pct_pb",
+                "value": 65
+              },
+              "note": "no upper limit; surface before your limit"
+            }
+          ]
+        },
+        "specialization": {
+          "reps": [
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "pct_pb",
+                "value": 70
+              },
+              "note": "70-75%; no upper limit; surface before your limit"
+            }
+          ]
+        },
+        "taper": {
+          "reps": [
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "pct_pb",
+                "value": 80
+              },
+              "note": "no upper limit; surface before your limit"
+            }
+          ]
+        }
+      },
+      "goal": "One dive, no warm-up, no breathe-up, breathing normally beforehand, face dry until you go. Aim for at least the target percentage of your PB with no upper limit, but surface before your limit and never finish shaky. Build 65%, specialization 70-75%, taper 80%.",
+      "cues": "% of PB (def 65).",
+      "log_mode": "per_rep",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n"
+      },
+      "reps": [
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "pct_pb",
+            "value": 65
+          },
+          "note": "no upper limit; surface before your limit"
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "seals-endurance-ladder",
+      "name": "Endurance ladder",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "DYNb",
+      "capacity_tags": [
+        "co2",
+        "volume"
+      ],
+      "collections": [
+        "seals"
+      ],
+      "phase_tags": [
+        "specialization",
+        "taper"
+      ],
+      "phase_defaults": {
+        "specialization": {
+          "reps": [
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 75
+              },
+              "recovery": {
+                "type": "inequality",
+                "value": "<= swim time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "inequality",
+                "value": "<= swim time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "inequality",
+                "value": "<= swim time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "inequality",
+                "value": "<= swim time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "inequality",
+                "value": "<= swim time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "inequality",
+                "value": "<= swim time"
+              }
+            }
+          ]
+        },
+        "taper": {
+          "reps": [
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 75
+              },
+              "recovery": {
+                "type": "inequality",
+                "value": "<= swim time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 75
+              },
+              "recovery": {
+                "type": "inequality",
+                "value": "<= swim time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 75
+              },
+              "recovery": {
+                "type": "inequality",
+                "value": "<= swim time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "inequality",
+                "value": "<= swim time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "inequality",
+                "value": "<= swim time"
+              }
+            },
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "recovery": {
+                "type": "inequality",
+                "value": "<= swim time"
+              }
+            }
+          ]
+        }
+      },
+      "goal": "Mixed 75 m and 50 m with rest no longer than the dive time. Week 9: 1 x 75 + 5 x 50, then convert one 50 into a 75 each week (2 + 4, 3 + 3, 4 + 2).",
+      "cues": "75s (def 1); 50s (def 5); rest (def at most the dive time).",
+      "log_mode": "per_rep",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n"
+      },
+      "reps": [
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 75
+          },
+          "recovery": {
+            "type": "inequality",
+            "value": "<= swim time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "inequality",
+            "value": "<= swim time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "inequality",
+            "value": "<= swim time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "inequality",
+            "value": "<= swim time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "inequality",
+            "value": "<= swim time"
+          }
+        },
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "recovery": {
+            "type": "inequality",
+            "value": "<= swim time"
+          }
+        }
+      ]
+    },
+    {
+      "schema_version": 1,
+      "id": "seals-tortuga",
+      "name": "Tortuga (slow crawl)",
+      "environment": "pool",
+      "role": "main",
+      "discipline": "tortuga",
+      "capacity_tags": [
+        "mental",
+        "co2"
+      ],
+      "collections": [
+        "seals"
+      ],
+      "phase_tags": [
+        "build",
+        "specialization"
+      ],
+      "phase_defaults": {
+        "build": {
+          "reps": [
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "pace": "relaxed",
+              "note": "longest possible time; distance irrelevant"
+            }
+          ]
+        },
+        "specialization": {
+          "reps": [
+            {
+              "shape": "simple",
+              "distance_target": {
+                "unit": "absolute",
+                "value": 50
+              },
+              "pace": "relaxed",
+              "note": "longest possible time; distance irrelevant"
+            }
+          ]
+        }
+      },
+      "goal": "Crawl along the bottom as slowly as you can, covering at most 50 m in the longest possible time; no goggles so you do not watch the clock. From week 5, one slow crawl after the sprints, every week.",
+      "cues": "distance cap (def 50m).",
+      "log_mode": "per_rep",
+      "set_repeat": 1,
+      "termination": {
+        "type": "fixed_n"
+      },
+      "reps": [
+        {
+          "shape": "simple",
+          "distance_target": {
+            "unit": "absolute",
+            "value": 50
+          },
+          "pace": "relaxed",
+          "note": "longest possible time; distance irrelevant"
+        }
+      ]
+    }
+  ],
+  "affinities": []
+}

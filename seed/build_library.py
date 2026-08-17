@@ -4,6 +4,7 @@ Defines the canonical exercises (deduped from the two Obsidian library notes)
 and the session->canonical mapping, then emits:
   - docs/exercise-canon-and-mapping.xlsx  (human review: catalog + mapping + affinities)
   - seed/fixtures.json                     (the app's seed library, schema-validated)
+  - seed/fixtures.seals.json               (the Seals club edition: ten pool exercises with phase defaults)
 
 Run: python seed/build_library.py
 
@@ -355,10 +356,9 @@ style_sheet(ws2, [24, 30, 10, 13, 22, 46, 52])
 style_sheet(ws, [8, 11, 24, 9, 22, 26, 10, 13, 20, 40, 44], role_col=3)
 style_sheet(ws3, [24, 24, 12, 40])
 
-wb.save(OUT)
-
 # ---------------- seed/fixtures.json (single source of truth) ----------------
 FIXTURES = str(ROOT / "seed" / "fixtures.json")
+FIXTURES_SEALS = str(ROOT / "seed" / "fixtures.seals.json")
 
 # primary role per template (allowed_roles is a higher-level concept the
 # Phase 0a schema does not model; the seed carries the primary role).
@@ -761,6 +761,163 @@ LOG_MODE = {
     "dyn-sweet16": "aggregate",
 }
 
+
+# ---------------- Seals edition ----------------
+# The club edition ships these ten pool exercises and nothing else. Same tuple
+# shape as the canonical catalog; every dynamic one is DYNb, tortuga stays its
+# own discipline. Numbers are the design proposals in docs/seals-basic-program.md
+# (Jeranko's sequencing at club intensity), not values read off his sheets.
+seals_catalog = [
+    ("seals-fixed-rest", "Fixed-rest set", "DYNb", "main",
+     "co2",
+     "Repeated 50 m at your normal dive pace with a rest cap. Base: 4, 5, 6, 7 reps across the four weeks, cap 60 s. Specialization: 6 reps, cap 45 s. Taper: 5 then 4 reps, cap 45 s.",
+     "reps (def 4); distance (def 50m, 25m for newer members); rest cap (def 60s)."),
+    ("seals-pyramid", "Pyramid", "DYNb", "main",
+     "co2",
+     "50-25-25-50 in weeks 1-2, 50-50-25-50-50 in weeks 3-4, rest no longer than 60 s and shorter when you can.",
+     "ladder (def 50-25-25-50); rest cap (def 60s)."),
+    ("seals-hypercapnic-swim", "Hypercapnic surface swim", "any", "main",
+     "co2",
+     "Freestyle on the surface in short fins, no wetsuit, breathing a fixed 3 times per 25 m, no stopping. Base 100 to 250 m, build 300 to 350 m, specialization 400 m, taper 300 then 200 m.",
+     "distance (def 100m); breaths per 25m (def 3)."),
+    ("seals-recovery-swim", "Recovery swim", "any", "cooldown",
+     "",
+     "100 m any style, relaxed, breathing normally, to close every session.",
+     "distance (def 100m)."),
+    ("seals-over-under", "Over-under warm-up", "DYNb", "warmup",
+     "technique",
+     "25 m freestyle on the surface, turn, 25 m DYNb underwater without stopping; twice for 100 m.",
+     "rounds (def 2)."),
+    ("seals-sprints", "Sprints", "DYNb", "main",
+     "fitness_lactic",
+     "All-out DYNb sprints. Base: 2 sets of 6 x 25 m, 20 s between reps, 2 min between sets (weeks 1-2), then 6 x 50 m with 60 s (weeks 3-4). Build: 5-6 x 75 m with 75-120 s.",
+     "distance (def 25m); reps (def 6); sets (def 2); rest (def 20s); rest between sets (def 2 min)."),
+    ("seals-dolphin-sprints", "Dolphin sprints", "DYNb", "main",
+     "fitness_lactic",
+     "Each rep is 25 m of all-out dolphin kick on the surface (snorkel, or on your back so you can breathe), then a duck dive straight into 10 m underwater at sprint pace. 2 sets of 4 (weeks 5-6), 2 sets of 5 (weeks 7-8), 60-90 s between reps, 3 min between sets, short fins, no wetsuit.",
+     "reps (def 4); sets (def 2); rest (def 90s); rest between sets (def 3 min)."),
+    ("seals-submax", "Submax dive", "DYNb", "main",
+     "o2_hypoxia, mental",
+     "One dive, no warm-up, no breathe-up, breathing normally beforehand, face dry until you go. Aim for at least the target percentage of your PB with no upper limit, but surface before your limit and never finish shaky. Build 65%, specialization 70-75%, taper 80%.",
+     "% of PB (def 65)."),
+    ("seals-endurance-ladder", "Endurance ladder", "DYNb", "main",
+     "co2, volume",
+     "Mixed 75 m and 50 m with rest no longer than the dive time. Week 9: 1 x 75 + 5 x 50, then convert one 50 into a 75 each week (2 + 4, 3 + 3, 4 + 2).",
+     "75s (def 1); 50s (def 5); rest (def at most the dive time)."),
+    ("seals-tortuga", "Tortuga (slow crawl)", "tortuga", "main",
+     "mental, co2",
+     "Crawl along the bottom as slowly as you can, covering at most 50 m in the longest possible time; no goggles so you do not watch the clock. From week 5, one slow crawl after the sprints, every week.",
+     "distance cap (def 50m)."),
+]
+
+_CAP = lambda n: {"type": "cap", "value": n, "unit": "time"}
+_LE_SWIM = {"type": "inequality", "value": "<= swim time"}
+_D = lambda m, **kw: {"shape": "simple", "distance_target": {"unit": "absolute", "value": m}, **kw}
+_PCT = lambda p, **kw: {"shape": "simple", "distance_target": {"unit": "pct_pb", "value": p}, **kw}
+_SWIM = lambda m, note=None: {"shape": "continuous-protocol",
+                              "distance_target": {"unit": "absolute", "value": m},
+                              "continuous": {"stroke_cadence": "3 breaths per 25 m"},
+                              **({"note": note} if note else {})}
+
+def _fixed_rest(n, cap):
+    return [_D(50, recovery=_CAP(cap)) for _ in range(n)]
+
+def _dolphin(n, rest=90):
+    rows = []
+    for i in range(n):
+        rows.append(_D(25, pace="max_sprint", note="surface dolphin kick, snorkel or on your back"))
+        rows.append(_D(10, pace="max_sprint", recovery=_CAP(rest), note="duck dive, underwater sprint"))
+    return rows
+
+def _ladder(n75, n50):
+    return [_D(75, recovery=_LE_SWIM) for _ in range(n75)] + [_D(50, recovery=_LE_SWIM) for _ in range(n50)]
+
+_RELAXED_100 = lambda: [_D(100, pace="relaxed", note="any style, breathe normally")]
+_OVER_UNDER = lambda: [_D(25, note="freestyle on the surface"),
+                       _D(25, note="turn, DYNb underwater, no stop")]
+_TORTUGA = lambda: [_D(50, pace="relaxed", note="longest possible time; distance irrelevant")]
+
+# Per-phase defaults: reps (and set_repeat / recovery_inter where they change)
+# that the builder applies when an exercise is added under a chosen phase. The
+# template's own reps are the first phase's defaults, so an app without phases
+# still gets a sensible plan.
+SEALS_PHASES = {
+    "seals-fixed-rest": {
+        "base": {"reps": _fixed_rest(4, 60)},
+        "specialization": {"reps": _fixed_rest(6, 45)},
+        "taper": {"reps": _fixed_rest(5, 45)},
+    },
+    "seals-pyramid": {
+        "base": {"reps": [_D(50, recovery=_CAP(60)), _D(25, recovery=_CAP(60)),
+                          _D(25, recovery=_CAP(60)), _D(50)]},
+    },
+    "seals-hypercapnic-swim": {
+        "base": {"reps": [_SWIM(100, "100 to 250 m across the block")]},
+        "build": {"reps": [_SWIM(300, "300 to 350 m across the block")]},
+        "specialization": {"reps": [_SWIM(400)]},
+        "taper": {"reps": [_SWIM(300, "300 then 200 m")]},
+    },
+    "seals-recovery-swim": {p: {"reps": _RELAXED_100()} for p in ("base", "build", "specialization", "taper")},
+    "seals-over-under": {p: {"reps": _OVER_UNDER(), "set_repeat": 2} for p in ("base", "build")},
+    "seals-sprints": {
+        "base": {"reps": [_D(25, pace="max_sprint", recovery=_SECS(20)) for _ in range(6)],
+                 "set_repeat": 2, "recovery_inter": _SECS(120)},
+        "build": {"reps": [_D(75, pace="max_sprint", recovery=_CAP(120)) for _ in range(5)],
+                  "set_repeat": 1},
+    },
+    "seals-dolphin-sprints": {
+        "build": {"reps": _dolphin(4), "set_repeat": 2, "recovery_inter": _SECS(180)},
+    },
+    "seals-submax": {
+        "build": {"reps": [_PCT(65, note="no upper limit; surface before your limit")]},
+        "specialization": {"reps": [_PCT(70, note="70-75%; no upper limit; surface before your limit")]},
+        "taper": {"reps": [_PCT(80, note="no upper limit; surface before your limit")]},
+    },
+    "seals-endurance-ladder": {
+        "specialization": {"reps": _ladder(1, 5)},
+        "taper": {"reps": _ladder(3, 3)},
+    },
+    "seals-tortuga": {p: {"reps": _TORTUGA()} for p in ("build", "specialization")},
+}
+PHASE_ORDER = ["base", "build", "specialization", "taper"]
+
+seals_templates = []
+for (cid, name, discipline, role, capacity, structure, options) in seals_catalog:
+    phases = SEALS_PHASES[cid]
+    first = next(p for p in PHASE_ORDER if p in phases)
+    d0 = phases[first]
+    seals_templates.append({
+        "schema_version": 1,
+        "id": cid,
+        "name": name,
+        "environment": "pool",
+        "role": role,
+        "discipline": discipline,
+        "capacity_tags": [c.strip() for c in capacity.split(",") if c.strip()],
+        "collections": ["seals"],
+        "phase_tags": [p for p in PHASE_ORDER if p in phases],
+        "phase_defaults": phases,
+        "goal": structure,
+        "cues": options,
+        "log_mode": "per_rep",
+        "set_repeat": d0.get("set_repeat", 1),
+        **({"recovery_inter": d0["recovery_inter"]} if "recovery_inter" in d0 else {}),
+        "termination": {"type": "fixed_n"},
+        "reps": d0["reps"],
+    })
+
+ws_seals = wb.create_sheet("Seals catalog")
+ws_seals.append(["Id", "Name", "Discipline", "Role", "Capacity focus", "Structure", "Editable options (defaults)"])
+for c in seals_catalog:
+    ws_seals.append(list(c))
+style_sheet(ws_seals, [24, 26, 10, 10, 18, 60, 44], role_col=3)
+# The workbook is review output; if Excel has it open, keep going and still
+# write the fixtures, which are what the app needs.
+try:
+    wb.save(OUT)
+except PermissionError:
+    print("WARNING: could not write", OUT, "(open in Excel?); fixtures still written")
+
 templates = []
 for (cid, name, discipline, allowed_roles, capacity, structure, options) in catalog:
     caps = [c.strip() for c in capacity.split(",")]
@@ -809,7 +966,15 @@ with open(FIXTURES, "w", encoding="utf-8") as f:
     json.dump(fixtures, f, indent=2, ensure_ascii=False)
     f.write("\n")
 
+# Seals edition: its own fixtures file with only the seals collection and no
+# affinities, selected at app build time by VITE_EDITION=seals.
+seals_fixtures = {"schema_version": 1, "templates": seals_templates, "affinities": []}
+with open(FIXTURES_SEALS, "w", encoding="utf-8") as f:
+    json.dump(seals_fixtures, f, indent=2, ensure_ascii=False)
+    f.write("\n")
+
 print("wrote", OUT)
 print("wrote", FIXTURES)
+print("wrote", FIXTURES_SEALS, "|", len(seals_templates), "seals templates")
 print("catalog:", len(catalog), "| mapping rows:", len(mapping),
       "| affinity pairs:", len(affinities), "| templates:", len(templates))

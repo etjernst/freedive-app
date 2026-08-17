@@ -47,6 +47,17 @@
     "lungVolume": { "enum": ["FL", "FRC", "RV"] },
     "shape": { "enum": ["simple", "stop-start", "start-stop", "stop-in-the-middle", "continuous-protocol"] },
     "role": { "enum": ["warmup", "main", "cooldown"] },
+    "phase": { "enum": ["base", "build", "specialization", "taper"] },
+    "phaseDefault": {
+      "type": "object",
+      "required": ["reps"],
+      "additionalProperties": false,
+      "properties": {
+        "reps": { "type": "array", "items": { "$ref": "#/$defs/repPlanned" }, "minItems": 1 },
+        "set_repeat": { "type": "integer", "minimum": 1 },
+        "recovery_inter": { "$ref": "#/$defs/recoveryTarget" }
+      }
+    },
     "environment": { "enum": ["pool", "dry", "gym"] },
     "capacity": { "enum": ["co2", "o2_hypoxia", "mental", "volume", "lung_volume", "fitness_lactic", "technique", "performance"] },
     "pace": { "enum": ["sprint", "max_sprint", "relaxed", "race_pace"] },
@@ -164,8 +175,28 @@
         "discipline": { "$ref": "#/$defs/discipline" },
         "capacity_tags": {
           "type": "array",
-          "items": { "$ref": "#/$defs/capacity" },
-          "minItems": 1
+          "items": { "$ref": "#/$defs/capacity" }
+        },
+        "collections": {
+          "description": "Editions or audiences the template ships to (e.g. seals). Absent = the full library.",
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "phase_tags": {
+          "description": "Training-cycle phases the exercise belongs to; drives the phase filter.",
+          "type": "array",
+          "items": { "$ref": "#/$defs/phase" }
+        },
+        "phase_defaults": {
+          "description": "Per-phase plan defaults the builder applies when the exercise is added under that phase.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "base": { "$ref": "#/$defs/phaseDefault" },
+            "build": { "$ref": "#/$defs/phaseDefault" },
+            "specialization": { "$ref": "#/$defs/phaseDefault" },
+            "taper": { "$ref": "#/$defs/phaseDefault" }
+          }
         },
         "goal": { "type": "string" },
         "cues": { "type": "string" },

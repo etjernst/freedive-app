@@ -14,11 +14,15 @@ except ImportError:
 
 HERE = Path(__file__).resolve().parent
 SCHEMA = HERE / "freedive.schema.json"
-FIXTURES = HERE.parent / "seed" / "fixtures.json"
+FIXTURES_FILES = [HERE.parent / "seed" / "fixtures.json", HERE.parent / "seed" / "fixtures.seals.json"]
 
 
 def main() -> int:
     schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    return max(check(schema, f) for f in FIXTURES_FILES)
+
+
+def check(schema, FIXTURES) -> int:
     data = json.loads(FIXTURES.read_text(encoding="utf-8"))
 
     validator = Draft202012Validator(schema)
