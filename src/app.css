@@ -1479,27 +1479,61 @@ fieldset.bare:disabled {
 
 .between .add-rest {
   background: none;
-  border: none;
+  border: 1px dashed var(--border);
+  border-radius: 999px;
+  padding: 3px 12px;
   font: inherit;
   font-size: 12.5px;
   color: var(--muted);
-  text-decoration: underline;
   cursor: pointer;
 }
 
-.rest-pill button.link {
+.between .add-rest:hover {
+  background: var(--panel-2);
+}
+
+.rest-pill .rest-lbl {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+}
+
+.rest-pill .rest-step {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--accent-2);
+  font: inherit;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rest-pill .rest-step:hover {
+  background: var(--panel-2);
+}
+
+.rest-pill .rest-x {
   background: none;
   border: none;
   color: var(--muted);
+  font: inherit;
   cursor: pointer;
-  padding: 2px 6px;
+  padding: 2px 4px;
 }
 
 .rest-pill {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 4px 6px 4px 12px;
+  gap: 6px;
+  padding: 4px 6px 4px 14px;
   border: 1px solid var(--border);
   border-radius: 999px;
   background: var(--panel-2);
@@ -1507,7 +1541,22 @@ fieldset.bare:disabled {
 }
 
 .rest-pill input {
-  width: 64px;
+  width: 58px;
+  text-align: center;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  padding: 4px 2px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.rest-pill input:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
 }
 
 .inter {

@@ -250,6 +250,19 @@
   function clearRestAfter(ex) {
     ex.rest_after_s = null
   }
+  // Rest steps in half minutes; stepping down past zero removes the rest.
+  const REST_STEP_S = 30
+  function stepRestAfter(ex, dir) {
+    const next = (ex.rest_after_s ?? 0) + dir * REST_STEP_S
+    ex.rest_after_s = next > 0 ? next : null
+  }
+  // Rep count typed at the top: grow by duplicating the last rep (a table
+  // extends with a tweak, as "+ Add rep" does), shrink by dropping from the end.
+  function setRepCount(ex, n) {
+    n = Math.max(1, Math.floor(Number(n) || 1))
+    while (ex.planned.reps.length < n) addRep(ex)
+    if (ex.planned.reps.length > n) ex.planned.reps = ex.planned.reps.slice(0, n)
+  }
   // Rest between sets uses the same type families as a rep recovery.
   function onInterType(ex) {
     const t = ex.recovery_inter.type
@@ -511,6 +524,15 @@
         </div>
       {/if}
       <div class="field">
+        <span class="lbl">Reps <span class="muted">(rows below)</span></span>
+        <input
+          type="number"
+          min="1"
+          value={ex.planned.reps.length}
+          onchange={(e) => setRepCount(ex, e.currentTarget.value)}
+        />
+      </div>
+      <div class="field">
         <span class="lbl">Sets (repeat)</span>
         <input type="number" min="1" bind:value={ex.set_repeat} />
       </div>
@@ -748,9 +770,11 @@
       <div class="between">
         {#if ex.rest_after_s != null}
           <span class="rest-pill">
-            <span class="lbl">Rest</span>
+            <span class="rest-lbl">Rest</span>
+            <button class="rest-step" onclick={() => stepRestAfter(ex, -1)} disabled={locked} aria-label="30 s less rest">−</button>
             <MMSS bind:seconds={ex.rest_after_s} disabled={locked} />
-            <button class="link" onclick={() => clearRestAfter(ex)} disabled={locked} aria-label="Remove rest">✕</button>
+            <button class="rest-step" onclick={() => stepRestAfter(ex, 1)} disabled={locked} aria-label="30 s more rest">+</button>
+            <button class="rest-x" onclick={() => clearRestAfter(ex)} disabled={locked} aria-label="Remove rest">✕</button>
           </span>
         {:else}
           <button class="link add-rest" onclick={() => addRestAfter(ex)} disabled={locked}>+ rest</button>
