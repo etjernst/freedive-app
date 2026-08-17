@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Winnow Logo Options V2</title>
+  <style>
+    :root {
+      --ink: #26312d;
+      --muted: #6f746c;
+      --deep: #4f6b57;
+      --sage: #a7b79a;
+      --fig: #6f5d7e;
+      --signal: #965f6f;
+      --paper: #fcfbf7;
+      --field: #f6f3ea;
+      --line: #ded8c8;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, Avenir, "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 44px 24px 72px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 36px;
+      line-height: 1.1;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+
+    .intro {
+      max-width: 820px;
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .option {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 22px;
+      background: var(--paper);
+      display: grid;
+      grid-template-columns: 172px minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+      min-height: 220px;
+    }
+
+    .logo {
+      width: 172px;
+      height: 172px;
+      display: grid;
+      place-items: center;
+      background: var(--field);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    svg {
+      width: 140px;
+      height: 140px;
+      overflow: visible;
+    }
+
+    h2 {
+      margin: 0 0 6px;
+      font-size: 19px;
+      line-height: 1.2;
+      font-weight: 720;
+      letter-spacing: 0;
+    }
+
+    .label {
+      margin: 0 0 9px;
+      color: var(--deep);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 15px;
+    }
+
+    .word {
+      fill: var(--ink);
+      font-family: Inter, Avenir, "Segoe UI", Arial, sans-serif;
+      font-size: 30px;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+
+    .tiny {
+      fill: var(--muted);
+      font-family: Inter, Avenir, "Segoe UI", Arial, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+    }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 580px) {
+      main { padding: 28px 16px 48px; }
+      .option { grid-template-columns: 1fr; }
+      .logo { width: 100%; height: 180px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Winnow Logo Options V2</h1>
+  <p class="intro">
+    Ten new directions. I avoided compass forms, ripple-W gestures, centered vertical bodies,
+    cigarette-like line-and-dot marks, and overly symmetric compositions. These lean more
+    product-brand than sport-brand.
+  </p>
+
+  <section class="grid" aria-label="Winnow logo options, second set">
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 160 160" role="img" aria-label="Option 11 sorted field">
+          <rect x="31" y="34" width="98" height="92" rx="18" fill="#fff" stroke="#DED8C8" stroke-width="6"/>
+          <circle cx="55" cy="58" r="6" fill="#A7B79A"/>
+          <circle cx="80" cy="58" r="6" fill="#A7B79A"/>
+          <circle cx="105" cy="58" r="6" fill="#A7B79A"/>
+          <circle cx="55" cy="83" r="6" fill="#A7B79A"/>
+          <circle cx="80" cy="83" r="6" fill="#4F6B57"/>
+          <circle cx="105" cy="83" r="6" fill="#A7B79A"/>
+          <circle cx="55" cy="108" r="6" fill="#A7B79A"/>
+          <circle cx="80" cy="108" r="6" fill="#A7B79A"/>
+          <circle cx="105" cy="108" r="6" fill="#965F6F"/>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 11</p>
+        <h2>Sorted Field</h2>
+        <p>A structured field where one point has emerged as useful. It says filtering and training data without implying motion, smoke, diving depth, or a mascot.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 160 160" role="img" aria-label="Option 12 off-center aperture">
+          <path d="M44 57C54 39 78 31 99 39" stroke="#4F6B57" stroke-width="11" stroke-linecap="round"/>
+          <path d="M111 48C129 64 130 94 113 112" stroke="#A7B79A" stroke-width="11" stroke-linecap="round"/>
+          <path d="M98 121C75 131 50 121 39 101" stroke="#6F5D7E" stroke-width="11" stroke-linecap="round"/>
+          <circle cx="84" cy="82" r="13" fill="#26312D"/>
+          <circle cx="106" cy="59" r="6" fill="#965F6F"/>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 12</p>
+        <h2>Open Aperture</h2>
+        <p>A less perfect cycle: open, off-center, and observational. It keeps the decent parts of the breath-cycle idea while moving away from smartwatch symmetry.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 160 160" role="img" aria-label="Option 13 winnow wordmark notch">
+          <text x="18" y="83" class="word">Winnow</text>
+          <path d="M94 91L105 112L116 91" stroke="#965F6F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M24 106H76" stroke="#A7B79A" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 13</p>
+        <h2>Wordmark With Notch</h2>
+        <p>Mostly a wordmark, with a small custom winnowing notch tucked under the double-n. This is restrained and grown-up, and probably the easiest to live with daily.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 160 160" role="img" aria-label="Option 14 sieve corner">
+          <rect x="38" y="35" width="84" height="90" rx="16" fill="#fff" stroke="#26312D" stroke-width="7"/>
+          <path d="M61 56H101" stroke="#A7B79A" stroke-width="7" stroke-linecap="round"/>
+          <path d="M61 78H96" stroke="#A7B79A" stroke-width="7" stroke-linecap="round"/>
+          <path d="M61 100H83" stroke="#4F6B57" stroke-width="7" stroke-linecap="round"/>
+          <path d="M98 96L119 117" stroke="#965F6F" stroke-width="7" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 14</p>
+        <h2>Marked Log</h2>
+        <p>A capture/logbook mark with a diagonal annotation. It is more product UI than logo-poem: good if Winnow should feel like a tool first and a brand second.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 160 160" role="img" aria-label="Option 15 threshold tabs">
+          <rect x="36" y="42" width="88" height="74" rx="18" fill="#fff" stroke="#DED8C8" stroke-width="6"/>
+          <path d="M52 68H92" stroke="#A7B79A" stroke-width="8" stroke-linecap="round"/>
+          <path d="M52 91H108" stroke="#4F6B57" stroke-width="8" stroke-linecap="round"/>
+          <path d="M111 64L126 79L111 94" stroke="#965F6F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 15</p>
+        <h2>Decision Card</h2>
+        <p>Two candidate readings and a deliberate next step. It hints at planning and coaching without becoming a generic graph or a literal checklist.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 160 160" role="img" aria-label="Option 16 asymmetric weave">
+          <path d="M35 57C57 43 84 43 109 56" stroke="#A7B79A" stroke-width="9" stroke-linecap="round"/>
+          <path d="M47 84C68 70 93 72 116 88" stroke="#4F6B57" stroke-width="9" stroke-linecap="round"/>
+          <path d="M35 111C58 124 91 123 118 106" stroke="#6F5D7E" stroke-width="9" stroke-linecap="round"/>
+          <circle cx="118" cy="106" r="8" fill="#965F6F"/>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 16</p>
+        <h2>Asymmetric Weave</h2>
+        <p>A softer, less mechanical version of trend lines. The forms do not overlap or resolve too neatly, so it avoids the "mistake" feeling of the earlier narrowing path.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 160 160" role="img" aria-label="Option 17 selected grain">
+          <circle cx="51" cy="48" r="5" fill="#A7B79A"/>
+          <circle cx="82" cy="42" r="5" fill="#A7B79A"/>
+          <circle cx="111" cy="55" r="5" fill="#A7B79A"/>
+          <circle cx="41" cy="82" r="5" fill="#A7B79A"/>
+          <circle cx="76" cy="78" r="5" fill="#A7B79A"/>
+          <circle cx="112" cy="87" r="5" fill="#4F6B57"/>
+          <circle cx="59" cy="113" r="5" fill="#A7B79A"/>
+          <circle cx="95" cy="119" r="5" fill="#A7B79A"/>
+          <path d="M101 76L127 102" stroke="#965F6F" stroke-width="7" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 17</p>
+        <h2>Selected Grain</h2>
+        <p>A small field of observations with one selected. This is the less cigarette-like cousin of the dots idea: no horizontal baseline, no smoke silhouette.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 160 160" role="img" aria-label="Option 18 soft bracket">
+          <path d="M59 41H42V119H59" stroke="#26312D" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M101 41H118V119H101" stroke="#26312D" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M63 65H98" stroke="#A7B79A" stroke-width="7" stroke-linecap="round"/>
+          <path d="M63 87H88" stroke="#4F6B57" stroke-width="7" stroke-linecap="round"/>
+          <circle cx="98" cy="87" r="7" fill="#965F6F"/>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 18</p>
+        <h2>Bounded Read</h2>
+        <p>Brackets around the signal: Winnow as the place where messy training gets held, compared, and interpreted. It is compact and app-icon friendly.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 160 160" role="img" aria-label="Option 19 cut plane">
+          <path d="M37 101L119 43" stroke="#DED8C8" stroke-width="22" stroke-linecap="round"/>
+          <path d="M43 97L100 57" stroke="#4F6B57" stroke-width="10" stroke-linecap="round"/>
+          <path d="M77 113L122 81" stroke="#A7B79A" stroke-width="10" stroke-linecap="round"/>
+          <circle cx="103" cy="55" r="8" fill="#965F6F"/>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 19</p>
+        <h2>Cut Plane</h2>
+        <p>A diagonal filter plane, like separating layers of evidence. It is intentionally not centered and not aquatic; more analytical, a little sharper.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 160 160" role="img" aria-label="Option 20 lowercase badge">
+          <rect x="32" y="35" width="96" height="90" rx="24" fill="#fff" stroke="#DED8C8" stroke-width="6"/>
+          <text x="55" y="96" fill="#26312D" font-family="Georgia, 'Times New Roman', serif" font-size="64" font-weight="700">w</text>
+          <circle cx="107" cy="100" r="7" fill="#965F6F"/>
+          <path d="M53 112H95" stroke="#A7B79A" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 20</p>
+        <h2>Lowercase Badge</h2>
+        <p>A gentle monogram, more journal than smartwatch. The lowercase w makes Winnow feel personal and calm, while the small dot keeps the idea of a found signal.</p>
+      </div>
+    </article>
+  </section>
+</main>
+</body>
+</html>

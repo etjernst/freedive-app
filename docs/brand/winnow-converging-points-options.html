@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Winnow Converging Points Options</title>
+  <style>
+    :root {
+      --ink: #111b20;
+      --moss: #69745e;
+      --sage: #a8b39b;
+      --stone: #c3bcae;
+      --clay: #9a8170;
+      --paper: #fbf8ee;
+      --field: #f4efe4;
+      --line: #ded5c3;
+      --muted: #6d7068;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, Avenir, "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 44px 24px 72px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 36px;
+      line-height: 1.1;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+
+    .intro {
+      max-width: 880px;
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .option {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 22px;
+      background: var(--paper);
+      display: grid;
+      grid-template-columns: 230px minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+      min-height: 248px;
+    }
+
+    .logo {
+      width: 230px;
+      min-height: 196px;
+      display: grid;
+      place-items: center;
+      background: var(--field);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    svg {
+      width: 204px;
+      height: 170px;
+      overflow: visible;
+    }
+
+    h2 {
+      margin: 0 0 6px;
+      font-size: 19px;
+      line-height: 1.2;
+      font-weight: 720;
+      letter-spacing: 0;
+    }
+
+    .label {
+      margin: 0 0 8px;
+      color: var(--moss);
+      font-size: 13px;
+      font-weight: 740;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 15px;
+    }
+
+    .word {
+      fill: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 27px;
+      font-weight: 500;
+      letter-spacing: -0.3px;
+    }
+
+    @media (max-width: 960px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      main { padding: 28px 16px 48px; }
+      .option { grid-template-columns: 1fr; }
+      .logo { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Winnow Converging Points Options</h1>
+  <p class="intro">
+    Ten variants combining converging paths with dotted observations. The dots make
+    the forms feel like data points rather than streams, while the convergence
+    keeps the Winnow idea: separate, align, read.
+  </p>
+
+  <section class="grid" aria-label="Winnow converging points logo options">
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 210 176" role="img" aria-label="Option 51 dotted convergence">
+          <path d="M24 42C70 45 89 70 116 78C135 84 157 82 184 82" fill="none" stroke="#111B20" stroke-width="4" stroke-linecap="round"/>
+          <path d="M24 66C69 66 91 76 116 82C135 87 157 88 184 88" fill="none" stroke="#69745E" stroke-width="4" stroke-linecap="round"/>
+          <path d="M24 93C68 88 91 86 116 86C136 86 158 93 184 94" fill="none" stroke="#A8B39B" stroke-width="4" stroke-linecap="round"/>
+          <path d="M24 121C66 109 89 94 116 90C136 88 158 99 184 100" fill="none" stroke="#9A8170" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="35" cy="43" r="3.2" fill="#111B20"/><circle cx="58" cy="49" r="2.8" fill="#69745E"/>
+          <circle cx="78" cy="62" r="2.6" fill="#A8B39B"/><circle cx="101" cy="75" r="3.2" fill="#111B20"/>
+          <circle cx="43" cy="66" r="2.7" fill="#A8B39B"/><circle cx="72" cy="70" r="3" fill="#69745E"/>
+          <circle cx="52" cy="92" r="2.8" fill="#A8B39B"/><circle cx="82" cy="88" r="2.8" fill="#69745E"/>
+          <circle cx="41" cy="116" r="3.1" fill="#9A8170"/><circle cx="74" cy="105" r="2.6" fill="#A8B39B"/>
+          <text x="62" y="158" class="word">Winnow</text>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 51</p>
+        <h2>Dotted Convergence</h2>
+        <p>The most direct blend of the two references: paths converge, but the visible evidence is the individual observations sitting on them.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 210 176" role="img" aria-label="Option 52 W convergence">
+          <path d="M30 50C61 52 76 71 96 98C111 76 126 55 153 51" fill="none" stroke="#C3BCAE" stroke-width="3" stroke-linecap="round"/>
+          <path d="M30 78C59 80 76 86 96 98C116 86 132 80 161 78" fill="none" stroke="#C3BCAE" stroke-width="3" stroke-linecap="round"/>
+          <path d="M30 111C61 105 77 102 96 98C115 102 131 105 161 111" fill="none" stroke="#C3BCAE" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="35" cy="50" r="3.3" fill="#69745E"/><circle cx="59" cy="58" r="2.8" fill="#A8B39B"/>
+          <circle cx="82" cy="80" r="3" fill="#111B20"/><circle cx="96" cy="98" r="4.7" fill="#111B20"/>
+          <circle cx="117" cy="79" r="2.8" fill="#A8B39B"/><circle cx="145" cy="56" r="3.2" fill="#69745E"/>
+          <circle cx="52" cy="78" r="2.7" fill="#A8B39B"/><circle cx="139" cy="79" r="2.7" fill="#9A8170"/>
+          <circle cx="61" cy="105" r="2.8" fill="#9A8170"/><circle cx="130" cy="104" r="2.8" fill="#69745E"/>
+          <text x="62" y="158" class="word">Winnow</text>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 52</p>
+        <h2>Converging W</h2>
+        <p>The implied paths form a W and converge at the center. It is more letter-driven, and the dots keep it from becoming just a stylized stroke.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 210 176" role="img" aria-label="Option 53 resolved band">
+          <path d="M25 42C74 46 96 77 124 80H184" fill="none" stroke="#111B20" stroke-width="5" stroke-linecap="round"/>
+          <path d="M25 69C73 69 96 80 124 86H184" fill="none" stroke="#69745E" stroke-width="5" stroke-linecap="round"/>
+          <path d="M25 96C72 91 96 87 124 92H184" fill="none" stroke="#A8B39B" stroke-width="5" stroke-linecap="round"/>
+          <path d="M25 123C73 112 96 95 124 98H184" fill="none" stroke="#9A8170" stroke-width="5" stroke-linecap="round"/>
+          <g fill="#F4EFE4">
+            <circle cx="123" cy="80" r="2.2"/><circle cx="124" cy="86" r="2.2"/><circle cx="124" cy="92" r="2.2"/><circle cx="124" cy="98" r="2.2"/>
+          </g>
+          <circle cx="43" cy="44" r="3" fill="#111B20"/><circle cx="65" cy="54" r="2.8" fill="#A8B39B"/>
+          <circle cx="49" cy="70" r="3" fill="#69745E"/><circle cx="83" cy="77" r="2.6" fill="#A8B39B"/>
+          <circle cx="53" cy="96" r="2.7" fill="#A8B39B"/><circle cx="79" cy="92" r="3" fill="#69745E"/>
+          <circle cx="44" cy="120" r="3" fill="#9A8170"/><circle cx="72" cy="108" r="2.6" fill="#A8B39B"/>
+          <text x="62" y="158" class="word">Winnow</text>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 53</p>
+        <h2>Resolved Band</h2>
+        <p>Messy, dotted inputs become a stable set of bands. It is the most like the first reference, but with the dots making it feel observational instead of stream-like.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 210 176" role="img" aria-label="Option 54 word as resolved line">
+          <path d="M24 43C58 47 78 72 98 84" fill="none" stroke="#A8B39B" stroke-width="3" stroke-linecap="round"/>
+          <path d="M24 68C61 69 79 80 100 88" fill="none" stroke="#69745E" stroke-width="3" stroke-linecap="round"/>
+          <path d="M24 96C61 91 79 91 100 92" fill="none" stroke="#A8B39B" stroke-width="3" stroke-linecap="round"/>
+          <path d="M24 121C59 110 78 99 99 96" fill="none" stroke="#9A8170" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="35" cy="43" r="3" fill="#A8B39B"/><circle cx="56" cy="52" r="2.6" fill="#69745E"/>
+          <circle cx="39" cy="68" r="2.8" fill="#69745E"/><circle cx="72" cy="78" r="2.8" fill="#A8B39B"/>
+          <circle cx="44" cy="95" r="3" fill="#A8B39B"/><circle cx="75" cy="92" r="2.6" fill="#69745E"/>
+          <circle cx="38" cy="119" r="3" fill="#9A8170"/><circle cx="69" cy="104" r="2.8" fill="#A8B39B"/>
+          <text x="100" y="101" class="word">Winnow</text>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 54</p>
+        <h2>Word As Resolution</h2>
+        <p>The observations converge into the word itself instead of into a separate mark. This is wordmark-first and could feel elegant in a header.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 210 176" role="img" aria-label="Option 55 dotted fan">
+          <path d="M28 42C72 48 100 72 132 84" fill="none" stroke="#C3BCAE" stroke-width="3" stroke-linecap="round"/>
+          <path d="M28 62C71 64 99 76 132 88" fill="none" stroke="#C3BCAE" stroke-width="3" stroke-linecap="round"/>
+          <path d="M28 84C72 82 100 82 132 90" fill="none" stroke="#C3BCAE" stroke-width="3" stroke-linecap="round"/>
+          <path d="M28 106C72 99 100 91 132 92" fill="none" stroke="#C3BCAE" stroke-width="3" stroke-linecap="round"/>
+          <path d="M28 128C72 114 100 99 132 96" fill="none" stroke="#C3BCAE" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="45" cy="45" r="3" fill="#69745E"/><circle cx="69" cy="54" r="2.8" fill="#A8B39B"/>
+          <circle cx="48" cy="63" r="2.6" fill="#A8B39B"/><circle cx="84" cy="73" r="3" fill="#69745E"/>
+          <circle cx="48" cy="84" r="3" fill="#A8B39B"/><circle cx="78" cy="83" r="2.7" fill="#111B20"/>
+          <circle cx="48" cy="106" r="2.8" fill="#9A8170"/><circle cx="84" cy="96" r="3" fill="#A8B39B"/>
+          <circle cx="46" cy="126" r="3" fill="#9A8170"/><circle cx="75" cy="112" r="2.7" fill="#A8B39B"/>
+          <path d="M132 84H178" stroke="#111B20" stroke-width="4" stroke-linecap="round"/>
+          <path d="M132 90H178" stroke="#69745E" stroke-width="4" stroke-linecap="round"/>
+          <path d="M132 96H178" stroke="#9A8170" stroke-width="4" stroke-linecap="round"/>
+          <text x="62" y="158" class="word">Winnow</text>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 55</p>
+        <h2>Dotted Fan</h2>
+        <p>A broader fan of observations narrows into three stable readings. It is more data-point-heavy and less letter-driven, but it has a clean Winnow metaphor.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 210 176" role="img" aria-label="Option 56 W at the merge">
+          <path d="M24 44C64 48 83 76 104 91" fill="none" stroke="#A8B39B" stroke-width="3" stroke-linecap="round"/>
+          <path d="M24 71C65 72 84 84 104 91" fill="none" stroke="#69745E" stroke-width="3" stroke-linecap="round"/>
+          <path d="M24 100C64 94 84 91 104 91" fill="none" stroke="#A8B39B" stroke-width="3" stroke-linecap="round"/>
+          <path d="M24 126C64 113 83 99 104 91" fill="none" stroke="#9A8170" stroke-width="3" stroke-linecap="round"/>
+          <path d="M103 72L114 113L127 84L140 113L153 72" fill="none" stroke="#111B20" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="38" cy="45" r="3" fill="#69745E"/><circle cx="62" cy="56" r="2.8" fill="#A8B39B"/>
+          <circle cx="42" cy="71" r="2.8" fill="#69745E"/><circle cx="72" cy="82" r="2.6" fill="#A8B39B"/>
+          <circle cx="43" cy="99" r="3" fill="#A8B39B"/><circle cx="72" cy="94" r="2.8" fill="#69745E"/>
+          <circle cx="39" cy="124" r="3" fill="#9A8170"/><circle cx="68" cy="108" r="2.8" fill="#A8B39B"/>
+          <text x="62" y="158" class="word">Winnow</text>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 56</p>
+        <h2>W At The Merge</h2>
+        <p>The W appears at the point where the observations start to resolve. This makes the name’s initial letter the outcome, not an unrelated decoration.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 210 176" role="img" aria-label="Option 57 sparse field">
+          <path d="M34 48C72 51 93 72 120 82" fill="none" stroke="#C3BCAE" stroke-width="2.6" stroke-linecap="round"/>
+          <path d="M34 80C72 78 94 82 120 88" fill="none" stroke="#C3BCAE" stroke-width="2.6" stroke-linecap="round"/>
+          <path d="M34 114C72 105 94 94 120 94" fill="none" stroke="#C3BCAE" stroke-width="2.6" stroke-linecap="round"/>
+          <circle cx="34" cy="48" r="4" fill="#69745E"/><circle cx="68" cy="58" r="3" fill="#A8B39B"/>
+          <circle cx="94" cy="74" r="2.8" fill="#111B20"/><circle cx="120" cy="82" r="4" fill="#111B20"/>
+          <circle cx="45" cy="80" r="3.2" fill="#A8B39B"/><circle cx="79" cy="82" r="3" fill="#69745E"/>
+          <circle cx="120" cy="88" r="3.5" fill="#69745E"/>
+          <circle cx="38" cy="113" r="3.5" fill="#9A8170"/><circle cx="78" cy="103" r="3" fill="#A8B39B"/>
+          <circle cx="120" cy="94" r="3.5" fill="#9A8170"/>
+          <path d="M130 77H176" stroke="#111B20" stroke-width="3.8" stroke-linecap="round"/>
+          <path d="M130 88H176" stroke="#69745E" stroke-width="3.8" stroke-linecap="round"/>
+          <path d="M130 99H176" stroke="#9A8170" stroke-width="3.8" stroke-linecap="round"/>
+          <text x="62" y="158" class="word">Winnow</text>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 57</p>
+        <h2>Sparse Field</h2>
+        <p>A more restrained version with fewer points. This avoids the map/spaghetti problem and may be easier to make elegant with careful spacing.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 210 176" role="img" aria-label="Option 58 app tile convergence">
+          <rect x="27" y="31" width="156" height="105" rx="24" fill="#FBF8EE" stroke="#DED5C3" stroke-width="3"/>
+          <path d="M45 52C76 54 95 72 120 80" fill="none" stroke="#A8B39B" stroke-width="3" stroke-linecap="round"/>
+          <path d="M45 78C77 77 96 81 120 86" fill="none" stroke="#69745E" stroke-width="3" stroke-linecap="round"/>
+          <path d="M45 108C77 101 96 92 120 92" fill="none" stroke="#9A8170" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="53" cy="53" r="3" fill="#A8B39B"/><circle cx="77" cy="61" r="2.6" fill="#69745E"/>
+          <circle cx="55" cy="78" r="2.8" fill="#69745E"/><circle cx="83" cy="82" r="2.8" fill="#A8B39B"/>
+          <circle cx="54" cy="107" r="3" fill="#9A8170"/><circle cx="81" cy="99" r="2.7" fill="#A8B39B"/>
+          <path d="M120 80H160" stroke="#111B20" stroke-width="4" stroke-linecap="round"/>
+          <path d="M120 86H160" stroke="#69745E" stroke-width="4" stroke-linecap="round"/>
+          <path d="M120 92H160" stroke="#9A8170" stroke-width="4" stroke-linecap="round"/>
+          <text x="62" y="158" class="word">Winnow</text>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 58</p>
+        <h2>App Tile</h2>
+        <p>The concept contained in a soft rounded tile for PWA use. Less airy than the loose marks, but it solves the home-screen icon problem directly.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 210 176" role="img" aria-label="Option 59 dotted word path">
+          <circle cx="30" cy="49" r="3.2" fill="#69745E"/><circle cx="45" cy="57" r="2.8" fill="#A8B39B"/>
+          <circle cx="60" cy="70" r="2.8" fill="#A8B39B"/><circle cx="75" cy="85" r="3.2" fill="#111B20"/>
+          <circle cx="31" cy="83" r="2.8" fill="#A8B39B"/><circle cx="51" cy="88" r="2.8" fill="#69745E"/>
+          <circle cx="32" cy="116" r="3" fill="#9A8170"/><circle cx="55" cy="105" r="2.8" fill="#A8B39B"/>
+          <path d="M26 49C56 58 71 76 88 89" fill="none" stroke="#C3BCAE" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M26 83C56 84 72 88 88 91" fill="none" stroke="#C3BCAE" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M26 116C56 105 72 96 88 94" fill="none" stroke="#C3BCAE" stroke-width="2.4" stroke-linecap="round"/>
+          <text x="86" y="103" class="word">Winnow</text>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 59</p>
+        <h2>Dotted Word Path</h2>
+        <p>A lighter cousin of option 54: dots converge into the full word. It is probably better for a header lockup than a standalone app icon.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 210 176" role="img" aria-label="Option 60 final W read">
+          <path d="M30 48C65 50 85 70 108 82" fill="none" stroke="#C3BCAE" stroke-width="2.6" stroke-linecap="round"/>
+          <path d="M30 80C65 78 85 82 108 88" fill="none" stroke="#C3BCAE" stroke-width="2.6" stroke-linecap="round"/>
+          <path d="M30 114C65 105 85 95 108 94" fill="none" stroke="#C3BCAE" stroke-width="2.6" stroke-linecap="round"/>
+          <circle cx="39" cy="48" r="3" fill="#69745E"/><circle cx="63" cy="58" r="2.7" fill="#A8B39B"/>
+          <circle cx="41" cy="80" r="2.8" fill="#A8B39B"/><circle cx="73" cy="82" r="2.8" fill="#69745E"/>
+          <circle cx="40" cy="112" r="3" fill="#9A8170"/><circle cx="70" cy="101" r="2.8" fill="#A8B39B"/>
+          <path d="M111 68L121 109L133 82L145 109L156 68" fill="none" stroke="#111B20" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="62" y="158" class="word">Winnow</text>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 60</p>
+        <h2>Final W Read</h2>
+        <p>The observations converge into a clean W mark. This is more brandable than the pure line studies because it gives the app a memorable initial glyph.</p>
+      </div>
+    </article>
+  </section>
+</main>
+</body>
+</html>

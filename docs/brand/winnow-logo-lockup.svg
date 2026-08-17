@@ -1,0 +1,19 @@
+<svg width="1600" height="520" viewBox="0 0 1600 520" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Winnow logo lockup</title>
+  <desc id="desc">Winnow logo lockup with an abstract signal-filtering mark and the tagline No quick decisions.</desc>
+  <rect width="1600" height="520" rx="48" fill="#F6FBFA"/>
+  <g transform="translate(94 76) scale(.36)">
+    <rect width="1024" height="1024" rx="224" fill="#F6FBFA"/>
+    <path d="M198 313C282 267 362 267 446 313C489 337 535 337 578 313C662 267 742 267 826 313" stroke="#0B6F7B" stroke-width="42" stroke-linecap="round"/>
+    <path d="M232 466C320 413 407 402 512 466C617 402 704 413 792 466" stroke="#63BFAE" stroke-width="42" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M278 606C356 557 434 550 512 606C590 550 668 557 746 606" stroke="#63BFAE" stroke-width="42" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M356 736C408 704 460 699 512 736C564 699 616 704 668 736" stroke="#63BFAE" stroke-width="42" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M512 258V774" stroke="#20343D" stroke-width="52" stroke-linecap="round"/>
+    <circle cx="512" cy="188" r="42" fill="#20343D"/>
+    <path d="M672 414H758" stroke="#D1660F" stroke-width="34" stroke-linecap="round"/>
+    <path d="M701 520H785" stroke="#D1660F" stroke-width="34" stroke-linecap="round"/>
+    <path d="M672 626H758" stroke="#D1660F" stroke-width="34" stroke-linecap="round"/>
+  </g>
+  <text x="536" y="236" fill="#20343D" font-family="Inter, Avenir, Segoe UI, Arial, sans-serif" font-size="136" font-weight="740">Winnow</text>
+  <text x="544" y="326" fill="#0B6F7B" font-family="Inter, Avenir, Segoe UI, Arial, sans-serif" font-size="44" font-weight="560" letter-spacing="4">NO QUICK DECISIONS</text>
+</svg>

@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Winnow Logo Options</title>
+  <style>
+    :root {
+      --ink: #20343d;
+      --muted: #65767d;
+      --water: #0b6f7b;
+      --seafoam: #63bfae;
+      --signal: #d1660f;
+      --soft: #f6fbfa;
+      --line: #d8e6e3;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, Avenir, "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 44px 24px 72px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 36px;
+      line-height: 1.1;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+
+    .intro {
+      max-width: 780px;
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .option {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 22px;
+      background: var(--soft);
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+      min-height: 220px;
+    }
+
+    .logo {
+      width: 170px;
+      height: 170px;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    svg {
+      width: 138px;
+      height: 138px;
+      overflow: visible;
+    }
+
+    h2 {
+      margin: 0 0 6px;
+      font-size: 19px;
+      line-height: 1.2;
+      font-weight: 720;
+      letter-spacing: 0;
+    }
+
+    .label {
+      margin: 0 0 9px;
+      color: var(--water);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 15px;
+    }
+
+    .word {
+      font-size: 29px;
+      font-weight: 760;
+      letter-spacing: 0;
+      fill: var(--ink);
+      font-family: Inter, Avenir, "Segoe UI", Arial, sans-serif;
+    }
+
+    .smallword {
+      font-size: 20px;
+      font-weight: 760;
+      fill: var(--ink);
+      font-family: Inter, Avenir, "Segoe UI", Arial, sans-serif;
+    }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 580px) {
+      main { padding: 28px 16px 48px; }
+      .option {
+        grid-template-columns: 1fr;
+      }
+      .logo {
+        width: 100%;
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Winnow Logo Options</h1>
+  <p class="intro">
+    Ten deliberately different directions for Winnow. These avoid the vertical-body symmetry
+    that made the previous mark read as an insect, and explore the name as filtering, noticing,
+    composure, and training signal.
+  </p>
+
+  <section class="grid" aria-label="Winnow logo options">
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 160 160" role="img" aria-label="Option 1 wordmark">
+          <text x="18" y="88" class="word">Winnow</text>
+          <path d="M25 104C48 96 70 96 94 104C109 109 124 109 138 104" stroke="#63BFAE" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 1</p>
+        <h2>Quiet Wordmark</h2>
+        <p>A typography-led identity with only a small ripple underline. This is the most app-store and public-product friendly direction: calm, mature, and hard to misread.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 160 160" role="img" aria-label="Option 2 sieve dots">
+          <circle cx="34" cy="45" r="5" fill="#63BFAE"/>
+          <circle cx="54" cy="32" r="4" fill="#63BFAE"/>
+          <circle cx="57" cy="62" r="5" fill="#63BFAE"/>
+          <circle cx="78" cy="47" r="4" fill="#63BFAE"/>
+          <circle cx="84" cy="78" r="5" fill="#63BFAE"/>
+          <circle cx="106" cy="62" r="4" fill="#0B6F7B"/>
+          <circle cx="123" cy="80" r="5" fill="#0B6F7B"/>
+          <path d="M32 112H128" stroke="#20343D" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="128" cy="112" r="8" fill="#D1660F"/>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 2</p>
+        <h2>Signal From Noise</h2>
+        <p>Scattered inputs settle into one clear signal. This leans into the word Winnow directly, and feels broader than freediving: useful for coaching, training, notes, and analysis.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 160 160" role="img" aria-label="Option 3 ripple W">
+          <path d="M24 78C43 48 58 108 80 78C102 48 117 108 136 78" stroke="#0B6F7B" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M32 106C52 92 68 92 88 106C101 115 115 115 128 106" stroke="#63BFAE" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 3</p>
+        <h2>Ripple W</h2>
+        <p>A single soft W made from a waterline. It keeps the aquatic reference but makes the letterform primary, so it avoids looking like a sport logo or a literal dive symbol.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 160 160" role="img" aria-label="Option 4 sieve bowl">
+          <path d="M34 52H126" stroke="#20343D" stroke-width="8" stroke-linecap="round"/>
+          <path d="M44 70C54 102 68 120 80 120C92 120 106 102 116 70" stroke="#0B6F7B" stroke-width="9" stroke-linecap="round" fill="none"/>
+          <circle cx="58" cy="46" r="4" fill="#63BFAE"/>
+          <circle cx="80" cy="39" r="4" fill="#63BFAE"/>
+          <circle cx="102" cy="46" r="4" fill="#63BFAE"/>
+          <circle cx="80" cy="132" r="6" fill="#D1660F"/>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 4</p>
+        <h2>The Sieve</h2>
+        <p>A more literal winnowing metaphor: many inputs above, one useful output below. This has a quietly practical feel and could work well if the app becomes a training-analysis tool for others.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 160 160" role="img" aria-label="Option 5 calm compass">
+          <circle cx="80" cy="80" r="47" fill="none" stroke="#D8E6E3" stroke-width="8"/>
+          <path d="M80 35V125" stroke="#20343D" stroke-width="7" stroke-linecap="round"/>
+          <path d="M45 86C64 72 96 72 115 86" stroke="#0B6F7B" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="80" cy="80" r="8" fill="#D1660F"/>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 5</p>
+        <h2>Composure Compass</h2>
+        <p>Less about filtering, more about orientation under pressure. It says "notice, decide, stay centered," which fits the mantra and the coaching dimension of the app.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 160 160" role="img" aria-label="Option 6 logbook tabs">
+          <rect x="36" y="32" width="88" height="96" rx="12" fill="none" stroke="#20343D" stroke-width="8"/>
+          <path d="M54 58H106" stroke="#0B6F7B" stroke-width="7" stroke-linecap="round"/>
+          <path d="M54 80H96" stroke="#63BFAE" stroke-width="7" stroke-linecap="round"/>
+          <path d="M54 102H84" stroke="#63BFAE" stroke-width="7" stroke-linecap="round"/>
+          <circle cx="112" cy="102" r="8" fill="#D1660F"/>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 6</p>
+        <h2>Training Log</h2>
+        <p>A practical notebook mark. It is less poetic, but very clear: Winnow captures structured sessions and turns them into something readable. Good if usability should lead the brand.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 160 160" role="img" aria-label="Option 7 narrowing path">
+          <path d="M30 50C55 42 78 42 102 50C116 55 126 57 138 56" stroke="#63BFAE" stroke-width="9" stroke-linecap="round"/>
+          <path d="M39 80C60 75 82 75 103 80C115 83 123 84 132 83" stroke="#0B6F7B" stroke-width="9" stroke-linecap="round"/>
+          <path d="M54 110C68 107 88 107 104 110" stroke="#20343D" stroke-width="9" stroke-linecap="round"/>
+          <circle cx="121" cy="110" r="7" fill="#D1660F"/>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 7</p>
+        <h2>Narrowing Path</h2>
+        <p>Three bands compress into a final useful point. It suggests recent sessions, capacity trends, and coaching interpretation without using charts or literal sport imagery.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 160 160" role="img" aria-label="Option 8 breath ring">
+          <path d="M80 34C105 34 126 55 126 80C126 105 105 126 80 126" stroke="#0B6F7B" stroke-width="10" stroke-linecap="round"/>
+          <path d="M80 126C55 126 34 105 34 80C34 55 55 34 80 34" stroke="#63BFAE" stroke-width="10" stroke-linecap="round" stroke-dasharray="34 12"/>
+          <path d="M61 80H99" stroke="#20343D" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="104" cy="80" r="7" fill="#D1660F"/>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 8</p>
+        <h2>Breath Cycle</h2>
+        <p>A circular mark for training cycles, breath cycles, and review loops. It is the most physiological of the set while still staying abstract enough for a general coaching app.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 160 160" role="img" aria-label="Option 9 custom W">
+          <text x="29" y="101" class="word" font-size="76">W</text>
+          <path d="M55 112H112" stroke="#63BFAE" stroke-width="7" stroke-linecap="round"/>
+          <circle cx="119" cy="112" r="7" fill="#D1660F"/>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 9</p>
+        <h2>Monogram W</h2>
+        <p>The safest app-icon route: a strong W with a small signal detail. It would scale cleanly, feel premium, and avoid overexplaining what the app does.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 160 160" role="img" aria-label="Option 10 decision line">
+          <path d="M30 58H130" stroke="#D8E6E3" stroke-width="8" stroke-linecap="round"/>
+          <path d="M30 82H130" stroke="#D8E6E3" stroke-width="8" stroke-linecap="round"/>
+          <path d="M30 106H130" stroke="#D8E6E3" stroke-width="8" stroke-linecap="round"/>
+          <path d="M42 58C58 58 65 106 80 106C95 106 102 58 118 58" stroke="#0B6F7B" stroke-width="8" stroke-linecap="round" fill="none"/>
+          <circle cx="80" cy="106" r="8" fill="#D1660F"/>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 10</p>
+        <h2>No Quick Decisions</h2>
+        <p>A slow path crossing three possible readings before settling. This is the most mantra-driven option: it visually says do not react to the first signal, wait for the clearer one.</p>
+      </div>
+    </article>
+  </section>
+</main>
+</body>
+</html>

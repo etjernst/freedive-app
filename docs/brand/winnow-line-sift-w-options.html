@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Winnow Line-Sift W Options</title>
+  <style>
+    :root {
+      --ink: #111b20;
+      --taupe: #9b9486;
+      --taupe-dark: #756f65;
+      --moss: #69745e;
+      --paper: #fbf8ee;
+      --field: #f3eee2;
+      --line: #ded5c3;
+      --muted: #6d7068;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, Avenir, "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 44px 24px 72px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 36px;
+      line-height: 1.1;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+
+    .intro {
+      max-width: 860px;
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .option {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 22px;
+      background: var(--paper);
+      display: grid;
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+      min-height: 250px;
+    }
+
+    .logo {
+      width: 210px;
+      min-height: 204px;
+      display: grid;
+      place-items: center;
+      background: var(--field);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    svg {
+      width: 184px;
+      height: 178px;
+      overflow: visible;
+    }
+
+    h2 {
+      margin: 0 0 6px;
+      font-size: 19px;
+      line-height: 1.2;
+      font-weight: 720;
+      letter-spacing: 0;
+    }
+
+    .label {
+      margin: 0 0 8px;
+      color: var(--moss);
+      font-size: 13px;
+      font-weight: 740;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 15px;
+    }
+
+    .word {
+      fill: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 26px;
+      font-weight: 500;
+      letter-spacing: -0.3px;
+    }
+
+    @media (max-width: 940px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 620px) {
+      main { padding: 28px 16px 48px; }
+      .option { grid-template-columns: 1fr; }
+      .logo { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Winnow Line-Sift W Options</h1>
+  <p class="intro">
+    Ten variants based on the data-sifting reference: a noisy mass meeting ordered
+    lines. Each option integrates a W through negative space, line interruptions,
+    or the boundary between texture and structure.
+  </p>
+
+  <section class="grid" aria-label="Winnow line-sift W logo options">
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 190 184" role="img" aria-label="Option 41 negative W in lines">
+          <defs>
+            <clipPath id="circle41"><circle cx="77" cy="76" r="52"/></clipPath>
+            <mask id="w41">
+              <rect width="190" height="184" fill="white"/>
+              <path d="M55 49L67 111L79 70L91 111L104 49" fill="none" stroke="black" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+            </mask>
+          </defs>
+          <g clip-path="url(#circle41)" opacity=".95">
+            <circle cx="77" cy="76" r="52" fill="#9B9486"/>
+            <g fill="#F3EEE2">
+              <circle cx="35" cy="42" r="3"/><circle cx="43" cy="61" r="2"/><circle cx="27" cy="77" r="3"/>
+              <circle cx="48" cy="95" r="2"/><circle cx="58" cy="28" r="2"/><circle cx="24" cy="111" r="2"/>
+            </g>
+          </g>
+          <g mask="url(#w41)" stroke="#111B20" stroke-width="2.6" stroke-linecap="square">
+            <path d="M81 28H162"/><path d="M78 38H162"/><path d="M76 48H162"/><path d="M75 58H162"/>
+            <path d="M76 68H162"/><path d="M78 78H162"/><path d="M81 88H162"/><path d="M84 98H162"/>
+            <path d="M88 108H162"/><path d="M93 118H162"/>
+          </g>
+          <text x="52" y="168" class="word">Winnow</text>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 41</p>
+        <h2>Negative W Lines</h2>
+        <p>The scan lines carry a W-shaped absence. This keeps the reference intact while making the letter appear as the thing the ordered read reveals.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 190 184" role="img" aria-label="Option 42 W boundary">
+          <path d="M28 29C45 29 57 38 64 54L74 82L83 51L94 83L104 54C111 38 123 29 140 29C130 52 124 78 123 119H30C30 79 25 53 28 29Z" fill="#9B9486"/>
+          <g stroke="#111B20" stroke-width="2.7">
+            <path d="M87 33H162"/><path d="M90 43H162"/><path d="M94 53H162"/><path d="M99 63H162"/>
+            <path d="M104 73H162"/><path d="M108 83H162"/><path d="M111 93H162"/><path d="M113 103H162"/>
+            <path d="M115 113H162"/><path d="M116 123H162"/>
+          </g>
+          <circle cx="26" cy="51" r="2.5" fill="#756F65"/><circle cx="38" cy="76" r="2.4" fill="#F3EEE2"/>
+          <circle cx="23" cy="92" r="2.8" fill="#F3EEE2"/><circle cx="51" cy="33" r="2" fill="#756F65"/>
+          <text x="52" y="168" class="word">Winnow</text>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 42</p>
+        <h2>W Boundary</h2>
+        <p>The edge between mass and ordered lines is shaped like a W. It is subtler than a drawn letter, but more integrated with the sifting metaphor.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 190 184" role="img" aria-label="Option 43 striped W">
+          <g stroke="#111B20" stroke-width="2.6">
+            <path d="M32 33H158"/><path d="M32 43H158"/><path d="M32 53H158"/><path d="M32 63H158"/>
+            <path d="M32 73H158"/><path d="M32 83H158"/><path d="M32 93H158"/><path d="M32 103H158"/>
+            <path d="M32 113H158"/><path d="M32 123H158"/>
+          </g>
+          <path d="M43 42L59 123H76L88 79L101 123H118L136 42" fill="none" stroke="#F3EEE2" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M43 42L59 123H76L88 79L101 123H118L136 42" fill="none" stroke="#9B9486" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="31" cy="49" r="3" fill="#9B9486"/><circle cx="24" cy="75" r="2.5" fill="#756F65"/>
+          <circle cx="35" cy="104" r="3" fill="#B5AA98"/><circle cx="47" cy="126" r="2.5" fill="#756F65"/>
+          <text x="52" y="168" class="word">Winnow</text>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 43</p>
+        <h2>Striped W</h2>
+        <p>The W is the interruption in the ordered data field. This is the boldest and clearest letterform, though it risks feeling more graphic-design-poster than app icon.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 190 184" role="img" aria-label="Option 44 half-dust W">
+          <path d="M44 44L61 122H77L88 79L100 122H116L133 44" fill="none" stroke="#111B20" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+          <g stroke="#111B20" stroke-width="2.4">
+            <path d="M91 38H162"/><path d="M94 48H162"/><path d="M98 58H162"/><path d="M102 68H162"/>
+            <path d="M106 78H162"/><path d="M109 88H162"/><path d="M111 98H162"/><path d="M113 108H162"/>
+            <path d="M115 118H162"/>
+          </g>
+          <g fill="#9B9486">
+            <circle cx="31" cy="42" r="2.4"/><circle cx="42" cy="56" r="2.1"/><circle cx="24" cy="67" r="2.8"/>
+            <circle cx="35" cy="82" r="1.9"/><circle cx="23" cy="101" r="2.3"/><circle cx="48" cy="121" r="2"/>
+            <circle cx="57" cy="35" r="1.9"/><circle cx="16" cy="119" r="1.7"/>
+          </g>
+          <text x="52" y="168" class="word">Winnow</text>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 44</p>
+        <h2>Half-Dust W</h2>
+        <p>A direct W mark with dust on the unsorted side and lines on the sorted side. It is less elegant, but very readable and easy to translate into a small icon.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 190 184" role="img" aria-label="Option 45 lowercase line sift">
+          <g stroke="#111B20" stroke-width="2.4">
+            <path d="M73 35H162"/><path d="M76 45H162"/><path d="M80 55H162"/><path d="M84 65H162"/>
+            <path d="M88 75H162"/><path d="M91 85H162"/><path d="M94 95H162"/><path d="M96 105H162"/>
+            <path d="M98 115H162"/><path d="M99 125H162"/>
+          </g>
+          <text x="34" y="116" fill="#9B9486" font-family="Georgia, 'Times New Roman', serif" font-size="102" font-weight="700">w</text>
+          <g fill="#F3EEE2">
+            <circle cx="53" cy="50" r="3"/><circle cx="67" cy="42" r="2.4"/><circle cx="38" cy="72" r="2.6"/>
+            <circle cx="54" cy="102" r="2.4"/>
+          </g>
+          <text x="52" y="168" class="word">Winnow</text>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 45</p>
+        <h2>Lowercase Sift</h2>
+        <p>A warmer route: the lowercase w sits inside the sifted mass while the lines pass behind it. This feels less technical and more like a training journal.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 190 184" role="img" aria-label="Option 46 line-cut vessel">
+          <path d="M34 34C51 32 63 40 69 57L84 119L99 57C105 40 117 32 134 34C129 67 125 99 126 128H42C43 99 39 67 34 34Z" fill="#9B9486"/>
+          <g stroke="#111B20" stroke-width="2.4">
+            <path d="M86 38H160"/><path d="M89 48H160"/><path d="M91 58H160"/><path d="M93 68H160"/>
+            <path d="M95 78H160"/><path d="M97 88H160"/><path d="M99 98H160"/><path d="M101 108H160"/>
+            <path d="M103 118H160"/><path d="M106 128H160"/>
+          </g>
+          <path d="M67 59L84 119L101 59" fill="none" stroke="#F3EEE2" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="52" y="168" class="word">Winnow</text>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 46</p>
+        <h2>Line-Cut Vessel</h2>
+        <p>The W is implied by the trough carved through a sifted body. It is less literal than the uppercase W options and ties back to the vessel idea.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 190 184" role="img" aria-label="Option 47 w aperture">
+          <defs>
+            <clipPath id="ap47"><path d="M29 28H162V128H29Z"/></clipPath>
+          </defs>
+          <g clip-path="url(#ap47)">
+            <g stroke="#111B20" stroke-width="2.5">
+              <path d="M30 32H162"/><path d="M30 42H162"/><path d="M30 52H162"/><path d="M30 62H162"/>
+              <path d="M30 72H162"/><path d="M30 82H162"/><path d="M30 92H162"/><path d="M30 102H162"/>
+              <path d="M30 112H162"/><path d="M30 122H162"/>
+            </g>
+            <path d="M38 39L58 127H75L87 77L100 127H117L139 39" fill="#F3EEE2"/>
+            <path d="M20 22C49 28 67 49 73 80C78 106 58 127 25 132V22Z" fill="#9B9486"/>
+          </g>
+          <circle cx="35" cy="49" r="2.5" fill="#F3EEE2"/><circle cx="48" cy="66" r="2.2" fill="#F3EEE2"/>
+          <circle cx="28" cy="91" r="2.8" fill="#756F65"/>
+          <text x="52" y="168" class="word">Winnow</text>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 47</p>
+        <h2>W Aperture</h2>
+        <p>The reference image, but with a W-shaped aperture interrupting the scan field. This is the most faithful to the supplied concept and probably worth refining.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 190 184" role="img" aria-label="Option 48 monoline winnow">
+          <g stroke="#111B20" stroke-width="2.4">
+            <path d="M36 38H158"/><path d="M36 48H158"/><path d="M36 58H158"/><path d="M36 68H158"/>
+            <path d="M36 78H158"/><path d="M36 88H158"/><path d="M36 98H158"/><path d="M36 108H158"/>
+            <path d="M36 118H158"/>
+          </g>
+          <path d="M47 57C55 82 61 102 67 118C75 105 81 86 87 68C94 88 100 106 107 118C114 101 121 80 130 57" fill="none" stroke="#9B9486" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+          <g fill="#9B9486">
+            <circle cx="29" cy="44" r="2.4"/><circle cx="23" cy="62" r="2.2"/><circle cx="32" cy="83" r="2.6"/>
+            <circle cx="22" cy="104" r="2.1"/><circle cx="41" cy="125" r="2.4"/>
+          </g>
+          <text x="52" y="168" class="word">Winnow</text>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 48</p>
+        <h2>Monoline Winnow</h2>
+        <p>A lighter W stroke laid across the line field. It is the least emblematic option and could work well in a header, though the app icon may need a bolder version.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 190 184" role="img" aria-label="Option 49 compact app tile">
+          <rect x="35" y="29" width="120" height="106" rx="20" fill="#FBF8EE" stroke="#DED5C3" stroke-width="3"/>
+          <g stroke="#111B20" stroke-width="2.3">
+            <path d="M75 45H137"/><path d="M72 55H137"/><path d="M70 65H137"/><path d="M70 75H137"/>
+            <path d="M72 85H137"/><path d="M76 95H137"/><path d="M81 105H137"/><path d="M87 115H137"/>
+          </g>
+          <path d="M51 51L63 116H77L86 78L96 116H110L124 51" fill="none" stroke="#9B9486" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="49" cy="43" r="3" fill="#756F65"/><circle cx="38" cy="68" r="2.6" fill="#9B9486"/>
+          <circle cx="45" cy="98" r="2.8" fill="#9B9486"/>
+          <text x="52" y="168" class="word">Winnow</text>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 49</p>
+        <h2>Compact App Tile</h2>
+        <p>A contained version designed for PWA icons. It gives up some airy elegance, but it would be easier to render consistently across splash screens and home screens.</p>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="logo">
+        <svg viewBox="0 0 190 184" role="img" aria-label="Option 50 full word scan">
+          <g stroke="#111B20" stroke-width="2.1">
+            <path d="M75 42H162"/><path d="M76 52H162"/><path d="M78 62H162"/><path d="M80 72H162"/>
+            <path d="M83 82H162"/><path d="M87 92H162"/><path d="M92 102H162"/><path d="M97 112H162"/>
+          </g>
+          <text x="30" y="101" fill="#9B9486" font-family="Georgia, 'Times New Roman', serif" font-size="76" font-weight="500">W</text>
+          <circle cx="31" cy="45" r="2.4" fill="#9B9486"/><circle cx="44" cy="37" r="2.2" fill="#756F65"/>
+          <circle cx="25" cy="68" r="2.5" fill="#9B9486"/><circle cx="39" cy="116" r="2.7" fill="#756F65"/>
+          <text x="52" y="168" class="word">Winnow</text>
+        </svg>
+      </div>
+      <div>
+        <p class="label">Option 50</p>
+        <h2>Full Word Scan</h2>
+        <p>The W is treated as the sifted mass and the full name anchors the lockup below. This is simple, maybe too simple, but much less likely to become a confusing abstract symbol.</p>
+      </div>
+    </article>
+  </section>
+</main>
+</body>
+</html>

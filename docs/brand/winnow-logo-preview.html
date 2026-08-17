@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Winnow Logo Preview</title>
+  <style>
+    :root {
+      --ink: #20343d;
+      --water: #0b6f7b;
+      --seafoam: #63bfae;
+      --signal: #d1660f;
+      --mist: #f6fbfa;
+      --line: #d8e6e3;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Avenir, "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 48px 24px 72px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 34px;
+      line-height: 1.15;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+
+    p {
+      max-width: 740px;
+      margin: 0 0 26px;
+      color: #52646b;
+      line-height: 1.55;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+      gap: 28px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 24px;
+      background: var(--mist);
+    }
+
+    .mark {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      align-items: center;
+    }
+
+    .mark img, .lockup img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .sizes img:nth-child(1) { max-width: 220px; }
+    .sizes img:nth-child(2) { max-width: 128px; }
+    .sizes img:nth-child(3) { max-width: 64px; }
+    .sizes img:nth-child(4) { max-width: 32px; }
+
+    .notes {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .note {
+      border-top: 3px solid var(--water);
+      padding-top: 12px;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .note strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--ink);
+    }
+
+    @media (max-width: 760px) {
+      main { padding: 28px 16px 48px; }
+      .grid, .notes { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Winnow Logo</h1>
+    <p>
+      A first vector direction for a training capture and coaching app: quiet, precise,
+      and useful beyond one athlete. The name frames the product as a way to separate
+      signal from noise, while the mark keeps a subtle water and breath reference.
+    </p>
+
+    <section class="grid" aria-label="Logo preview">
+      <div class="panel">
+        <div class="mark sizes">
+          <img src="winnow-logo-mark.svg" alt="Winnow mark at large size">
+          <img src="winnow-logo-mark.svg" alt="Winnow mark at app icon size">
+          <img src="winnow-logo-mark.svg" alt="Winnow mark at toolbar size">
+          <img src="winnow-logo-mark.svg" alt="Winnow mark at favicon size">
+        </div>
+      </div>
+
+      <div class="panel lockup">
+        <img src="winnow-logo-lockup.svg" alt="Winnow logo lockup with tagline">
+      </div>
+    </section>
+
+    <section class="notes" aria-label="Design rationale">
+      <div class="note">
+        <strong>Winnowing signal</strong>
+        The repeated curves narrow toward a single centerline: plans, sensations, and training logs becoming usable judgment.
+      </div>
+      <div class="note">
+        <strong>Still aquatic</strong>
+        The palette and wave rhythm keep the freediving context, but avoid depth imagery so the app can travel beyond private use.
+      </div>
+      <div class="note">
+        <strong>Quiet coaching</strong>
+        The orange ticks hint at reps and targets; the centered line keeps the brand aligned with “No quick decisions.”
+      </div>
+    </section>
+  </main>
+</body>
+</html>
