@@ -51,11 +51,11 @@
           {#if roleLabel(t.role)}<span class="role">{roleLabel(t.role)}</span>{/if}
         </span>
       </span>
-      {#if t.capacity_tags?.length}
-        <span class="tags">{t.capacity_tags.join(' · ')}</span>
-      {/if}
-      {#if t.phase_tags?.length}
-        <span class="tags">{t.phase_tags.join(' · ')}</span>
+      {#if t.capacity_tags?.length || t.phase_tags?.length}
+        <span class="tags">
+          {#each t.capacity_tags ?? [] as tag}<span class="tag tag-cap">{tag}</span>{/each}
+          {#each t.phase_tags ?? [] as tag}<span class="tag tag-phase">{tag}</span>{/each}
+        </span>
       {/if}
       {#if t.goal}<span class="lib-goal muted">{t.goal}</span>{/if}
     </button>

@@ -325,6 +325,7 @@
         bind:cap={libCap}
         bind:phase={libPhase}
         showPhases={hasPhases(app.templates)}
+        templates={app.templates}
       >
         {#if libAdded > 0}
           <span class="lib-count">{libAdded} added</span>

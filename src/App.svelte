@@ -178,6 +178,7 @@
         bind:cap={libCap}
         bind:phase={libPhase}
         showPhases={hasPhases(app.templates)}
+        templates={app.templates}
       />
       <div class="lib-list">
         {#each libTemplates as t (t.id)}
