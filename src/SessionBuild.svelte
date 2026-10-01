@@ -101,6 +101,7 @@
     ex.recovery_inter.unit ??= 'time'
     ex.rest_after_s ??= null
     ex.collapsed ??= false
+    ex.recovery_decrement ??= null
   }
   // Seed-time pass so reloaded sessions render without a flash of empty binds.
   // Also backfill fields added after a session was first saved.
@@ -262,6 +263,54 @@
     n = Math.max(1, Math.floor(Number(n) || 1))
     while (ex.planned.reps.length < n) addRep(ex)
     if (ex.planned.reps.length > n) ex.planned.reps = ex.planned.reps.slice(0, n)
+    applyRecoveryStep(ex)
+  }
+  // Set-level fields at the top of an exercise: each shows the first rep's
+  // value and writes the same value to every rep that has that segment; the
+  // per-rep editors below stay free for one-off changes.
+  function segReps(ex, seg) {
+    return ex.planned.reps.filter((r) => repSegments(r.shape ?? 'simple', ex.discipline).includes(seg))
+  }
+  function setTarget(ex, seg) {
+    return segReps(ex, seg)[0]?.[`${seg}_target`] ?? { unit: 'absolute', value: null }
+  }
+  function writeTarget(ex, seg, patch) {
+    const t = { ...$state.snapshot(setTarget(ex, seg)), ...patch }
+    for (const r of segReps(ex, seg)) r[`${seg}_target`] = { ...t }
+  }
+  function setRecovery(ex) {
+    return ex.planned.reps[0]?.recovery ?? { type: 'absolute', value: null, unit: 'time' }
+  }
+  function writeRecovery(ex, patch) {
+    const r = { ...$state.snapshot(setRecovery(ex)), ...patch }
+    for (const rep of ex.planned.reps) rep.recovery = { ...r }
+    applyRecoveryStep(ex)
+  }
+  // Same value-reset families as a rep's recovery type change.
+  function setRecoveryType(ex, t) {
+    const value = t === 'qualitative' ? 'adequate' : t === 'inequality' ? '' : null
+    ex.recovery_decrement = null
+    writeRecovery(ex, { type: t, value })
+  }
+  function setRecoveryUnit(ex, u) {
+    ex.recovery_decrement = null
+    writeRecovery(ex, { unit: u, value: null })
+  }
+  const stepsDown = (r) => r && (r.type === 'absolute' || r.type === 'cap')
+  // A recovery that shrinks each rep (a CO2 table): rep i gets the first rep's
+  // value minus i × the decrement, never below zero.
+  function applyRecoveryStep(ex) {
+    const d = ex.recovery_decrement
+    const first = ex.planned.reps[0]?.recovery
+    if (!d || !stepsDown(first) || typeof first.value !== 'number') return
+    const base = $state.snapshot(first)
+    ex.planned.reps.forEach((rep, i) => {
+      rep.recovery = { ...base, value: Math.max(0, base.value - i * d) }
+    })
+  }
+  function setRecoveryDecrement(ex, v) {
+    ex.recovery_decrement = v > 0 ? v : null
+    writeRecovery(ex, {})
   }
   // Rest between sets uses the same type families as a rep recovery.
   function onInterType(ex) {
@@ -298,6 +347,7 @@
       if (sp) rep.pace = sp
     }
     ex.planned.reps = [...ex.planned.reps, rep]
+    applyRecoveryStep(ex)
   }
   function removeRep(ex, i) {
     ex.planned.reps = ex.planned.reps.filter((_, j) => j !== i)
@@ -532,6 +582,88 @@
           onchange={(e) => setRepCount(ex, e.currentTarget.value)}
         />
       </div>
+      {#if ex.planned.reps.length > 1}
+        {#if segReps(ex, 'hold').length}
+          {@const t = setTarget(ex, 'hold')}
+          <div class="field">
+            <span class="lbl">Hold <span class="muted">(every rep)</span></span>
+            <span class="inter">
+              <select class="unit" value={t.unit} onchange={(e) => writeTarget(ex, 'hold', { unit: e.currentTarget.value, value: null })}>
+                <option value="absolute">mm:ss</option>
+                <option value="pct_pb">% PB</option>
+                <option value="contraction_relative">1C +s</option>
+                <option value="qualitative">qualitative</option>
+              </select>
+              {#if t.unit === 'absolute'}
+                <MMSS bind:seconds={() => t.value, (v) => writeTarget(ex, 'hold', { value: v })} />
+              {:else if t.unit === 'qualitative'}
+                <select value={t.value} onchange={(e) => writeTarget(ex, 'hold', { value: e.currentTarget.value })}>
+                  {#each HOLD_QUAL as q}<option value={q.value}>{q.label}</option>{/each}
+                </select>
+              {:else}
+                <input type="number" value={t.value} oninput={(e) => writeTarget(ex, 'hold', { value: e.currentTarget.value === '' ? null : Number(e.currentTarget.value) })} placeholder={t.unit === 'pct_pb' ? '%' : '+s'} />
+              {/if}
+            </span>
+          </div>
+        {/if}
+        {#if segReps(ex, 'distance').length}
+          {@const t = setTarget(ex, 'distance')}
+          <div class="field">
+            <span class="lbl">Distance <span class="muted">(every rep)</span></span>
+            <span class="inter">
+              <select class="unit" value={t.unit} onchange={(e) => writeTarget(ex, 'distance', { unit: e.currentTarget.value, value: null })}>
+                <option value="absolute">m</option>
+                <option value="pct_pb">% PB</option>
+                <option value="qualitative">qualitative</option>
+              </select>
+              {#if t.unit === 'qualitative'}
+                <input value={t.value ?? ''} oninput={(e) => writeTarget(ex, 'distance', { value: e.currentTarget.value })} list="qual-words" placeholder="max, submax, or free text" />
+              {:else}
+                <input type="number" value={t.value} oninput={(e) => writeTarget(ex, 'distance', { value: e.currentTarget.value === '' ? null : Number(e.currentTarget.value) })} placeholder={t.unit === 'pct_pb' ? '%' : 'm'} />
+              {/if}
+            </span>
+          </div>
+        {/if}
+        {@const rec = setRecovery(ex)}
+        <div class="field">
+          <span class="lbl">Recovery <span class="muted">(every rep)</span></span>
+          <span class="inter">
+            <select class="unit" value={rec.type} onchange={(e) => setRecoveryType(ex, e.currentTarget.value)}>
+              <option value="absolute">fixed</option>
+              <option value="cap">cap (≤)</option>
+              <option value="inequality">≤ rule</option>
+              <option value="qualitative">qualitative</option>
+            </select>
+            {#if rec.type === 'qualitative'}
+              <select value={rec.value} onchange={(e) => writeRecovery(ex, { value: e.currentTarget.value })}>
+                {#each REC_QUAL as r}<option value={r}>{r}</option>{/each}
+              </select>
+            {:else if rec.type === 'inequality'}
+              <input value={rec.value ?? ''} oninput={(e) => writeRecovery(ex, { value: e.currentTarget.value })} placeholder="< swim_time" />
+            {:else}
+              {#if rec.unit === 'breaths'}
+                <input type="number" value={rec.value} oninput={(e) => writeRecovery(ex, { value: e.currentTarget.value === '' ? null : Number(e.currentTarget.value) })} placeholder="breaths" />
+              {:else}
+                <MMSS bind:seconds={() => rec.value, (v) => writeRecovery(ex, { value: v })} />
+              {/if}
+              <select class="unit" value={rec.unit ?? 'time'} onchange={(e) => setRecoveryUnit(ex, e.currentTarget.value)}>
+                <option value="time">time</option>
+                <option value="breaths">breaths</option>
+              </select>
+            {/if}
+          </span>
+        </div>
+        {#if stepsDown(rec)}
+          <div class="field">
+            <span class="lbl">Decrease per rep <span class="muted">(optional)</span></span>
+            {#if rec.unit === 'breaths'}
+              <input type="number" min="0" value={ex.recovery_decrement} oninput={(e) => setRecoveryDecrement(ex, Number(e.currentTarget.value))} placeholder="breaths" />
+            {:else}
+              <MMSS bind:seconds={() => ex.recovery_decrement, (v) => setRecoveryDecrement(ex, v)} placeholder="none" />
+            {/if}
+          </div>
+        {/if}
+      {/if}
       <div class="field">
         <span class="lbl">Sets (repeat)</span>
         <input type="number" min="1" bind:value={ex.set_repeat} />
