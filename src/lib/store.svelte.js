@@ -237,6 +237,7 @@ export async function doExport() {
 
 export async function doRestore(file) {
   const result = await restoreFromFile(file)
+  await seedIfNeeded()
   await refresh()
   return result
 }
@@ -280,6 +281,7 @@ export async function restoreFromDropbox() {
       return
     }
     const result = await restoreFromEnvelope(parseExport(text))
+    await seedIfNeeded()
     await refresh()
     return result
   } catch (e) {
